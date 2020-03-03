@@ -31,8 +31,8 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void launch(String[] args) {
-        launch(args);
+    public static void load() {
+        launch();
     }
 
 }
