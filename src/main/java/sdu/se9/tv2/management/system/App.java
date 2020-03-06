@@ -20,7 +20,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
-        stage.setTitle("Management System");
+        stage.setTitle("TV2 credit Management System");
         stage.show();
     }
 
