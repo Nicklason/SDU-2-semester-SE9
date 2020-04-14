@@ -4,10 +4,16 @@ public class Main {
     public static void main (String args[]) {
         App.load();
 
-        /* Persistence persistence = new Persistence();
+        /*
+        Persistence persistence = new Persistence();
 
         Producer test = persistence.createProducer("TV2");
 
-        System.out.println(test.getName()); */
+        System.out.println(test);
+
+        System.out.println(persistence.hasProducer(0));
+
+        System.out.println(persistence.getProducer(0));
+        */
     }
 }

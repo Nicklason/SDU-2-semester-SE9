@@ -107,6 +107,30 @@ public class Persistence {
         return newProducer;
     }
 
+    public boolean hasProducer (int producerID) {
+        for (int i = 0; i < this.producers.size(); i++) {
+            Producer producer = this.producers.get(i);
+
+            if (producer.getID() == producerID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public Producer getProducer (int producerID) throws IllegalStateException {
+        for (int i = 0; i < this.producers.size(); i++) {
+            Producer producer = this.producers.get(i);
+
+            if (producer.getID() == producerID) {
+                return producer;
+            }
+        }
+
+        throw new IllegalStateException("Producer does not exist");
+    }
+
     private static Producer parseProducer(JSONObject producer) {
         int id = Math.toIntExact((Long)producer.get("id"));
         String name = (String)producer.get("name");

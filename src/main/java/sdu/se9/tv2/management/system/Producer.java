@@ -14,4 +14,12 @@ public class Producer {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Producer{" +
+                "id='" + id + "'" +
+                ", name='" + name + "'" +
+                "}";
+    }
 }
