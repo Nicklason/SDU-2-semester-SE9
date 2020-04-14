@@ -26,3 +26,6 @@ buildNumber.properties
 # Maven
 log/
 target/
+
+# Persistence
+data.json

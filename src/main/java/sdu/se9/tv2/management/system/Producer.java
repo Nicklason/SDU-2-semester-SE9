@@ -1,13 +1,17 @@
 package sdu.se9.tv2.management.system;
 
 public class Producer {
-    private String producerName;
+    private int id;
+    private String name;
 
-    public Producer(String producerName) {
-        this.producerName = producerName;
+    public Producer(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public String getProducerName() {
-        return producerName;
+    public int getID() { return id; }
+
+    public String getName() {
+        return name;
     }
 }
