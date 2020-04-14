@@ -28,4 +28,7 @@ log/
 target/
 
 # Persistence
-data.json
+producer.json
+program.json
+credit.json
+person.json

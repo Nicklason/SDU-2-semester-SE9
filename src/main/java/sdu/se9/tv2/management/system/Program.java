@@ -35,8 +35,16 @@ public class Program {
         return approved;
     }
 
+    public void setApproved (boolean approved) {
+        this.approved = approved;
+    }
+
     public boolean isAwaitingApproval() {
         return awaitingApproval;
+    }
+
+    public void setAwaitingApproval(boolean awaitingApproval) {
+        this.awaitingApproval = awaitingApproval;
     }
 
     @Override

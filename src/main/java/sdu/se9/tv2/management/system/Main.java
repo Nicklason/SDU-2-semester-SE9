@@ -2,26 +2,20 @@ package sdu.se9.tv2.management.system;
 
 public class Main {
     public static void main (String args[]) {
-        // App.load();
+        App.load();
 
-        /*
-        Persistence persistence = new Persistence();
+        /* PersistenceProducer producerPersistence = new PersistenceProducer();
 
-        Producer tv2 = persistence.createProducer("TV2");
+        PersistenceProgram programPersistence = new PersistenceProgram();
 
-        Program badehotetllet = persistence.createProgram(tv2.getID(), "Badehotellet", 123);
+        Producer tv2 = producerPersistence.createProducer("TV2");
 
-        System.out.println(badehotetllet);
-        */
+        System.out.println(producerPersistence.getProducer(tv2.getID()));
 
-        /*
-        Producer test = persistence.createProducer("TV2");
+        Program badehotellet = programPersistence.createProgram(tv2.getID(), "Badehotellet", 1234);
 
-        System.out.println(test);
-
-        System.out.println(persistence.hasProducer(0));
-
-        System.out.println(persistence.getProducer(0));
-        */
+        System.out.println(badehotellet);
+        
+        System.out.println(programPersistence.getProgram(badehotellet.getID())); */
     }
 }
