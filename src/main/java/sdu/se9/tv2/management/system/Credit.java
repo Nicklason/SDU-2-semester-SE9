@@ -1,4 +1,4 @@
 package sdu.se9.tv2.management.system;
 
-public class Credits {
+public class Credit {
 }
