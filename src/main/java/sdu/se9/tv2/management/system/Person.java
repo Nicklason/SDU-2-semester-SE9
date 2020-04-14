@@ -23,6 +23,10 @@ public class Person {
         return this.personID;
     }
 
+    public String GetName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
