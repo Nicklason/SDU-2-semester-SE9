@@ -23,7 +23,7 @@ public class Person {
         return this.personID;
     }
 
-    public String GetName() {
+    public String getName() {
         return this.firstName + " " + this.lastName;
     }
 
