@@ -7,17 +7,39 @@ import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+/**
+ * Implementation of the IPersistenceProgram interface
+ */
 public class PersistenceProgram implements IPersistenceProgram {
+    /**
+     * Instance of persistence class for file
+     */
     private Persistence persistence = new Persistence("program.json");
 
+    /**
+     * The last ID used
+     */
     private int lastID = -1;
 
+    /**
+     * A list of programs
+     */
     private ArrayList<Program> programs = new ArrayList<Program>();
 
+    /**
+     * Creates a new instance of the PersistenceProducer class
+     */
     PersistenceProgram () {
         this.read();
     }
 
+    /**
+     * Creates a new program and saves it to file
+     * @param producerID The ID of the producer who made the program
+     * @param programName The name of the program
+     * @param internalID TV2's internal ID for the program
+     * @return
+     */
     public Program createProgram (int producerID, String programName, int internalID) {
         lastID++;
         Program newProgram = new Program(lastID, producerID, programName, internalID, false, false);
@@ -28,6 +50,11 @@ public class PersistenceProgram implements IPersistenceProgram {
         return newProgram;
     }
 
+    /**
+     * Gets a program by ID
+     * @param programID The ID of the program
+     * @return
+     */
     public Program getProgram (int programID) {
         for (int i = 0; i < this.programs.size(); i++) {
             Program element = this.programs.get(i);
@@ -40,28 +67,50 @@ public class PersistenceProgram implements IPersistenceProgram {
         return null;
     }
 
+    /**
+     * Set program credits approved status and saves to file
+     * @param programID The ID of the program
+     * @param approved `true` for approved, `false` for not
+     */
     public void setApproved (int programID, boolean approved) {
+        // Loop through all programs
         for (int i = 0; i < this.programs.size(); i++) {
             Program element = this.programs.get(i);
 
+            // Check if the program is the one we are looking for by matching ids
             if (element.getID() == programID) {
+                // Set it as approved
                 element.setApproved(approved);
-                return;
+                // Stop the loop
+                break;
             }
         }
+
+        // Save changes to file
+        this.write();
     }
 
+    /**
+     * Set a program awaiting approval status and saves to file
+     * @param programID The ID of the program
+     * @param awaitingApproval The approval status, `true` for pending approval and `false` for not
+     */
     public void setAwaitingApproval (int programID, boolean awaitingApproval) {
+        // Loop through programs and look for program matching programID
         for (int i = 0; i < this.programs.size(); i++) {
             Program element = this.programs.get(i);
 
             if (element.getID() == programID) {
+                // Set awaiting approval
                 element.setAwaitingApproval(awaitingApproval);
                 return;
             }
         }
     }
 
+    /**
+     * Reads file and parses JSONObject
+     */
     private void read() {
         JSONObject obj = null;
 
@@ -88,6 +137,9 @@ public class PersistenceProgram implements IPersistenceProgram {
         }
     }
 
+    /**
+     * Writes data saved in memory to file
+     */
     private void write() {
         JSONObject obj = new JSONObject();
 
