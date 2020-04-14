@@ -14,16 +14,21 @@ public class Persistence {
 
     private int lastProducerID = -1;
 
+    private int lastProgramID = -1;
+
     private ArrayList<Producer> producers = new ArrayList<Producer>();
+
+    private ArrayList<Program> programs = new ArrayList<>();
 
     public Persistence() {
         try {
             JSONObject obj = this.read();
 
             if (obj != null) {
+                // <editor-fold desc="Producer">
                 JSONObject producerObj = (JSONObject)obj.get("producer");
 
-                // jsonObject.get("lastProducerID") returns Long
+                // producerObj.get("lastID") returns Long
                 this.lastProducerID = Math.toIntExact((Long)producerObj.get("lastID"));
 
                 JSONArray producerList = (JSONArray)producerObj.get("list");
@@ -31,13 +36,32 @@ public class Persistence {
                 ArrayList<Producer> parsedProducerList = new ArrayList<Producer>();
 
                 // Parse producer list
-                Iterator<JSONObject> iterator = producerList.iterator();
-                while (iterator.hasNext()) {
-                    JSONObject element = iterator.next();
-                    parsedProducerList.add(Persistence.parseProducer(element));
+                Iterator<JSONObject> producerIterator = producerList.iterator();
+                while (producerIterator.hasNext()) {
+                    JSONObject element = producerIterator.next();
+                    parsedProducerList.add(Producer.parseJSON(element));
                 }
 
                 producers = parsedProducerList;
+                // </editor-fold>
+
+                // <editor-fold desc="Program">
+                JSONObject programObj = (JSONObject)obj.get("program");
+
+                this.lastProgramID = Math.toIntExact((Long)programObj.get("lastID"));
+
+                JSONArray programList = (JSONArray)programObj.get("list");
+
+                ArrayList<Program> parsedProgramList = new ArrayList<>();
+
+                Iterator<JSONObject> programIterator = programList.iterator();
+                while (programIterator.hasNext()) {
+                    JSONObject element = programIterator.next();
+                    parsedProgramList.add(Program.parseJSON(element));
+                }
+
+                programs = parsedProgramList;
+                // </editor-fold>
             }
 
         } catch (ParseException err) {
@@ -68,22 +92,40 @@ public class Persistence {
     private void write () {
         System.out.println("Saving...");
 
-        JSONArray producerList = new JSONArray();
-
-        for (int i = 0; i < this.producers.size(); i++) {
-            producerList.add(Persistence.parseProducer(this.producers.get(i)));
-        }
-
         // Create JSONObject that will be saved
         JSONObject obj = new JSONObject();
 
+        // <editor-fold desc="Producer">
         JSONObject producerObj = new JSONObject();
+
+        JSONArray producerList = new JSONArray();
+
+        for (int i = 0; i < this.producers.size(); i++) {
+            producerList.add(Producer.parseJSON(this.producers.get(i)));
+        }
 
         // Add producer info
         producerObj.put("lastID", this.lastProducerID);
         producerObj.put("list", producerList);
 
         obj.put("producer", producerObj);
+        // </editor-fold>
+
+        // <editor-fold desc="Program">
+        JSONObject programObj = new JSONObject();
+
+        JSONArray programList = new JSONArray();
+
+        for (int i = 0; i < this.programs.size(); i++) {
+            programList.add(Program.parseJSON(this.programs.get(i)));
+        }
+
+        // Add producer info
+        programObj.put("lastID", this.lastProgramID);
+        programObj.put("list", programList);
+
+        obj.put("program", programObj);
+        // </editor-fold>
 
         // Make file writer
         try (FileWriter file = new FileWriter(this.file)) {
@@ -109,9 +151,9 @@ public class Persistence {
 
     public boolean hasProducer (int producerID) {
         for (int i = 0; i < this.producers.size(); i++) {
-            Producer producer = this.producers.get(i);
+            Producer element = this.producers.get(i);
 
-            if (producer.getID() == producerID) {
+            if (element.getID() == producerID) {
                 return true;
             }
         }
@@ -121,31 +163,52 @@ public class Persistence {
 
     public Producer getProducer (int producerID) throws IllegalStateException {
         for (int i = 0; i < this.producers.size(); i++) {
-            Producer producer = this.producers.get(i);
+            Producer element = this.producers.get(i);
 
-            if (producer.getID() == producerID) {
-                return producer;
+            if (element.getID() == producerID) {
+                return element;
             }
         }
 
         throw new IllegalStateException("Producer does not exist");
     }
 
-    private static Producer parseProducer(JSONObject producer) {
-        int id = Math.toIntExact((Long)producer.get("id"));
-        String name = (String)producer.get("name");
-        return new Producer(id, name);
+    public Program createProgram (int producerID, String programName, int internalID) throws IllegalStateException {
+        // If the producer does not exist then an error will be thrown
+        Producer producer = this.getProducer(producerID);
+
+        lastProgramID++;
+        Program newProgram = new Program(lastProgramID, producer.getID(), programName, internalID, false, false);
+        programs.add(newProgram);
+
+        // Save changes to file
+
+        this.write();
+
+        return newProgram;
     }
 
-    private static JSONObject parseProducer(Producer producer) {
-        // Create new json object
-        JSONObject producerObj = new JSONObject();
+    public boolean hasProgram (int programID) {
+        for (int i = 0; i < this.programs.size(); i++) {
+            Program element = this.programs.get(i);
 
-        // Add properties to json object
-        producerObj.put("id", producer.getID());
-        producerObj.put("name", producer.getName());
+            if (element.getID() == programID) {
+                return true;
+            }
+        }
 
-        // Return object
-        return producerObj;
+        return false;
+    }
+
+    public Program getProgram (int programID) throws IllegalStateException {
+        for (int i = 0; i < this.programs.size(); i++) {
+            Program element = this.programs.get(i);
+
+            if (element.getID() == programID) {
+                return element;
+            }
+        }
+
+        throw new IllegalStateException("Program does not exist");
     }
 }
