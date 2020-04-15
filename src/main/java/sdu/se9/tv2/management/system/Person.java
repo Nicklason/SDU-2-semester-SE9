@@ -1,14 +1,16 @@
 package sdu.se9.tv2.management.system;
 
+import org.json.simple.JSONObject;
+
 public class Person {
     private String firstName;
     private String lastName;
-    private int personID;
+    private int id;
 
-    public Person(String firstName, String lastName, int personID) {
+    public Person(int personID, String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.personID = personID;
+        this.id = personID;
     }
 
     public String getFirstName() {
@@ -19,8 +21,8 @@ public class Person {
         return this.lastName;
     }
 
-    public int getPersonID() {
-        return this.personID;
+    public int getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -32,7 +34,25 @@ public class Person {
         return "Person{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", personID=" + personID +
+                ", id=" + id +
                 '}';
+    }
+
+    public static Person parseJSON (JSONObject person) {
+        int personID = Math.toIntExact((Long)person.get("id"));
+        String firstName = (String)person.get("firstName");
+        String lastName = (String)person.get("lastName");
+
+        return new Person(personID, firstName, lastName);
+    }
+
+    public static JSONObject parseJSON(Person person) {
+        JSONObject obj = new JSONObject();
+
+        obj.put("firstName", person.getFirstName());
+        obj.put("lastName", person.getLastName());
+        obj.put("id", person.getId());
+
+        return obj;
     }
 }

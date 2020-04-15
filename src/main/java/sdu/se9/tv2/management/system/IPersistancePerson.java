@@ -1,8 +1,5 @@
 package sdu.se9.tv2.management.system;
 
-/**
- * Interface for persistence for persons
- */
 public interface IPersistancePerson {
     /**
      * Creates a new person
