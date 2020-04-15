@@ -76,7 +76,7 @@ public class PersistenceProgram implements IPersistenceProgram {
         for (int i = 0; i < this.programs.size(); i++) {
             Program element = this.programs.get(i);
 
-            if (element.getName() == programName) {
+            if (element.getName().equals(programName)) {
                 return element;
             }
         }

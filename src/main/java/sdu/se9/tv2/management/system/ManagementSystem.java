@@ -50,11 +50,20 @@ public class ManagementSystem {
                 case "getproducer":
                     this.getProducer();
                     break;
+                case "createprogram":
+                    this.createProgram();
+                    break;
+                case "getprogram":
+                    this.getProgram();
+                    break;
                 case "setapproved":
                     this.setApproved();
                     break;
+                case "exportcredits":
+                    this.exportCredits();
+                    break;
                 default:
-                    System.out.println("stop, help, createproducer, getproducer");
+                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved");
             }
         }
 
@@ -91,7 +100,9 @@ public class ManagementSystem {
 
         String roleName = scanner.nextLine();
 
-        Credit newCredit = persistenceCredit.createCredit(Integer.parseInt(programID), Integer.parseInt(personID), roleName);
+        Credit credit = persistenceCredit.createCredit(Integer.parseInt(programID), Integer.parseInt(personID), roleName);
+
+        System.out.println(credit);
     }
 
     public void getCredit() {
@@ -127,9 +138,26 @@ public class ManagementSystem {
         persistenceCredit.getCredits(Integer.parseInt(programID));
     }
 
-    public Program createProgram (int producerID, String programName, int internalID) {
+    public void createProgram () {
         // TODO: Check if program already exists
-        return this.persistenceProgram.createProgram(producerID, programName, internalID);
+
+        Producer producer = this.getProducer();
+
+        if (producer == null) {
+            return;
+        }
+
+        System.out.println("Hvad er navnet på programmet?");
+
+        String programName = scanner.nextLine();
+
+        System.out.println("Hvad er det interne ID?");
+
+        int internalID = Integer.parseInt(scanner.nextLine());
+
+        Program program = this.persistenceProgram.createProgram(producer.getID(), programName, internalID);
+
+        System.out.println(program);
     }
 
     public Program getProgram() {
@@ -169,18 +197,21 @@ public class ManagementSystem {
         }
     }
 
-    public void exportCredits(String fileFormat) {
+    public void exportCredits() {
         Program program = getProgram();
 
         System.out.println("Indtast ønskede filformat");
 
-        String filformat = scanner.nextLine();
+        String fileFormat = scanner.nextLine();
 
-        Persistence persistence = new Persistence(program.getName() + "." + fileFormat);
-        write(persistence, persistenceCredit.getCredits(Integer.parseInt(programID)));
-    }
+        if (fileFormat != "json") {
+            System.out.println("Kan kun eksporterer til json");
+            return;
+        }
 
-    private void write(Persistence persistence, ArrayList<Credit> credits) {
+        Persistence persistence = new Persistence(program.getName() + ".json");
+        ArrayList<Credit> credits = persistenceCredit.getCredits(program.getID());
+
         // Create JSONObject to save
         JSONObject obj = new JSONObject();
 
