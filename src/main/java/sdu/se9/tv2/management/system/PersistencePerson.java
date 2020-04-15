@@ -80,7 +80,7 @@ public class PersistencePerson implements IPersistencePerson {
         for (int i = 0; i < this.persons.size(); i++) {
             Person element = this.persons.get(i);
 
-            if (element.getFirstName() == firstName && element.getLastName() == lastName) {
+            if (element.getFirstName().equals(firstName) && element.getLastName().equals(lastName)) {
                 persons.add(element);
             }
         }

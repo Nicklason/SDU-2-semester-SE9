@@ -59,11 +59,26 @@ public class ManagementSystem {
                 case "setapproved":
                     this.setApproved();
                     break;
+                case "createcredit":
+                    this.createCredit();
+                    break;
+                case "getcredit":
+                    this.getCredit();
+                    break;
+                case "getcredits":
+                    this.getCredits();
+                    break;
+                case "createperson":
+                    this.createPerson();
+                    break;
+                case "getperson":
+                    this.getPerson();
+                    break;
                 case "exportcredits":
                     this.exportCredits();
                     break;
                 default:
-                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved");
+                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits");
             }
         }
 
@@ -88,54 +103,55 @@ public class ManagementSystem {
     }
 
     public void createCredit (){
-        System.out.println("Indtast programID");
+        Program program = this.getProgram();
 
-        String programID = scanner.nextLine();
+        if (program == null) {
+            System.out.println("Fandt ikke programmet");
+            return;
+        }
 
-        System.out.println("Indtast personID");
+        Person person = this.getPerson();
 
-        String personID = scanner.nextLine();
+        if (person == null) {
+            System.out.println("Fandt ikke personen");
+            return;
+        }
 
         System.out.println("Indtast rolle");
 
         String roleName = scanner.nextLine();
 
-        Credit credit = persistenceCredit.createCredit(Integer.parseInt(programID), Integer.parseInt(personID), roleName);
+        Credit credit = persistenceCredit.createCredit(program.getID(), person.getId(), roleName);
 
         System.out.println(credit);
     }
 
     public void getCredit() {
-        System.out.println("Indtast programID");
+        Program program = this.getProgram();
 
-        String programID = scanner.nextLine();
+        if (program == null) {
+            System.out.println("Program blev ikke fundet.");
+            return;
+        }
 
-        System.out.println("Indtast personID");
+        Person person = this.getPerson();
 
-        String personID = scanner.nextLine();
+        if (person == null) {
+            System.out.println("Person blev ikke fundet");
+            return;
+        }
 
         System.out.println("Indtast rolle");
 
         String roleName = scanner.nextLine();
-        ArrayList<Credit> creditList = persistenceCredit.getCredits(Integer.parseInt(programID));
 
-        for (int i = 0; i < creditList.size(); i++) {
-            Credit credit = creditList.get(i);
-
-            if (credit.getProgramID() == Integer.parseInt(programID) && credit.getPersonID() == Integer.parseInt(personID) && credit.getRole() == roleName) {
-                System.out.println(credit);
-            }
-        }
-
-        System.out.println("Der er ingen kreditering for de indtastede oplysninger");;
+        System.out.println(persistenceCredit.getCredit(program.getID(), person.getId(), roleName));
     }
 
     public void getCredits() {
-        System.out.println("Hvilket program vil du se krediteringer for?");
+        Program program = this.getProgram();
 
-        String programID = scanner.nextLine();
-
-        persistenceCredit.getCredits(Integer.parseInt(programID));
+        System.out.println(persistenceCredit.getCredits(program.getID()));
     }
 
     public void createProgram () {
@@ -161,25 +177,65 @@ public class ManagementSystem {
     }
 
     public Program getProgram() {
-        System.out.println("Hvilket program leder du efter?");
+        System.out.println("Hvad er navnet på programmet?");
 
         String programName = scanner.nextLine();
         Program program = persistenceProgram.getProgram(programName);
         System.out.println(program);
-        return program;
 
+        return program;
     }
 
-    public Person createPerson (String firstName, String lastName) {
-        return this.persistencePerson.createPerson(firstName, lastName);
+    public Person createPerson () {
+        System.out.println("Hvad er personens fornavn?");
+
+        String firstName = scanner.nextLine();
+
+        System.out.println("Hvad er personens efternavn?");
+
+        String lastName = scanner.nextLine();
+
+        Person person = this.persistencePerson.createPerson(firstName, lastName);
+
+        System.out.println(person);
+
+        return person;
     }
 
     public ArrayList<Person> getPersons (String firstName, String lastName) {
         return this.persistencePerson.getPersons(firstName, lastName);
     }
 
-    public Person getPerson (int personID) {
-        return this.persistencePerson.getPerson(personID);
+    public Person getPerson () {
+        System.out.println("Hvad er personens fornavn?");
+
+        String firstName = scanner.nextLine();
+
+        System.out.println("Hvad er personens efternavn?");
+
+        String lastName = scanner.nextLine();
+
+        ArrayList<Person> people = persistencePerson.getPersons(firstName, lastName);
+
+        int peopleCount = people.size();
+
+        Person person = null;
+
+        if (peopleCount > 1) {
+            // Found multiple people with matching name, choose using id instead
+            System.out.println("Fandt " + peopleCount + " personer med matchene navn, vælg en af dem med deres ID: " + people.toString());
+
+            int personID = Integer.parseInt(scanner.nextLine());
+
+            // Return person (might be null if the id does not exist)
+            person = persistencePerson.getPerson(personID);
+        } else if (peopleCount == 1) {
+            person = people.get(0);
+        }
+
+        System.out.println(person);
+
+        return person;
     }
 
     public void setPendingApproval(int programID, boolean pendingApproval) {
@@ -193,7 +249,7 @@ public class ManagementSystem {
             persistenceProgram.setApproved(program.getID(), true);
             System.out.println("Krediteringen for programmet er godkendt.");
         } else {
-            System.out.println("Programmet belv ikke fundet.");
+            System.out.println("Programmet blev ikke fundet.");
         }
     }
 

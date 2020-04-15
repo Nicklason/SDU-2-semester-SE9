@@ -47,6 +47,38 @@ public class PersistenceCredit implements IPersistenceCredit {
         return result;
     }
 
+    /**
+     * Get credits a person has for a program
+     * @param programID Program id of the program
+     * @param personID Person id of the person
+     * @return
+     */
+    public ArrayList<Credit> getCredits(int programID, int personID) {
+        ArrayList<Credit> result = new ArrayList<Credit>();
+
+        for (int i = 0; i < this.credits.size(); i++) {
+            Credit element = this.credits.get(i);
+
+            if (element.getProgramID() == programID && element.getPersonID() == personID) {
+                result.add(element);
+            }
+        }
+
+        return result;
+    }
+
+    public Credit getCredit (int programID, int personID, String roleName) {
+        for (int i = 0; i < this.credits.size(); i++) {
+            Credit element = this.credits.get(i);
+
+            if (element.getProgramID() == programID && element.getPersonID() == personID && element.getRole().equals(roleName)) {
+                return element;
+            }
+        }
+
+        return null;
+    }
+
     private void read() {
         JSONObject obj = null;
 
