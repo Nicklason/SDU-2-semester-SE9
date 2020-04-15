@@ -27,13 +27,11 @@ public class ManagementSystem {
     }
 
     public Producer createProducer (String producerName) {
-        // add logic here
-        return null;
+        return persistenceProducer.createProducer(producerName);
     }
 
     public Producer getProducer (int producerID) {
-        // add logic here
-        return null;
+        return persistenceProducer.getProducer(producerID);
     }
 
     public Credit createCredit (int programID, int personID, String roleName){
