@@ -17,4 +17,6 @@ public interface IPersistenceProducer {
      * @return
      */
     Producer getProducer (int producerID);
+
+    Producer getProducer (String producerName);
 }

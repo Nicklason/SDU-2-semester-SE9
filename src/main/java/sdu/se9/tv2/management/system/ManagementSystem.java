@@ -47,8 +47,11 @@ public class ManagementSystem {
                 case "createproducer":
                     this.createProducer();
                     break;
+                case "getproducer":
+                    this.getProducer();
+                    break;
                 default:
-                    System.out.println("stop, help, createproducer");
+                    System.out.println("stop, help, createproducer, getproducer");
             }
         }
 
@@ -60,11 +63,15 @@ public class ManagementSystem {
 
         String producerName = scanner.nextLine();
 
-        persistenceProducer.createProducer(producerName);
+        System.out.println(persistenceProducer.createProducer(producerName));
     }
 
-    public Producer getProducer (int producerID) {
-        return persistenceProducer.getProducer(producerID);
+    public void getProducer () {
+        System.out.println("Hvilken producer leder du efter?");
+
+        String producerName = scanner.nextLine();
+
+        System.out.println(persistenceProducer.getProducer(producerName));
     }
 
     public Credit createCredit (int programID, int personID, String roleName){
