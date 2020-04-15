@@ -11,7 +11,7 @@ public class Producer {
         this.name = name;
     }
 
-    public int getID() { return id; }
+    public int getId() { return id; }
 
     public String getName() {
         return name;
@@ -36,7 +36,7 @@ public class Producer {
         JSONObject obj = new JSONObject();
 
         // Add properties to json object
-        obj.put("id", producer.getID());
+        obj.put("id", producer.getId());
         obj.put("name", producer.getName());
 
         // Return object
