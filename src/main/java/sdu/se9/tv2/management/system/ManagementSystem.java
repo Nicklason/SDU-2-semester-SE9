@@ -50,6 +50,9 @@ public class ManagementSystem {
                 case "getproducer":
                     this.getProducer();
                     break;
+                case "setapproved":
+                    this.setApproved();
+                    break;
                 default:
                     System.out.println("stop, help, createproducer, getproducer");
             }
@@ -66,12 +69,13 @@ public class ManagementSystem {
         System.out.println(persistenceProducer.createProducer(producerName));
     }
 
-    public void getProducer () {
+    public Producer getProducer () {
         System.out.println("Hvilken producer leder du efter?");
 
         String producerName = scanner.nextLine();
-
-        System.out.println(persistenceProducer.getProducer(producerName));
+        Producer producer = persistenceProducer.getProducer(producerName);
+        System.out.println(producer);
+        return producer;
     }
 
     public Credit createCredit (int programID, int personID, String roleName){
@@ -102,8 +106,14 @@ public class ManagementSystem {
         return this.persistenceProgram.createProgram(producerID, programName, internalID);
     }
 
-    public Program getProgram(int programID) {
-        return this.persistenceProgram.getProgram(programID);
+    public Program getProgram() {
+        System.out.println("Hvilket program leder du efter?");
+
+        String programName = scanner.nextLine();
+        Program program = persistenceProgram.getProgram(programName);
+        System.out.println(program);
+        return program;
+
     }
 
     public Person createPerson (String firstName, String lastName) {
@@ -122,12 +132,19 @@ public class ManagementSystem {
         persistenceProgram.setAwaitingApproval(programID, pendingApproval);
     }
 
-    public void setApproved(int programID, boolean approved) {
-        persistenceProgram.setApproved(programID, approved);
+    public void setApproved() {
+        Program program = this.getProgram();
+
+        if(program != null){
+            persistenceProgram.setApproved(program.getID(), true);
+            System.out.println("Krediteringen for programmet er godkendt.");
+        } else {
+            System.out.println("Programmet belv ikke fundet.");
+        }
     }
 
     public void exportCredits(int programID, String fileFormat) {
-        Program program = getProgram(programID);
+        Program program = persistenceProgram.getProgram(programID);
         Persistence persistence = new Persistence(program.getName() + "." + fileFormat);
         write(persistence, getCredits(programID));
     }
