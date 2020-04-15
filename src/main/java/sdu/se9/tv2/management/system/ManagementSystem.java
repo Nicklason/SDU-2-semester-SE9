@@ -1,5 +1,7 @@
 package sdu.se9.tv2.management.system;
 
+import java.util.ArrayList;
+
 public class ManagementSystem {
     private static ManagementSystem instance;
 
@@ -37,18 +39,26 @@ public class ManagementSystem {
     }
 
     public Credit createCredit (int programID, int personID, String roleName){
-        // add logic here
-        return null;
+        Credit newCredit = persistenceCredit.createCredit( programID, personID, roleName);
+        return newCredit;
     }
 
     public Credit getCredit(int programID, int personID, String roleName) {
-        // add logic here
+        ArrayList<Credit> creditList = persistenceCredit.getCredits(programID);
+
+        for (int i = 0; i < creditList.size(); i++) {
+            Credit credit = creditList.get(i);
+
+            if (credit.getProgramID() == programID && credit.getPersonID() == personID && credit.getRole() == roleName) {
+                return credit;
+            }
+        }
+
         return null;
     }
 
-    public Credit getCredits(int programID) {
-        // add logic here
-        return null;
+    public ArrayList<Credit> getCredits(int programID) {
+        return persistenceCredit.getCredits(programID);
     }
 
     public Program createProgram (int producerID, String programName, int internalID) {
