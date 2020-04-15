@@ -74,27 +74,53 @@ public class ManagementSystem {
         System.out.println(persistenceProducer.getProducer(producerName));
     }
 
-    public Credit createCredit (int programID, int personID, String roleName){
-        Credit newCredit = persistenceCredit.createCredit( programID, personID, roleName);
-        return newCredit;
+    public void createCredit (){
+        System.out.println("Indtast programID");
+
+        String programID = scanner.nextLine();
+
+        System.out.println("Indtast personID");
+
+        String personID = scanner.nextLine();
+
+        System.out.println("Indtast rolle");
+
+        String roleName = scanner.nextLine();
+
+        Credit newCredit = persistenceCredit.createCredit(Integer.parseInt(programID), Integer.parseInt(personID), roleName);
     }
 
-    public Credit getCredit(int programID, int personID, String roleName) {
-        ArrayList<Credit> creditList = persistenceCredit.getCredits(programID);
+    public void getCredit() {
+        System.out.println("Indtast programID");
+
+        String programID = scanner.nextLine();
+
+        System.out.println("Indtast personID");
+
+        String personID = scanner.nextLine();
+
+        System.out.println("Indtast rolle");
+
+        String roleName = scanner.nextLine();
+        ArrayList<Credit> creditList = persistenceCredit.getCredits(Integer.parseInt(programID));
 
         for (int i = 0; i < creditList.size(); i++) {
             Credit credit = creditList.get(i);
 
-            if (credit.getProgramID() == programID && credit.getPersonID() == personID && credit.getRole() == roleName) {
-                return credit;
+            if (credit.getProgramID() == Integer.parseInt(programID) && credit.getPersonID() == Integer.parseInt(personID) && credit.getRole() == roleName) {
+                System.out.println(credit);
             }
         }
 
-        return null;
+        System.out.println("Der er ingen kreditering for de indtastede oplysninger");;
     }
 
-    public ArrayList<Credit> getCredits(int programID) {
-        return persistenceCredit.getCredits(programID);
+    public void getCredits() {
+        System.out.println("Hvilket program vil du se krediteringer for?");
+
+        String programID = scanner.nextLine();
+
+        persistenceCredit.getCredits(Integer.parseInt(programID));
     }
 
     public Program createProgram (int producerID, String programName, int internalID) {
@@ -126,10 +152,18 @@ public class ManagementSystem {
         persistenceProgram.setApproved(programID, approved);
     }
 
-    public void exportCredits(int programID, String fileFormat) {
-        Program program = getProgram(programID);
+    public void exportCredits(String fileFormat) {
+        System.out.println("Indtast programID");
+
+        String programID = scanner.nextLine();
+
+        System.out.println("Indtast ønskede filformat");
+
+        String filformat = scanner.nextLine();
+
+        Program program = getProgram(Integer.parseInt(programID));
         Persistence persistence = new Persistence(program.getName() + "." + fileFormat);
-        write(persistence, getCredits(programID));
+        write(persistence, persistenceCredit.getCredits(Integer.parseInt(programID)));
     }
 
     private void write(Persistence persistence, ArrayList<Credit> credits) {
