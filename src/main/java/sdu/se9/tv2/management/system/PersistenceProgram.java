@@ -68,6 +68,23 @@ public class PersistenceProgram implements IPersistenceProgram {
     }
 
     /**
+     * Gets a program by name
+     * @param programName The name of the program
+     * @return
+     */
+    public Program getProgram (String programName) {
+        for (int i = 0; i < this.programs.size(); i++) {
+            Program element = this.programs.get(i);
+
+            if (element.getName() == programName) {
+                return element;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Set program credits approved status and saves to file
      * @param programID The ID of the program
      * @param approved `true` for approved, `false` for not
