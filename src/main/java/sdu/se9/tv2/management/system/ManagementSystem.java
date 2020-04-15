@@ -73,11 +73,11 @@ public class ManagementSystem {
     }
 
     public void setPendingApproval(int programID, boolean pendingApproval) {
-        // add logic here
+        persistenceProgram.setAwaitingApproval(programID, pendingApproval);
     }
 
     public void setApproved(int programID, boolean approved) {
-        // add logic here
+        persistenceProgram.setApproved(programID, approved);
     }
 
     public Credit exportCredits(int programID, String fileFormat) {
