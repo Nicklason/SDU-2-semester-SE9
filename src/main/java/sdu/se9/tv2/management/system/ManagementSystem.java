@@ -1,6 +1,7 @@
 package sdu.se9.tv2.management.system;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ManagementSystem {
     private static ManagementSystem instance;
@@ -21,6 +22,10 @@ public class ManagementSystem {
 
     private IPersistenceCredit persistenceCredit;
 
+    private boolean running = true;
+
+    private Scanner scanner = new Scanner(System.in);
+
     ManagementSystem () {
         this.persistenceProducer = new PersistenceProducer();
         this.persistenceProgram = new PersistenceProgram();
@@ -28,8 +33,27 @@ public class ManagementSystem {
         this.persistenceCredit = new PersistenceCredit();
     }
 
-    public Producer createProducer (String producerName) {
-        return persistenceProducer.createProducer(producerName);
+    public void run () {
+        while (running) {
+            switch (scanner.nextLine().toLowerCase()) {
+                case "stop":
+                    running = false;
+                    break;
+                case "createproducer":
+                    this.createProducer();
+                    break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    public void createProducer () {
+        System.out.println("Hvad er navnet på den nye producent?");
+
+        String producerName = scanner.nextLine();
+
+        persistenceProducer.createProducer(producerName);
     }
 
     public Producer getProducer (int producerID) {
