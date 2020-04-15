@@ -34,6 +34,8 @@ public class ManagementSystem {
     }
 
     public void run () {
+        System.out.println("Skriv \"help\" for en liste med alle kommandoerne.");
+
         while (running) {
             switch (scanner.nextLine().toLowerCase()) {
                 case "stop":
@@ -42,6 +44,8 @@ public class ManagementSystem {
                 case "createproducer":
                     this.createProducer();
                     break;
+                default:
+                    System.out.println("stop, help, createproducer");
             }
         }
 
