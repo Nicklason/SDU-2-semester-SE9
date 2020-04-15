@@ -68,6 +68,10 @@ public class ManagementSystem {
         return this.persistenceProgram.getProgram(programID);
     }
 
+    public Person createPerson (String firstName, String lastName) {
+        return this.persistencePerson.createPerson(firstName, lastName);
+    }
+
     public void setPendingApproval(int programID, boolean pendingApproval) {
         // add logic here
     }
