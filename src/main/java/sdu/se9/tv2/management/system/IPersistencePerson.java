@@ -2,7 +2,7 @@ package sdu.se9.tv2.management.system;
 
 import java.util.ArrayList;
 
-public interface IPersistancePerson {
+public interface IPersistencePerson {
     /**
      * Creates a new person
      * @param firstName The person's firstname
@@ -10,6 +10,13 @@ public interface IPersistancePerson {
      * @return
      */
     Person createPerson (String firstName, String lastName);
+
+    /**
+     * Get a person by person ID
+     * @param personID The ID of the person
+     * @return
+     */
+    Person getPerson (int personID);
 
     /**
      * Get a list of people with matching names

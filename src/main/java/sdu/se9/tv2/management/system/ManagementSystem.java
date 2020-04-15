@@ -13,13 +13,13 @@ public class ManagementSystem {
         return instance;
     }
 
-    private PersistenceProducer persistenceProducer;
+    private IPersistenceProducer persistenceProducer;
 
-    private PersistenceProgram persistenceProgram;
+    private IPersistenceProgram persistenceProgram;
 
-    private PersistencePerson persistencePerson;
+    private IPersistencePerson persistencePerson;
 
-    private PersistenceCredit persistenceCredit;
+    private IPersistenceCredit persistenceCredit;
 
     ManagementSystem () {
         this.persistenceProducer = new PersistenceProducer();

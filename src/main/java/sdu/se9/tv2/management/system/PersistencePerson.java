@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 /**
  * Implementation of the IPersistencePerson interface
  */
-public class PersistencePerson implements IPersistancePerson {
+public class PersistencePerson implements IPersistencePerson {
     /**
      * Instance of persistence class for file
      */
