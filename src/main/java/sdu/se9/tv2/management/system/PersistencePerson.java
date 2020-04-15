@@ -69,6 +69,26 @@ public class PersistencePerson implements IPersistancePerson {
     }
 
     /**
+     * Get a list of people with matching names
+     * @param firstName Firstname to search for
+     * @param lastName Lastname to search for
+     * @return
+     */
+    public ArrayList<Person> getPersons (String firstName, String lastName) {
+        ArrayList<Person> persons = new ArrayList<Person>();
+
+        for (int i = 0; i < this.persons.size(); i++) {
+            Person element = this.persons.get(i);
+
+            if (element.getFirstName() == firstName && element.getLastName() == lastName) {
+                persons.add(element);
+            }
+        }
+
+        return persons;
+    }
+
+    /**
      * Reads file and parses JSONObject
      */
     private void read() {

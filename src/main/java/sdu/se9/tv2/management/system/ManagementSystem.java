@@ -72,6 +72,14 @@ public class ManagementSystem {
         return this.persistencePerson.createPerson(firstName, lastName);
     }
 
+    public ArrayList<Person> getPersons (String firstName, String lastName) {
+        return this.persistencePerson.getPersons(firstName, lastName);
+    }
+
+    public Person getPerson (int personID) {
+        return this.persistencePerson.getPerson(personID);
+    }
+
     public void setPendingApproval(int programID, boolean pendingApproval) {
         persistenceProgram.setAwaitingApproval(programID, pendingApproval);
     }
