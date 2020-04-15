@@ -29,13 +29,11 @@ public class ManagementSystem {
     }
 
     public Producer createProducer (String producerName) {
-        // add logic here
-        return null;
+        return persistenceProducer.createProducer(producerName);
     }
 
     public Producer getProducer (int producerID) {
-        // add logic here
-        return null;
+        return persistenceProducer.getProducer(producerID);
     }
 
     public Credit createCredit (int programID, int personID, String roleName){
@@ -62,13 +60,12 @@ public class ManagementSystem {
     }
 
     public Program createProgram (int producerID, String programName, int internalID) {
-        // add logic here
-        return null;
+        // TODO: Check if program already exists
+        return this.persistenceProgram.createProgram(producerID, programName, internalID);
     }
 
     public Program getProgram(int programID) {
-        // add logic here
-        return null;
+        return this.persistenceProgram.getProgram(programID);
     }
 
     public void setPendingApproval(int programID, boolean pendingApproval) {
