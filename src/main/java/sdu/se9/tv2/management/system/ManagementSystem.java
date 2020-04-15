@@ -26,23 +26,37 @@ public class ManagementSystem {
         this.persistenceCredit = new PersistenceCredit();
     }
 
-    public Credit addCredits (int programID, int personID, String roleName){
-        // add logic here
-
-        return null;
-    }
-
-    public Producer findProducer(Producer producer) {
+    public Producer createProducer (String producerName) {
         // add logic here
         return null;
     }
 
-    public Program findCredits(Program program) {
+    public Producer getProducer (int producerID) {
+        // add logic here
+        return null;
+    }
+
+    public Credit createCredit (int programID, int personID, String roleName){
         // add logic here
         return null;
     }
 
     public Credit getCredit(int programID, int personID, String roleName) {
+        // add logic here
+        return null;
+    }
+
+    public Credit getCredits(int programID) {
+        // add logic here
+        return null;
+    }
+
+    public Program createProgram (int producerID, String programName, int internalID) {
+        // add logic here
+        return null;
+    }
+
+    public Program getProgram(int programID) {
         // add logic here
         return null;
     }
@@ -53,20 +67,9 @@ public class ManagementSystem {
 
     public void setApproved(int programID, boolean approved) {
         // add logic here
-
-    }
-
-    public Credit getCredits(int programID) {
-        // add logic here
-        return null;
     }
 
     public Credit exportCredits(int programID, String fileFormat) {
-        // add logic here
-        return null;
-    }
-
-    public Program getProgram(int programID) {
         // add logic here
         return null;
     }
