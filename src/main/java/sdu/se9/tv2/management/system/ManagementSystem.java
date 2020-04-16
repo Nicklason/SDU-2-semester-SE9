@@ -271,7 +271,7 @@ public class ManagementSystem {
 
         String fileFormat = scanner.nextLine();
 
-        if (fileFormat != "json") {
+        if (!fileFormat.equals("json")) {
             System.out.println("Kan kun eksporterer til json");
             return;
         }
