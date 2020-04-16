@@ -56,6 +56,9 @@ public class ManagementSystem {
                 case "getprogram":
                     this.getProgram();
                     break;
+                case "setpendingapproval":
+                    this.setPendingApproval();
+                    break;
                 case "setapproved":
                     this.setApproved();
                     break;
@@ -238,8 +241,15 @@ public class ManagementSystem {
         return person;
     }
 
-    public void setPendingApproval(int programID, boolean pendingApproval) {
-        persistenceProgram.setAwaitingApproval(programID, pendingApproval);
+    public void setPendingApproval() {
+        Program program = this.getProgram();
+
+        if (program == null) {
+            System.out.println("Fandt ikke noget program");
+            return;
+        }
+
+        persistenceProgram.setAwaitingApproval(program.getID(), true);
     }
 
     public void setApproved() {
@@ -247,6 +257,7 @@ public class ManagementSystem {
 
         if(program != null){
             persistenceProgram.setApproved(program.getID(), true);
+            persistenceProgram.setAwaitingApproval(program.getID(), false);
             System.out.println("Krediteringen for programmet er godkendt.");
         } else {
             System.out.println("Programmet blev ikke fundet.");
