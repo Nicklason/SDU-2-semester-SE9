@@ -21,4 +21,8 @@ public interface IPersistenceCredit {
      * @return
      */
     ArrayList<Credit> getCredits (int programID);
+
+    Credit getCredit (int programID, int personID, String roleName);
+
+    ArrayList<Credit> getCredits (int programID, int personID);
 }

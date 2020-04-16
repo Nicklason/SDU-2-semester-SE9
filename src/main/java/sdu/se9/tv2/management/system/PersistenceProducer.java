@@ -68,6 +68,18 @@ public class PersistenceProducer implements IPersistenceProducer {
         return null;
     }
 
+    public Producer getProducer (String producerName) {
+        for (int i = 0; i < this.producers.size(); i++) {
+            Producer element = this.producers.get(i);
+
+            if (element.getName().equals(producerName)) {
+                return element;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Reads file and parses JSONObject
      */

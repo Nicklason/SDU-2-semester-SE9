@@ -1,7 +1,15 @@
 package sdu.se9.tv2.management.system;
 
+import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
+
+import java.util.Scanner;
+
 public class Main {
     public static void main (String args[]) {
+        ManagementSystem system = new ManagementSystem();
+
+        system.run();
+
         //App.load();
 
         /*
@@ -26,7 +34,5 @@ public class Main {
         PersistenceCredit persistenceCredit = new PersistenceCredit();
 
         persistenceCredit.createCredit(badehotellet.getID(), amalie.getId(), "Amanda Madsen");*/
-
-
     }
 }

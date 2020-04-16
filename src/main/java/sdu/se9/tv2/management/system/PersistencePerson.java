@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
 /**
  * Implementation of the IPersistencePerson interface
  */
-public class PersistencePerson implements IPersistancePerson {
+public class PersistencePerson implements IPersistencePerson {
     /**
      * Instance of persistence class for file
      */
@@ -66,6 +66,26 @@ public class PersistencePerson implements IPersistancePerson {
         }
 
         return null;
+    }
+
+    /**
+     * Get a list of people with matching names
+     * @param firstName Firstname to search for
+     * @param lastName Lastname to search for
+     * @return
+     */
+    public ArrayList<Person> getPersons (String firstName, String lastName) {
+        ArrayList<Person> persons = new ArrayList<Person>();
+
+        for (int i = 0; i < this.persons.size(); i++) {
+            Person element = this.persons.get(i);
+
+            if (element.getFirstName().equals(firstName) && element.getLastName().equals(lastName)) {
+                persons.add(element);
+            }
+        }
+
+        return persons;
     }
 
     /**

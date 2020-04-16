@@ -19,6 +19,7 @@ public interface IPersistenceProgram {
      * @return
      */
     Program getProgram (int programID);
+    Program getProgram (String programID);
 
     /**
      * Set a program awaiting approval
