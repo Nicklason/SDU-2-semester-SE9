@@ -81,7 +81,7 @@ public class ManagementSystem {
                     this.exportCredits();
                     break;
                 default:
-                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits");
+                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits, createperson, setpendingapproval");
             }
         }
 
