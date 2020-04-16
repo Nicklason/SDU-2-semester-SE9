@@ -89,12 +89,19 @@ public class ManagementSystem {
                 case "login":
                     this.login();
                     break;
+                case "logout":
+                    this.logout();
+                    break;
                 case "createproduceraccount":
                     this.createProducerAccount();
+                    break;
+                case "createadminaccount":
+                    this.createAdminAccount();
+                    break;
                 default:
                     System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram," +
                             " setapproved, createcredit, getcredit, getcredits, getperson, exportcredits," +
-                            " createperson, setpendingapproval, login, createproduceraccount");
+                            " createperson, setpendingapproval, login, logout, createproduceraccount, createadminaccount");
 
             }
         }
@@ -102,12 +109,30 @@ public class ManagementSystem {
         scanner.close();
     }
 
-    public void createProducerAccount() {
-        if (account == null) {
-            System.out.println("Du er ikke logget ind");
-            return;
+    public boolean isLoggedIn() {
+        return this.account != null;
+    }
+
+    public boolean hasAccess (String requiredAccountType) {
+        if (!this.isLoggedIn()) {
+            return false;
         }
-        if (!account.getType().equals("admin")) {
+
+        return account.getType().equals(requiredAccountType);
+    }
+
+    public boolean hasAccessToProducer (int producerId) {
+        if (!this.hasAccess("producer")) {
+            return false;
+        }
+
+        ProducerAccount producerAccount = (ProducerAccount)this.account;
+
+        return producerAccount.getProducerId() == producerId;
+    }
+
+    public void createProducerAccount() {
+        if (!this.hasAccess("admin")) {
             System.out.println("Du har ikke adgang til denne funktion");
             return;
         }
@@ -141,6 +166,27 @@ public class ManagementSystem {
 
     }
 
+    public void createAdminAccount () {
+        if (!this.hasAccess("systemadmin")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
+
+        System.out.println("Hvad skal brugernavnet være?");
+
+        String username = scanner.nextLine();
+
+        System.out.println("Hvad skal adgangskoden være?");
+
+        String password = scanner.nextLine();
+
+        try {
+            System.out.println(persistenceAccount.createAdminAccount(username, password));
+        } catch (UsernameAlreadyExistsException e) {
+            System.out.println("En bruger med dette brugernavn findes allerede");
+        }
+    }
+
     public void login() {
         System.out.println("Hvad er dit brugernavn?");
 
@@ -155,12 +201,22 @@ public class ManagementSystem {
             System.out.println("Forkert brugernavn/adgangskode");
             return;
         }
+
         this.account = account;
         System.out.println(account);
+    }
 
+    public void logout () {
+        this.account = null;
+        System.out.println("Du er nu logget ud");
     }
 
     public void createProducer () {
+        if (!this.hasAccess("admin")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
+
         System.out.println("Hvad er navnet på den nye producent?");
 
         String producerName = scanner.nextLine();
@@ -169,6 +225,7 @@ public class ManagementSystem {
     }
 
     public Producer getProducer () {
+        // Anyone can see producers
         System.out.println("Hvilken producer leder du efter?");
 
         String producerName = scanner.nextLine();
@@ -177,12 +234,26 @@ public class ManagementSystem {
         return producer;
     }
 
-    public void createCredit (){
+    public void createCredit () {
+        boolean isProducer = this.hasAccess("producent");
+        if (!this.hasAccess("admin") || !isProducer) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
+
         Program program = this.getProgram();
 
         if (program == null) {
-            System.out.println("Fandt ikke programmet");
+            System.out.println("Fandt ikke programmet / du har ikke adgang til programmet");
             return;
+        } else if (isProducer) {
+            ProducerAccount producer = (ProducerAccount)account;
+
+            if (producer.getId() != program.getProducerID()) {
+                // Producer does not own this program, return error message as if the program was not found
+                System.out.println("Fandt ikke programmet / du har ikke adgang til programmet");
+                return;
+            }
         }
 
         Person person = this.getPerson();
@@ -205,7 +276,6 @@ public class ManagementSystem {
         Program program = this.getProgram();
 
         if (program == null) {
-            System.out.println("Program blev ikke fundet.");
             return;
         }
 
@@ -226,17 +296,22 @@ public class ManagementSystem {
     public void getCredits() {
         Program program = this.getProgram();
 
+        if (program == null) {
+            return;
+        }
+
         System.out.println(persistenceCredit.getCredits(program.getID()));
     }
 
     public void createProgram () {
         // TODO: Check if program already exists
 
-        Producer producer = this.getProducer();
-
-        if (producer == null) {
+        if (!hasAccess("producer")) {
+            System.out.println("Du har ikke adgang til denne funktion");
             return;
         }
+
+        ProducerAccount producerAccount = (ProducerAccount)account;
 
         System.out.println("Hvad er navnet på programmet?");
 
@@ -246,7 +321,7 @@ public class ManagementSystem {
 
         int internalID = Integer.parseInt(scanner.nextLine());
 
-        Program program = this.persistenceProgram.createProgram(producer.getID(), programName, internalID);
+        Program program = this.persistenceProgram.createProgram(producerAccount.getProducerId(), programName, internalID);
 
         System.out.println(program);
     }
@@ -256,12 +331,29 @@ public class ManagementSystem {
 
         String programName = scanner.nextLine();
         Program program = persistenceProgram.getProgram(programName);
+
+        if (program == null) {
+            System.out.println(program);
+            return null;
+        }
+
+        if (!this.hasAccess("admin") && !program.isApproved() && (!this.isLoggedIn() || !this.hasAccessToProducer(program.getProducerID()))) {
+            System.out.println(program);
+            System.out.println("Program blev ikke fundet");
+            return null;
+        }
+
         System.out.println(program);
 
         return program;
     }
 
     public Person createPerson () {
+        if (!hasAccess("admin") || !hasAccess("producer")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return null;
+        }
+
         System.out.println("Hvad er personens fornavn?");
 
         String firstName = scanner.nextLine();
@@ -317,7 +409,11 @@ public class ManagementSystem {
         Program program = this.getProgram();
 
         if (program == null) {
-            System.out.println("Fandt ikke noget program");
+            return;
+        }
+
+        if (!hasAccess("producer")) {
+            System.out.println("Du har ikke adgang til denne funktion");
             return;
         }
 
@@ -325,19 +421,27 @@ public class ManagementSystem {
     }
 
     public void setApproved() {
+        if (!hasAccess("admin")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
+
         Program program = this.getProgram();
 
         if(program != null){
             persistenceProgram.setApproved(program.getID(), true);
             persistenceProgram.setAwaitingApproval(program.getID(), false);
             System.out.println("Krediteringen for programmet er godkendt.");
-        } else {
-            System.out.println("Programmet blev ikke fundet.");
         }
     }
 
     public void exportCredits() {
         Program program = getProgram();
+
+        if (!hasAccess("admin") || !hasAccess("producer")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
 
         System.out.println("Indtast ønskede filformat");
 
