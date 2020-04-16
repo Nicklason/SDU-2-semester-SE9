@@ -18,6 +18,7 @@ public class ProducerAccount extends Account {
         return "ProducerAccount{" +
                 "id='" + getId() + '\'' +
                 ", username='" + getUsername() + '\'' +
+                ", password='" + getPassword() + '\'' +
                 ", type='" + getType() + '\'' +
                 ", producerId='" + getProducerId() + '\'' +
                 '}';

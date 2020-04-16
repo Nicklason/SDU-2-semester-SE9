@@ -73,6 +73,27 @@ public class PersistenceAccount implements IPersistenceAccount {
         return account;
     }
 
+    /**
+     * Gets the aomunt of accounts for the specific producer
+     *
+     * @param producerId
+     * @return
+     */
+    public int getProducerAccountCount(int producerId) {
+        int count = 0;
+        for (int i = 0; i < this.accounts.size(); i++) {
+            Account element = this.accounts.get(i);
+            if (!element.getType().equals("producer")) {
+                continue;
+            }
+            ProducerAccount account = (ProducerAccount)element;
+            if (account.getProducerId() == producerId) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void read() {
         JSONObject obj = null;
 

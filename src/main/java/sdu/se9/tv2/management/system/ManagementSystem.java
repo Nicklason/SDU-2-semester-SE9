@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,6 +26,10 @@ public class ManagementSystem {
 
     private IPersistenceCredit persistenceCredit;
 
+    private IPersistenceAccount persistenceAccount;
+
+    private Account account = null;
+
     private boolean running = true;
 
     private Scanner scanner = new Scanner(System.in);
@@ -34,6 +39,7 @@ public class ManagementSystem {
         this.persistenceProgram = new PersistenceProgram();
         this.persistencePerson = new PersistencePerson();
         this.persistenceCredit = new PersistenceCredit();
+        this.persistenceAccount = new PersistenceAccount();
     }
 
     public void run () {
@@ -80,12 +86,78 @@ public class ManagementSystem {
                 case "exportcredits":
                     this.exportCredits();
                     break;
+                case "login":
+                    this.login();
+                    break;
+                case "createproduceraccount":
+                    this.createProducerAccount();
                 default:
-                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits, createperson, setpendingapproval");
+                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram," +
+                            " setapproved, createcredit, getcredit, getcredits, getperson, exportcredits," +
+                            " createperson, setpendingapproval, login, createproduceraccount");
+
             }
         }
 
         scanner.close();
+    }
+
+    public void createProducerAccount() {
+        if (account == null) {
+            System.out.println("Du er ikke logget ind");
+            return;
+        }
+        if (!account.getType().equals("admin")) {
+            System.out.println("Du har ikke adgang til denne funktion");
+            return;
+        }
+
+        Producer producer = this.getProducer();
+        if (producer == null) {
+            System.out.println("Producenten blev ikke fundet");
+            return;
+        }
+
+        int accountCount = persistenceAccount.getProducerAccountCount(producer.getID());
+
+        System.out.println("Hvor mange nye konti skal produceren have? (kun hele tal)");
+
+        int numberOfAccounts = Integer.parseInt(scanner.nextLine());
+
+        ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
+
+        for (int i = 0; i < numberOfAccounts; i++) {
+            int accountId = accountCount+i+1;
+            String username = producer.getName()+ "-" +accountId;
+            String password = producer.getName() + "123";
+            try {
+                ProducerAccount account = persistenceAccount.createProducerAccount(username, password, producer.getID());
+                accounts.add(account);
+            } catch (UsernameAlreadyExistsException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(accounts);
+
+    }
+
+    public void login() {
+        System.out.println("Hvad er dit brugernavn?");
+
+        String username = scanner.nextLine();
+
+        System.out.println("Hvad er din adgangskode?");
+
+        String password = scanner.nextLine();
+
+        Account account = persistenceAccount.getMatchingAccount(username, password);
+        if (account == null) {
+            System.out.println("Forkert brugernavn/adgangskode");
+            return;
+        }
+        this.account = account;
+        System.out.println(account);
+
     }
 
     public void createProducer () {

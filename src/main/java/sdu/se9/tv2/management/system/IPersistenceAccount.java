@@ -37,4 +37,12 @@ public interface IPersistenceAccount {
      * @return
      */
     ProducerAccount createProducerAccount (String username, String password, int producerId) throws UsernameAlreadyExistsException;
+
+    /**
+     * Gets the aomunt of accounts for the specific producer
+     * @param producerId
+     * @return
+     */
+    int getProducerAccountCount (int producerId);
+
 }
