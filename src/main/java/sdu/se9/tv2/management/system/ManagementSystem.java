@@ -276,7 +276,9 @@ public class ManagementSystem {
             return;
         }
 
-        Persistence persistence = new Persistence(program.getName() + ".json");
+
+
+        Persistence persistence = new Persistence(program.getName().replaceAll("\\?","") + ".json");
         ArrayList<Credit> credits = persistenceCredit.getCredits(program.getID());
 
         // Create JSONObject to save
