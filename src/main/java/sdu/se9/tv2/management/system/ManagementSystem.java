@@ -81,7 +81,7 @@ public class ManagementSystem {
                     this.exportCredits();
                     break;
                 default:
-                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits");
+                    System.out.println("stop, help, createproducer, getproducer, createprogram, getprogram, setapproved, createcredit, getcredit, getcredits, getperson, exportcredits, createperson, setpendingapproval");
             }
         }
 
@@ -271,12 +271,14 @@ public class ManagementSystem {
 
         String fileFormat = scanner.nextLine();
 
-        if (fileFormat != "json") {
+        if (!fileFormat.equals("json")) {
             System.out.println("Kan kun eksporterer til json");
             return;
         }
 
-        Persistence persistence = new Persistence(program.getName() + ".json");
+
+
+        Persistence persistence = new Persistence(program.getName().replaceAll("\\?","") + ".json");
         ArrayList<Credit> credits = persistenceCredit.getCredits(program.getID());
 
         // Create JSONObject to save
