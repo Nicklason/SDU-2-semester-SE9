@@ -44,6 +44,8 @@ public abstract class Account {
             return new ProducerAccount(id, username, password, producerId);
         } else if (type.equals("admin")) {
             return new AdminAccount(id, username, password);
+        } else if (type.equals("systemadmin")) {
+            return new SystemAdminAccount(id, username, password);
         }
 
         throw new InvalidClassException("Unknown account type");

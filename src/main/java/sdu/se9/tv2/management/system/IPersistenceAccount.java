@@ -22,21 +22,32 @@ public interface IPersistenceAccount {
     boolean usernameTaken (String username);
 
     /**
-     * Creates a new admin account by username and password
+     * Creates a new admin account
      * @param username
      * @param password
      * @return
+     * @throws UsernameAlreadyExistsException
      */
     AdminAccount createAdminAccount (String username, String password) throws UsernameAlreadyExistsException;
 
     /**
-     * Creates a new producer account by username, password and producerId
+     * Creates a new producer account
      * @param username The username of the account
      * @param password The password of the account
      * @param producerId The producer ID for the account
      * @return
+     * @throws UsernameAlreadyExistsException
      */
     ProducerAccount createProducerAccount (String username, String password, int producerId) throws UsernameAlreadyExistsException;
+
+    /**
+     * Creates a new system admin account
+     * @param username The username of the account
+     * @param password The password of the account
+     * @return
+     * @throws UsernameAlreadyExistsException
+     */
+    SystemAdminAccount createSystemAdminAccount (String username, String password) throws UsernameAlreadyExistsException;
 
     /**
      * Gets the aomunt of accounts for the specific producer

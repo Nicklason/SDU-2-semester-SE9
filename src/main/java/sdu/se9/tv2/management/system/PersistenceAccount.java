@@ -59,6 +59,20 @@ public class PersistenceAccount implements IPersistenceAccount {
         return account;
     }
 
+    public SystemAdminAccount createSystemAdminAccount(String username, String password) throws UsernameAlreadyExistsException {
+        if (this.usernameTaken(username)) {
+            throw new UsernameAlreadyExistsException("An account with username already exists");
+        }
+
+        lastID++;
+        SystemAdminAccount account = new SystemAdminAccount(lastID, username, password);
+        accounts.add(account);
+
+        this.write();
+
+        return account;
+    }
+
     public ProducerAccount createProducerAccount(String username, String password, int producerId) throws UsernameAlreadyExistsException {
         if (this.usernameTaken(username)) {
             throw new UsernameAlreadyExistsException("An account with username already exists");
