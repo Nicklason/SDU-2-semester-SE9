@@ -235,8 +235,8 @@ public class ManagementSystem {
     }
 
     public void createCredit () {
-        boolean isProducer = this.hasAccess("producent");
-        if (!this.hasAccess("admin") || !isProducer) {
+        boolean isProducer = this.hasAccess("producer");
+        if (!this.hasAccess("admin") && !isProducer) {
             System.out.println("Du har ikke adgang til denne funktion");
             return;
         }
@@ -249,11 +249,16 @@ public class ManagementSystem {
         } else if (isProducer) {
             ProducerAccount producer = (ProducerAccount)account;
 
-            if (producer.getId() != program.getProducerID()) {
+            if (producer.getProducerId() != program.getProducerID()) {
                 // Producer does not own this program, return error message as if the program was not found
                 System.out.println("Fandt ikke programmet / du har ikke adgang til programmet");
                 return;
             }
+        }
+
+        if (program.isApproved() && isProducer) {
+            System.out.println("Programmet er allerede godkendt");
+            return;
         }
 
         Person person = this.getPerson();
@@ -334,11 +339,12 @@ public class ManagementSystem {
 
         if (program == null) {
             System.out.println(program);
+            System.out.println("Program blev ikke fundet");
             return null;
         }
 
-        if (!this.hasAccess("admin") && !program.isApproved() && (!this.isLoggedIn() || !this.hasAccessToProducer(program.getProducerID()))) {
-            System.out.println(program);
+        if (!program.isApproved() && !hasAccess("admin") && !this.hasAccessToProducer(program.getProducerID())) {
+            System.out.println("null");
             System.out.println("Program blev ikke fundet");
             return null;
         }
@@ -349,7 +355,7 @@ public class ManagementSystem {
     }
 
     public Person createPerson () {
-        if (!hasAccess("admin") || !hasAccess("producer")) {
+        if (!hasAccess("admin") && !hasAccess("producer")) {
             System.out.println("Du har ikke adgang til denne funktion");
             return null;
         }
@@ -417,6 +423,11 @@ public class ManagementSystem {
             return;
         }
 
+        if (program.isApproved()) {
+            System.out.println("Programmet er allerede godkendt");
+            return;
+        }
+
         persistenceProgram.setAwaitingApproval(program.getID(), true);
     }
 
@@ -438,7 +449,7 @@ public class ManagementSystem {
     public void exportCredits() {
         Program program = getProgram();
 
-        if (!hasAccess("admin") || !hasAccess("producer")) {
+        if (!hasAccess("admin") && !hasAccess("producer")) {
             System.out.println("Du har ikke adgang til denne funktion");
             return;
         }
@@ -452,26 +463,37 @@ public class ManagementSystem {
             return;
         }
 
-
-
         Persistence persistence = new Persistence(program.getName().replaceAll("\\?","") + ".json");
         ArrayList<Credit> credits = persistenceCredit.getCredits(program.getID());
 
         // Create JSONObject to save
         JSONObject obj = new JSONObject();
 
+        obj.put("programNavn", program.getName());
+        obj.put("programID", program.getID());
+
         // JSONArray that contains the producers
         JSONArray list = new JSONArray();
 
         // Go through producer list and parse as JSON objects
         for (int i = 0; i < credits.size(); i++) {
-            list.add(Credit.parseJSON(credits.get(i)));
+            Credit credit = credits.get(i);
+            JSONObject jsonCredit = new JSONObject();
+
+            Person person = persistencePerson.getPerson(credit.getPersonID());
+
+            jsonCredit.put("rolle", credit.getRole());
+            jsonCredit.put("personID", credit.getPersonID());
+            jsonCredit.put("fornavn", person.getFirstName());
+            jsonCredit.put("efternavn", person.getLastName());
+
+            list.add(jsonCredit);
         }
 
         // Add lastID to JSON object
         //obj.put("lastID", lastID);
         // Add list to JSON object
-        obj.put("list", list);
+        obj.put("medvirkende", list);
 
         // Overwrite the file with new JSON object
         persistence.write(obj);

@@ -123,6 +123,8 @@ public class PersistenceProgram implements IPersistenceProgram {
                 return;
             }
         }
+
+        this.write();
     }
 
     /**
