@@ -9,6 +9,7 @@
       <TextField fx:id="usernameInput" layoutX="91.0" layoutY="215.0" />
       <Label layoutX="91.0" layoutY="198.0" text="Username" />
       <Label layoutX="263.0" layoutY="198.0" text="Password" />
-      <Button onAction="#login" layoutX="230.0" layoutY="255.0" mnemonicParsing="false" text="Login" />
+      <Button layoutX="95.0" layoutY="255.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Label fx:id="loginError" layoutX="172.0" layoutY="259.0" text=""/>
    </children>
 </AnchorPane>
