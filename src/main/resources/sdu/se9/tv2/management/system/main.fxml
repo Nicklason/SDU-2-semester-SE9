@@ -14,7 +14,6 @@
         <VBox spacing="5">
             <Button onAction="#handleHomepageShowView" text="Homepage" />
             <Button onAction="#handleTestShowView" text="Test" />
-            <Button onAction="#handleProducerView" text="Tilføj producent / konti til producenter" />
         </VBox>
     </left>
     <center>
