@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="480" prefWidth="480" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.ProducerController">
+    <children>
+        <Button layoutX="35.0" layoutY="109.0" mnemonicParsing="false" onAction="#addProducer" text="Tilføj producent" />
+      <TextField fx:id="textfieldNewProducer" layoutX="240.0" layoutY="72.0" />
+      <TextField fx:id="textfieldProducer" layoutX="37.0" layoutY="201.0" />
+      <TextField fx:id="textfieldAmount" layoutX="37.0" layoutY="249.0" />
+      <Label layoutX="37.0" layoutY="184.0" text="Hvilken producent skal der oprettes konti til?" />
+      <Label layoutX="38.0" layoutY="232.0" text="Hvor mange konti skal oprettes?" />
+      <Button layoutX="35.0" layoutY="281.0" mnemonicParsing="false" onAction="#addAccounts" text="Tilføj konti til producent" />
+      <Label layoutX="35.0" layoutY="33.0" text="Tilføjelse af producent:" />
+      <Label layoutX="35.0" layoutY="167.0" text="Tilføjelse af konti til en producent" />
+      <Label layoutX="35.0" layoutY="76.0" text="Indtast navnet på den nye producent:" />
+    </children>
+</AnchorPane>
