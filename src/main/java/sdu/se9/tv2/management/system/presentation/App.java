@@ -17,8 +17,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("main"), 640, 480);
         stage.setScene(scene);
+        // stage.setResizable(false);
         stage.show();
     }
 
@@ -26,7 +27,11 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    static Scene getScene () {
+        return scene;
+    }
+
+    public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(App.class.getResource("/sdu/se9/tv2/management/system/" + fxml + ".fxml"));
         return fxmlLoader.load();
