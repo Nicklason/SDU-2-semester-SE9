@@ -30,7 +30,7 @@ public class LogInLogOutController {
 
         System.out.println(password);
 
-        Account account = persistenceAccount.getMatchingAccount(username, password);
+        Account account = IPersistenceAccount.getMatchingAccount(username, password);
         if (account == null) {
             System.out.println("Forkert brugernavn/adgangskode");
             return;
