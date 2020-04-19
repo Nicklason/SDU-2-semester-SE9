@@ -4,6 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import sdu.se9.tv2.management.system.domain.Producer;
+import sdu.se9.tv2.management.system.domain.accounts.Account;
+import sdu.se9.tv2.management.system.persistence.IPersistenceProducer;
+import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
+import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
+
+import java.io.IOException;
 
 public class ProducerController {
 
@@ -23,15 +30,19 @@ public class ProducerController {
     private Button buttonAddAccounts;
 
     @FXML
-    public String addProducer(ActionEvent e) {
-        System.out.println("test");
-        return null;
+    public void addProducer(ActionEvent e) throws IOException {
+        String newProducer = textfieldNewProducer.getText();
+        Producer producer = PersistenceProducer.getInstance().createProducer(newProducer);
+
     }
 
     @FXML
-    public String addAccounts (ActionEvent e) {
-        System.out.println("test2");
-        return null;
+    public void addAccounts (ActionEvent e) throws  IOException {
+        String nameOfProducer = textfieldProducer.getText();
+        String amount = textfieldAmount.getText();
+
+        Account count = PersistenceAccount.getInstance().
+
     }
 
 }
