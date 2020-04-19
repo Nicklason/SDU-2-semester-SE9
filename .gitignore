@@ -26,3 +26,11 @@ buildNumber.properties
 # Maven
 log/
 target/
+
+# Persistence
+producer.json
+program.json
+credit.json
+person.json
+account.json
+*.json
