@@ -6,6 +6,8 @@ import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 
+import java.util.ArrayList;
+
 /**
  * Interface for persistence for accounts
  */
@@ -46,6 +48,14 @@ public interface IPersistenceAccount {
      * @throws UsernameAlreadyExistsException
      */
     ProducerAccount createProducerAccount (String username, String password, int producerId) throws UsernameAlreadyExistsException;
+
+    /**
+     * Adding accounts for a producer
+     * @param producerId
+     * @param amount
+     * @return
+     */
+    ArrayList<ProducerAccount> createAccountsForProducer (int producerId, int amount);
 
     /**
      * Creates a new system admin account

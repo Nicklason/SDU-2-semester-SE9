@@ -3,6 +3,7 @@ package sdu.se9.tv2.management.system.persistence;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import sdu.se9.tv2.management.system.domain.Producer;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
@@ -33,6 +34,25 @@ public class PersistenceAccount implements IPersistenceAccount {
 
     private PersistenceAccount() {
         this.read();
+    }
+
+    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
+
+        ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
+
+        for (int i = 0; i < amount; i++) {
+            int accountId = i + 1;
+            // The String "username" needs to take the producerID and cast it to a string for more optimal usernames, i keep f.cking it up (Kasper)
+            String username = "ProducerensNavn" + accountId;
+            String password = "NytKodeord" + i+2*3;
+            try {
+                ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, PersistenceProducer.getInstance().getProducer(producerId).getID());
+                accounts.add(account);
+            } catch (UsernameAlreadyExistsException err) {
+                err.printStackTrace();
+            }
+        }
+        return accounts;
     }
 
     public Account getMatchingAccount(String username, String password) {

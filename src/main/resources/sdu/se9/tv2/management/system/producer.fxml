@@ -9,7 +9,7 @@
         <TextField fx:id="textfieldNewProducer" layoutX="240.0" layoutY="72.0" />
         <TextField fx:id="textfieldProducer" layoutX="37.0" layoutY="201.0" />
         <TextField fx:id="textfieldAmount" layoutX="37.0" layoutY="249.0" />
-        <Label layoutX="37.0" layoutY="184.0" text="Hvilken producent skal der oprettes konti til?" />
+        <Label layoutX="37.0" layoutY="184.0" text="Hvilken producent skal der oprettes konti til? (Skriv et tal / Id på producenten)" />
         <Label layoutX="38.0" layoutY="232.0" text="Hvor mange konti skal oprettes?" />
         <Button layoutX="35.0" layoutY="281.0" mnemonicParsing="false" onAction="#addAccounts" text="Tilføj konti til producent" />
         <Label layoutX="35.0" layoutY="33.0" text="Tilføjelse af producent:" />
