@@ -1,7 +1,7 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.domain.accounts;
 
 public class SystemAdminAccount extends Account {
-    SystemAdminAccount(int accountId, String accountUsername, String accountPassword) {
+    public SystemAdminAccount(int accountId, String accountUsername, String accountPassword) {
         super(accountId, accountUsername, accountPassword,  "systemadmin");
     }
 

@@ -1,4 +1,4 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.domain.accounts;
 
 import org.json.simple.JSONObject;
 
@@ -10,7 +10,7 @@ public abstract class Account {
     private String password;
     private String type;
 
-    Account(int accountId, String accountUsername, String accountPassword, String accountType) {
+    public Account(int accountId, String accountUsername, String accountPassword, String accountType) {
         this.id = accountId;
         this.username = accountUsername;
         this.password = accountPassword;

@@ -1,8 +1,9 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.persistence;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import sdu.se9.tv2.management.system.domain.Credit;
 
 import java.util.ArrayList;
 import java.util.Iterator;

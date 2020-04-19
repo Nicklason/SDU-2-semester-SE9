@@ -1,4 +1,4 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.persistence;
 
 import java.io.*;
 import org.json.simple.JSONObject;

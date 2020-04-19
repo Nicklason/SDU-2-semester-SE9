@@ -1,4 +1,6 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.persistence;
+
+import sdu.se9.tv2.management.system.domain.Credit;
 
 import java.util.ArrayList;
 

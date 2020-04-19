@@ -1,4 +1,4 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.domain;
 
 import org.json.simple.JSONObject;
 

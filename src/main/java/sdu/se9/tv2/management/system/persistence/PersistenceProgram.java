@@ -1,4 +1,4 @@
-package sdu.se9.tv2.management.system;
+package sdu.se9.tv2.management.system.persistence;
 
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import sdu.se9.tv2.management.system.domain.Program;
 
 /**
  * Implementation of the IPersistenceProgram interface
@@ -29,7 +30,7 @@ public class PersistenceProgram implements IPersistenceProgram {
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    PersistenceProgram () {
+    public PersistenceProgram() {
         this.read();
     }
 
