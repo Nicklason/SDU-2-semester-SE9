@@ -15,13 +15,23 @@ import java.util.Iterator;
 
 public class PersistenceAccount implements IPersistenceAccount {
 
+    private static PersistenceAccount instance = null;
+
+    public static PersistenceAccount getInstance() {
+        if (instance == null) {
+            instance = new PersistenceAccount();
+        }
+
+        return instance;
+    }
+
     private Persistence persistence = new Persistence("account.json");
 
     private int lastID = -1;
 
     private ArrayList<Account> accounts = new ArrayList<Account>();
 
-    public PersistenceAccount() {
+    private PersistenceAccount() {
         this.read();
     }
 

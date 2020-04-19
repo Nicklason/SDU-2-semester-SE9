@@ -13,6 +13,17 @@ import sdu.se9.tv2.management.system.domain.Producer;
  * Implementation of the IPersistenceProducer interface
  */
 public class PersistenceProducer implements IPersistenceProducer {
+
+    private static PersistenceProducer instance = null;
+
+    public static PersistenceProducer getInstance() {
+        if (instance == null) {
+            instance = new PersistenceProducer();
+        }
+
+        return instance;
+    }
+
     /**
      * Instance of persistence class for file
      */
@@ -31,7 +42,7 @@ public class PersistenceProducer implements IPersistenceProducer {
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    public PersistenceProducer() {
+    private PersistenceProducer() {
         // Once a new instance is made the data will be read and saved in memory
         this.read();
     }

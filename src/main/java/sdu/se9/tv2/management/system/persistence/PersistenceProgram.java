@@ -12,6 +12,17 @@ import sdu.se9.tv2.management.system.domain.Program;
  * Implementation of the IPersistenceProgram interface
  */
 public class PersistenceProgram implements IPersistenceProgram {
+
+    private static PersistenceProgram instance = null;
+
+    public static PersistenceProgram getInstance() {
+        if (instance == null) {
+            instance = new PersistenceProgram();
+        }
+
+        return instance;
+    }
+
     /**
      * Instance of persistence class for file
      */
@@ -30,7 +41,7 @@ public class PersistenceProgram implements IPersistenceProgram {
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    public PersistenceProgram() {
+    private PersistenceProgram() {
         this.read();
     }
 

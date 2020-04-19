@@ -11,6 +11,17 @@ import sdu.se9.tv2.management.system.domain.Person;
  * Implementation of the IPersistencePerson interface
  */
 public class PersistencePerson implements IPersistencePerson {
+
+    private static PersistencePerson instance = null;
+
+    public static PersistencePerson getInstance() {
+        if (instance == null) {
+            instance = new PersistencePerson();
+        }
+
+        return instance;
+    }
+
     /**
      * Instance of persistence class for file
      */
@@ -29,7 +40,7 @@ public class PersistencePerson implements IPersistencePerson {
     /**
      * Creates a new instance of the PersistencePerson class
      */
-    public PersistencePerson() {
+    private PersistencePerson() {
         // Once a new instance is made the data will be read and saved in memory
         this.read();
     }

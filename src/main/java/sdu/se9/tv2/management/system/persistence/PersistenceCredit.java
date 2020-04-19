@@ -10,13 +10,23 @@ import java.util.Iterator;
 
 public class PersistenceCredit implements IPersistenceCredit {
 
+    private static PersistenceCredit instance = null;
+
+    public static PersistenceCredit getInstance() {
+        if (instance == null) {
+            instance = new PersistenceCredit();
+        }
+
+        return instance;
+    }
+
     private Persistence persistence = new Persistence("credit.json");
 
     private int lastID = -1;
 
     private ArrayList<Credit> credits = new ArrayList<Credit>();
 
-    public PersistenceCredit() {
+    private PersistenceCredit() {
         this.read();
     }
 
