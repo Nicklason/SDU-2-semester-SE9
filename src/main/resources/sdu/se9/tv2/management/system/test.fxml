@@ -3,9 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane minHeight="480" maxHeight="480"  minWidth="500" maxWidth="500" prefHeight="480" prefWidth="600" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="480" prefWidth="480" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.TestController">
    <children>
-      <Button layoutX="115.0" layoutY="143.0" mnemonicParsing="false" text="Wow en anden knap?!" />
+      <Button layoutX="115.0" layoutY="143.0" mnemonicParsing="false" text="Wow en anden knap?!" onAction="#testAction"/>
    </children>
 </AnchorPane>
