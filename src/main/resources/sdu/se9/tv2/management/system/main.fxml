@@ -8,7 +8,7 @@
         <!--
         Add signin / signout
         -->
-        <Button text="Login / logud" />
+        <Button onAction="#handleLoginShowView" text="Login / logud" />
     </right>
     <left>
         <VBox spacing="5">
