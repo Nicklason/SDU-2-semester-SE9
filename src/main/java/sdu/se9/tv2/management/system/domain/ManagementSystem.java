@@ -11,7 +11,7 @@ public class ManagementSystem {
             instance = new ManagementSystem();
         }
 
-        return new ManagementSystem();
+        return instance;
     }
 
     private Account account = null;
