@@ -90,6 +90,28 @@ public class PersistenceCredit implements IPersistenceCredit {
         return null;
     }
 
+    public ArrayList<Credit> getCreditsByPerson (int personID) {
+        return this.getCreditsByPerson(personID, Integer.MAX_VALUE);
+    }
+
+    public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) {
+        ArrayList<Credit> result = new ArrayList<Credit>();
+
+        for (int i = 0; i < this.credits.size(); i++) {
+            Credit element = this.credits.get(i);
+
+            if (element.getPersonID() == personID) {
+                result.add(element);
+            }
+
+            if (result.size() >= maxCount) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
     private void read() {
         JSONObject obj = null;
 
