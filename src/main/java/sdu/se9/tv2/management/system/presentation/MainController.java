@@ -22,4 +22,10 @@ public class MainController {
         Parent parent = App.loadFXML("test");
         mainBorderPane.setCenter(parent);
     }
+
+    @FXML
+    private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
+        Parent parent = App.loadFXML("insert-credits");
+        mainBorderPane.setCenter(parent);
+    }
 }
