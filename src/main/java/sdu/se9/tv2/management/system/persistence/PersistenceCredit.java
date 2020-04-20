@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import sdu.se9.tv2.management.system.domain.Credit;
+import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,7 +32,11 @@ public class PersistenceCredit implements IPersistenceCredit {
     }
 
     @Override
-    public Credit createCredit(int programID, int personID, String roleName) {
+    public Credit createCredit(int programID, int personID, String roleName) throws DuplicateRoleNameException {
+        if (this.getCredit(programID, roleName) != null) {
+            throw new DuplicateRoleNameException("Role already exists");
+        }
+
         lastID++;
         Credit newCredit = new Credit(lastID, programID, personID, roleName);
         credits.add(newCredit);
@@ -78,6 +83,18 @@ public class PersistenceCredit implements IPersistenceCredit {
         return result;
     }
 
+    public Credit getCredit (int programID, String roleName) {
+        for (int i = 0; i < this.credits.size(); i++) {
+            Credit element = this.credits.get(i);
+
+            if (element.getProgramID() == programID && element.getRole().equals(roleName)) {
+                return element;
+            }
+        }
+
+        return null;
+    }
+
     public Credit getCredit (int programID, int personID, String roleName) {
         for (int i = 0; i < this.credits.size(); i++) {
             Credit element = this.credits.get(i);
@@ -97,7 +114,7 @@ public class PersistenceCredit implements IPersistenceCredit {
     public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) {
         ArrayList<Credit> result = new ArrayList<Credit>();
 
-        for (int i = 0; i < this.credits.size(); i++) {
+        for (int i = this.credits.size() - 1; i >= 0; i--) {
             Credit element = this.credits.get(i);
 
             if (element.getPersonID() == personID) {
