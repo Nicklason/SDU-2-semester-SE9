@@ -27,4 +27,8 @@ public interface IPersistenceCredit {
     Credit getCredit (int programID, int personID, String roleName);
 
     ArrayList<Credit> getCredits (int programID, int personID);
+
+    ArrayList<Credit> getCreditsByPerson (int personID);
+
+    ArrayList<Credit> getCreditsByPerson (int personID, int maxCount);
 }
