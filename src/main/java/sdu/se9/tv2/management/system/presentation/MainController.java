@@ -25,4 +25,10 @@ public class MainController {
     private void handleLoginShowView(ActionEvent e) throws IOException {
         App.setPage("login");
     }
+
+    @FXML
+    private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
+        Parent parent = App.loadFXML("insert-credits");
+        mainBorderPane.setCenter(parent);
+    }
 }

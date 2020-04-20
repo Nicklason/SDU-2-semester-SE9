@@ -13,6 +13,7 @@
     <left>
         <VBox spacing="5">
             <Button onAction="#handleHomepageShowView" text="Homepage" />
+            <Button onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" />
             <Button onAction="#handleTestShowView" text="Test" />
         </VBox>
     </left>
