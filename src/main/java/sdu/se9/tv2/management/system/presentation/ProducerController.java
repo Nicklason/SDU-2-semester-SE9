@@ -38,7 +38,6 @@ public class ProducerController {
     public void addProducer(ActionEvent e) throws IOException {
         String newProducer = textfieldNewProducer.getText();
         Producer producer = PersistenceProducer.getInstance().createProducer(newProducer);
-
     }
 
     @FXML
@@ -46,6 +45,6 @@ public class ProducerController {
         int nameOfProducer = Integer.parseInt(textfieldProducer.getText());
         int amount = Integer.parseInt(textfieldAmount.getText());
         ArrayList<ProducerAccount> account = PersistenceAccount.getInstance().createAccountsForProducer(nameOfProducer, amount);
-        }
     }
+}
 
