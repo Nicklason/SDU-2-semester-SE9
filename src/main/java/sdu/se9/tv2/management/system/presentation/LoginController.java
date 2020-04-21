@@ -10,6 +10,7 @@ import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 
+
 import java.io.IOException;
 
 public class LoginController {
@@ -42,6 +43,8 @@ public class LoginController {
         }
 
         system.setAccount(account);
+
+        App.updateLogin();
 
         loginError.setVisible(false);
 
