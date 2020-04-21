@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,4 +42,11 @@ public class App extends Application {
         launch();
     }
 
+    static void setPage (String fxml) throws IOException {
+        Parent page = loadFXML(fxml);
+
+        BorderPane mainBorderPane = (BorderPane) scene.lookup("#mainBorderPane");
+
+        mainBorderPane.setCenter(page);
+    }
 }

@@ -13,13 +13,22 @@ public class MainController {
 
     @FXML
     private void handleHomepageShowView(ActionEvent e) throws IOException {
-        Parent parent = App.loadFXML("homepage");
-        mainBorderPane.setCenter(parent);
+        App.setPage("homepage");
     }
 
     @FXML
     private void handleTestShowView(ActionEvent e) throws IOException {
-        Parent parent = App.loadFXML("test");
+        App.setPage("test");
+    }
+
+    @FXML
+    private void handleLoginShowView(ActionEvent e) throws IOException {
+        App.setPage("login");
+    }
+
+    @FXML
+    private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
+        Parent parent = App.loadFXML("insert-credits");
         mainBorderPane.setCenter(parent);
     }
 }

@@ -12,11 +12,14 @@ import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 public interface IPersistenceAccount {
     /**
      * Gets an account by username and password
+     *
      * @param username The username of the account
      * @param password The password of the account
      * @return
      */
-    Account getMatchingAccount (String username, String password);
+    static Account getMatchingAccount(String username, String password) {
+        return null;
+    }
 
     /**
      * Checks if a username is already used
