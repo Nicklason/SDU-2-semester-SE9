@@ -28,7 +28,11 @@ public class MainController {
 
     @FXML
     private void handleProducer(ActionEvent e) throws IOException {
-        Parent parent = App.loadFXML("producer");
-        mainBorderPane.setCenter(parent);
+        App.setPage("producer");
+    }
+
+    @FXML
+    private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
+        App.setPage("insert-credits");
     }
 }

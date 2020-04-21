@@ -1,6 +1,7 @@
 package sdu.se9.tv2.management.system.persistence;
 
 import sdu.se9.tv2.management.system.domain.Credit;
+import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public interface IPersistenceCredit {
      * @param roleName The name of the role that the person has
      * @return
      */
-    Credit createCredit (int programID, int personID, String roleName);
+    Credit createCredit (int programID, int personID, String roleName) throws DuplicateRoleNameException;
 
     /**
      * Get all credits for a program
@@ -24,7 +25,13 @@ public interface IPersistenceCredit {
      */
     ArrayList<Credit> getCredits (int programID);
 
+    Credit getCredit (int programID, String roleName);
+
     Credit getCredit (int programID, int personID, String roleName);
 
     ArrayList<Credit> getCredits (int programID, int personID);
+
+    ArrayList<Credit> getCreditsByPerson (int personID);
+
+    ArrayList<Credit> getCreditsByPerson (int personID, int maxCount);
 }

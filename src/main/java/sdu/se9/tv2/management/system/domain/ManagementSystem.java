@@ -5,6 +5,8 @@ import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
+import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
+import sdu.se9.tv2.management.system.persistence.PersistencePerson;
 
 import java.util.ArrayList;
 
@@ -51,5 +53,21 @@ public class ManagementSystem {
                 e.printStackTrace();
             }
         } return accounts;
+    }
+
+    public boolean hasExistingEmptyPerson (String firstname, String lastname) {
+        ArrayList<Person> people = PersistencePerson.getInstance().getPersons(firstname, lastname);
+
+        for (int i = 0; i < people.size(); i++) {
+            Person person = people.get(i);
+
+            int creditCount = PersistenceCredit.getInstance().getCreditsByPerson(person.getId(), 1).size();
+
+            if (creditCount == 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
