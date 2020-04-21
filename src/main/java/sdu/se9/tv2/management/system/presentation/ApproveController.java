@@ -31,21 +31,21 @@ public class ApproveController {
 
         Program program = PersistenceProgram.getInstance().getProgram(programName);
 
-        if(program != null){
-            if (program.isApproved()) {
-                userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
-                return;
-            }
-            if(!program.isAwaitingApproval()) {
-                userResponse.setText("Krediteringen for " + programName + " afventer ikke godkendelse");
-                return;
-            }
-            PersistenceProgram.getInstance().setApproved(program.getID(), true);
-            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
-            userResponse.setText("Krediteringen for: " + programName + " er blevet godkendt");
+        if(program == null){
+            userResponse.setText("Program med navn: " + programName + " ikke fundet");
             return;
         }
-        userResponse.setText("Program med navn: " + programName + " ikke fundet");
+        if (program.isApproved()) {
+            userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
+            return;
+        }
+        if(!program.isAwaitingApproval()) {
+            userResponse.setText("Krediteringen for " + programName + " afventer ikke godkendelse");
+            return;
+        }
+        PersistenceProgram.getInstance().setApproved(program.getID(), true);
+        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
+        userResponse.setText("Krediteringen for: " + programName + " er blevet godkendt");
     }
 
     @FXML
@@ -62,19 +62,19 @@ public class ApproveController {
 
         Program program = PersistenceProgram.getInstance().getProgram(programName);
 
-        if(program != null){
-            if (program.isApproved()) {
-                userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
-                return;
-            }
-            if(program.isAwaitingApproval()) {
-                userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
-                return;
-            }
-            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
-            userResponse.setText("Krediteringen for " + programName + " afventer nu godkendelse");
+        if(program == null){
+            userResponse.setText("Program med navn: " + programName + " ikke fundet");
             return;
         }
-        userResponse.setText("Program med navn: " + programName + " ikke fundet");
+        if (program.isApproved()) {
+            userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
+            return;
+        }
+        if(program.isAwaitingApproval()) {
+            userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
+            return;
+        }
+        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
+        userResponse.setText("Krediteringen for " + programName + " afventer nu godkendelse");
     }
 }
