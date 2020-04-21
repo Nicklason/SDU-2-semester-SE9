@@ -71,6 +71,12 @@ public class InsertCreditsController {
         String lastname = personLastnameField.getText();
 
         if (firstname.isBlank() || lastname.isBlank()) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Tilføj kreditering");
+            alert.setHeaderText("Tilføj ny person");
+            alert.setContentText("Du har ikke indtastet navnet på personen");
+
+            alert.show();
             return;
         }
 
