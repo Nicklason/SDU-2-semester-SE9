@@ -17,9 +17,7 @@ public interface IPersistenceAccount {
      * @param password The password of the account
      * @return
      */
-    static Account getMatchingAccount(String username, String password) {
-        return null;
-    }
+    Account getMatchingAccount(String username, String password);
 
     /**
      * Checks if a username is already used
