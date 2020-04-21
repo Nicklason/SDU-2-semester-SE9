@@ -45,7 +45,7 @@ public class ProducerController {
     public void addAccounts (ActionEvent e) throws  IOException {
         int nameOfProducer = Integer.parseInt(textfieldProducer.getText());
         int amount = Integer.parseInt(textfieldAmount.getText());
-        ArrayList<ProducerAccount> account = PersistenceAccount.getInstance().createAccountsForProducer(nameOfProducer, amount);
+        ArrayList<ProducerAccount> account = ManagementSystem.getInstance().createAccountsForProducer(nameOfProducer, amount);
         }
     }
 

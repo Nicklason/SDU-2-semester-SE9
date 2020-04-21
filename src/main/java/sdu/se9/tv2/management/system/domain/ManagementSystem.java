@@ -1,6 +1,12 @@
 package sdu.se9.tv2.management.system.domain;
 
 import sdu.se9.tv2.management.system.domain.accounts.Account;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
+import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
+import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
+import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
+
+import java.util.ArrayList;
 
 public class ManagementSystem {
 
@@ -24,5 +30,26 @@ public class ManagementSystem {
 
     public boolean isLoggedIn () {
         return this.account != null;
+    }
+
+    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
+
+        ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
+
+        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+
+        int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
+
+        for (int i = 0; i < amount; i++) {
+            int accountId = accountCount+i+1;
+            String username = producer.getName()+ "-" +accountId;
+            String password = producer.getName() + "123";
+            try {
+                ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
+                accounts.add(account);
+            } catch (UsernameAlreadyExistsException e) {
+                e.printStackTrace();
+            }
+        } return accounts;
     }
 }

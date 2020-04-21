@@ -37,27 +37,6 @@ public class PersistenceAccount implements IPersistenceAccount {
         this.read();
     }
 
-    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
-
-        ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
-
-        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
-
-        int accountCount = this.getProducerAccountCount(producer.getID());
-
-        for (int i = 0; i < amount; i++) {
-            int accountId = accountCount+i+1;
-            String username = producer.getName()+ "-" +accountId;
-            String password = producer.getName() + "123";
-            try {
-                ProducerAccount account = this.createProducerAccount(username, password, producer.getID());
-                accounts.add(account);
-            } catch (UsernameAlreadyExistsException e) {
-                e.printStackTrace();
-            }
-        } return accounts;
-    }
-
     public Account getMatchingAccount(String username, String password) {
         for (int i = 0; i < this.accounts.size(); i++) {
             Account element = this.accounts.get(i);
