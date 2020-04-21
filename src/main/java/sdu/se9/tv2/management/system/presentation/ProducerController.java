@@ -45,7 +45,5 @@ public class ProducerController {
         int nameOfProducer = Integer.parseInt(textfieldProducer.getText());
         int amount = Integer.parseInt(textfieldAmount.getText());
         ArrayList<ProducerAccount> account = ManagementSystem.getInstance().createAccountsForProducer(nameOfProducer, amount);
-        }
     }
 }
-
