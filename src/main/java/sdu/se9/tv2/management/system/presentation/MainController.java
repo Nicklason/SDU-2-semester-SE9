@@ -27,6 +27,16 @@ public class MainController {
     }
 
     @FXML
+    private void handleApproveShowView(ActionEvent e) throws IOException {
+        App.setPage("approve");
+    }
+
+    @FXML
+    private void handleExportShowView(ActionEvent e) throws IOException {
+        App.setPage("export");
+    }
+
+    @FXML
     private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
         Parent parent = App.loadFXML("insert-credits");
         mainBorderPane.setCenter(parent);
