@@ -13,6 +13,8 @@
             <Button onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" />
             <Button onAction="#handleTestShowView" text="Test" />
             <Button onAction="#handleProducer" text="Tilføj producent / konti"/>
+            <Button onAction="#handleApproveShowView" text="Godkend" />
+            <Button onAction="#handleExportShowView" text="Eksporter" />
         </VBox>
     </left>
     <center>
