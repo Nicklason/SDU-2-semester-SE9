@@ -22,7 +22,12 @@ public class ManagementSystem {
         this.account = account;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
     public boolean isLoggedIn () {
         return this.account != null;
     }
+
 }
