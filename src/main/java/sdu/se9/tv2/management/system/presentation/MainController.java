@@ -35,10 +35,14 @@ public class MainController {
     private void handleExportShowView(ActionEvent e) throws IOException {
         App.setPage("export");
     }
+    
+    @FXML
+    private void handleProducer(ActionEvent e) throws IOException {
+        App.setPage("producer");
+    }
 
     @FXML
     private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
-        Parent parent = App.loadFXML("insert-credits");
-        mainBorderPane.setCenter(parent);
+        App.setPage("insert-credits");
     }
 }

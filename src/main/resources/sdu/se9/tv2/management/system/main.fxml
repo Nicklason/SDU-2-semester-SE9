@@ -15,8 +15,9 @@
             <Button onAction="#handleHomepageShowView" text="Homepage" />
             <Button onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" />
             <Button onAction="#handleTestShowView" text="Test" />
-         <Button layoutX="10.0" layoutY="70.0" onAction="#handleApproveShowView" text="Godkend" />
-         <Button layoutX="10.0" layoutY="100.0" onAction="#handleExportShowView" text="Eksporter" />
+            <Button onAction="#handleProducer" text="Tilføj producent / konti"/>
+            <Button onAction="#handleApproveShowView" text="Godkend" />
+            <Button onAction="#handleExportShowView" text="Eksporter" />
         </VBox>
     </left>
     <center>
