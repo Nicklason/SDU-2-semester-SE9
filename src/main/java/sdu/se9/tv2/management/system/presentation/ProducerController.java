@@ -2,8 +2,10 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Producer;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
@@ -45,6 +47,5 @@ public class ProducerController {
         int amount = Integer.parseInt(textfieldAmount.getText());
         ArrayList<ProducerAccount> account = PersistenceAccount.getInstance().createAccountsForProducer(nameOfProducer, amount);
         }
-
     }
 

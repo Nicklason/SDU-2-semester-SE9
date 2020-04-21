@@ -9,6 +9,7 @@ import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
+import sdu.se9.tv2.management.system.presentation.ProducerController;
 
 import java.io.InvalidClassException;
 import java.util.ArrayList;
@@ -40,22 +41,21 @@ public class PersistenceAccount implements IPersistenceAccount {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
+        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+
+        int accountCount = this.getProducerAccountCount(producer.getID());
+
         for (int i = 0; i < amount; i++) {
-            int accountId = i + 1;
-            int max = 1000;
-            int min = 1;
-            int range = max - min + 1;
-            // The String "username" needs to take the producerID and cast it to a string for more optimal usernames, i keep f.cking it up (Kasper)
-            int username = (int) (Math.random() * range + accountId);
-            String password = "NytKodeord" + i+2*3;
+            int accountId = accountCount+i+1;
+            String username = producer.getName()+ "-" +accountId;
+            String password = producer.getName() + "123";
             try {
-                ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(String.valueOf(username), password, PersistenceProducer.getInstance().getProducer(producerId).getID());
+                ProducerAccount account = this.createProducerAccount(username, password, producer.getID());
                 accounts.add(account);
-            } catch (UsernameAlreadyExistsException err) {
-                err.printStackTrace();
+            } catch (UsernameAlreadyExistsException e) {
+                e.printStackTrace();
             }
-        }
-        return accounts;
+        } return accounts;
     }
 
     public Account getMatchingAccount(String username, String password) {
