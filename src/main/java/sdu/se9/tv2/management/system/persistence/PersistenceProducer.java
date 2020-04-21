@@ -1,5 +1,6 @@
 package sdu.se9.tv2.management.system.persistence;
 
+import javafx.fxml.FXML;
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +9,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import sdu.se9.tv2.management.system.domain.Producer;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
+import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
+import sdu.se9.tv2.management.system.presentation.ProducerController;
 
 /**
  * Implementation of the IPersistenceProducer interface
@@ -69,7 +73,7 @@ public class PersistenceProducer implements IPersistenceProducer {
      * @param producerID The ID of the producer
      * @return
      */
-    public Producer getProducer (int producerID) {
+    public Producer getProducer (int producerID){
         for (int i = 0; i < this.producers.size(); i++) {
             Producer element = this.producers.get(i);
 
@@ -81,7 +85,7 @@ public class PersistenceProducer implements IPersistenceProducer {
         return null;
     }
 
-    public Producer getProducer (String producerName) {
+    public Producer getProducer (String producerName){
         for (int i = 0; i < this.producers.size(); i++) {
             Producer element = this.producers.get(i);
 
@@ -110,9 +114,9 @@ public class PersistenceProducer implements IPersistenceProducer {
             // The file exists and has correct formatting, get lastID and list of producers
 
             // obj.get("lastID") returns Long
-            this.lastID = Math.toIntExact((Long)obj.get("lastID"));
+            this.lastID = Math.toIntExact((Long) obj.get("lastID"));
 
-            JSONArray objList = (JSONArray)obj.get("list");
+            JSONArray objList = (JSONArray) obj.get("list");
 
             ArrayList<Producer> parsedList = new ArrayList<Producer>();
 
@@ -133,7 +137,7 @@ public class PersistenceProducer implements IPersistenceProducer {
     /**
      * Writes data saved in memory to file
      */
-    private void write() {
+    private void write () {
         // Create JSONObject to save
         JSONObject obj = new JSONObject();
 
