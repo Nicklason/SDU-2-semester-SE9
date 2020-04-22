@@ -14,8 +14,8 @@ public class MainController {
     }
 
     @FXML
-    private void handleTestShowView(ActionEvent e) throws IOException {
-        App.setPage("test");
+    private void handleViewCreditsShowView(ActionEvent e) throws IOException {
+        App.setPage("view-credits");
     }
 
     @FXML
