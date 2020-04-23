@@ -12,7 +12,7 @@
             <Button onAction="#handleHomepageShowView" text="Homepage" />
             <Button onAction="#handleViewCreditsShowView" text="Se kreditering" />
             <Button onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" />
-            <Button onAction="#handleProducer" text="Tilføj producent / konti"/>
+            <Button onAction="#handleProducerShowView" text="Tilføj producent / konti"/>
             <Button onAction="#handleApproveShowView" text="Godkend" />
             <Button onAction="#handleExportShowView" text="Eksporter" />
         </VBox>

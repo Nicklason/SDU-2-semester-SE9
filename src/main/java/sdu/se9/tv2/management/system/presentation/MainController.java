@@ -42,7 +42,7 @@ public class MainController {
     }
     
     @FXML
-    private void handleProducer(ActionEvent e) throws IOException {
+    private void handleProducerShowView(ActionEvent e) throws IOException {
         App.setPage("producer");
     }
 
