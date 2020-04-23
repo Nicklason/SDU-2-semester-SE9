@@ -47,7 +47,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
-                    <mainClass>sdu.se9.tv2.management.system.App</mainClass>
+                    <mainClass>sdu.se9.tv2.management.system.presentation.App</mainClass>
                 </configuration>
             </plugin>
         </plugins>
