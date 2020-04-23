@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="480" prefWidth="480" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.ApproveController">
+<AnchorPane prefHeight="480" prefWidth="480" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.RequestApprovalController">
     <children>
         <VBox layoutX="91.0" layoutY="215.0">
             <HBox>
@@ -21,7 +21,7 @@
         </VBox>
         <TextField fx:id="programNameText" layoutX="91.0" layoutY="103.0" prefHeight="25.0" prefWidth="298.0" />
         <Text layoutX="91.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Indtast program navn" wrappingWidth="149.0" />
-        <Button layoutX="91.0" layoutY="135.0" mnemonicParsing="false" onAction="#approve" text="Godkend" />
-      <Text fx:id="userResponse" layoutX="166.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="222.00000190734863" />
+      <Text fx:id="userResponse" layoutX="154.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="234.79998970031738" />
+      <Button layoutX="91.0" layoutY="135.0" mnemonicParsing="false" onAction="#requestApproval" text="Anmod" />
     </children>
 </AnchorPane>
