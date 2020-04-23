@@ -206,6 +206,10 @@ public class InsertCreditsController {
     private void onPersonSelected () {
         Person selected = (Person)personListView.getSelectionModel().getSelectedItem();
 
+        if (selected == null) {
+            return;
+        }
+
         String text = "ID: " + selected.getId() + "\nProgrammer medvirket i:";
 
         // Get credits that the person has
