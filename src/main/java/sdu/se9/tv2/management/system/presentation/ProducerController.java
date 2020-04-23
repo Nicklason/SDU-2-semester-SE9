@@ -42,8 +42,18 @@ public class ProducerController {
 
     @FXML
     public void addAccounts (ActionEvent e) throws  IOException {
-        int nameOfProducer = Integer.parseInt(textfieldProducer.getText());
+        String nameOfProducer = textfieldProducer.getText();
+
+        Producer producer = PersistenceProducer.getInstance().getProducer(nameOfProducer);
+
+        if (producer == null) {
+            // TODO: Show error to user
+            return;
+        }
+
         int amount = Integer.parseInt(textfieldAmount.getText());
-        ArrayList<ProducerAccount> account = ManagementSystem.getInstance().createAccountsForProducer(nameOfProducer, amount);
+        ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
+
+        // TODO: Show usernames and passwords to admin
     }
 }
