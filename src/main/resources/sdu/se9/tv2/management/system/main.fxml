@@ -10,7 +10,11 @@
     <left>
         <VBox spacing="5">
             <Button onAction="#handleHomepageShowView" text="Homepage" />
-            <Button onAction="#handleTestShowView" text="Test" />
+            <Button onAction="#handleViewCreditsShowView" text="Se kreditering" />
+            <Button onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" />
+            <Button onAction="#handleProducerShowView" text="Tilføj producent / konti"/>
+            <Button onAction="#handleApproveShowView" text="Godkend" />
+            <Button onAction="#handleExportShowView" text="Eksporter" />
         </VBox>
     </left>
     <center>

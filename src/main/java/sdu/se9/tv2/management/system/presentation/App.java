@@ -57,8 +57,8 @@ public class App extends Application {
         Button loginBtn = (Button) scene.lookup("#loginShowView");
         if(system.isLoggedIn()) {
             loginBtn.setText("Log ud");
-        } else{ loginBtn.setText("Log ind");
+        } else {
+            loginBtn.setText("Log ind");
         }
-
     }
 }

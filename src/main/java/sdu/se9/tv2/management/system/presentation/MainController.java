@@ -14,8 +14,8 @@ public class MainController {
     }
 
     @FXML
-    private void handleTestShowView(ActionEvent e) throws IOException {
-        App.setPage("test");
+    private void handleViewCreditsShowView(ActionEvent e) throws IOException {
+        App.setPage("view-credits");
     }
 
     @FXML
@@ -29,5 +29,25 @@ public class MainController {
         } else{
             App.setPage("login");
         }
+    }
+
+    @FXML
+    private void handleApproveShowView(ActionEvent e) throws IOException {
+        App.setPage("approve");
+    }
+
+    @FXML
+    private void handleExportShowView(ActionEvent e) throws IOException {
+        App.setPage("export");
+    }
+    
+    @FXML
+    private void handleProducerShowView(ActionEvent e) throws IOException {
+        App.setPage("producer");
+    }
+
+    @FXML
+    private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
+        App.setPage("insert-credits");
     }
 }
