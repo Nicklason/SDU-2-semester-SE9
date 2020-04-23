@@ -19,6 +19,7 @@ public class CreateProgramController {
 
 
     public void createProgram(ActionEvent event) {
+        // TODO: This will be fixed when we have access control (only producers can create programs)
         Account account = ManagementSystem.getInstance().getAccount();
         if (!account.getType().equals("producer")) {
             return;
