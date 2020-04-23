@@ -21,6 +21,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("main"), 640, 480);
+        stage.setTitle("TV2 krediteringssytem");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
