@@ -37,6 +37,11 @@ public class MainController {
     }
 
     @FXML
+    private void handleRequestApprovalShowView(ActionEvent e) throws IOException {
+        App.setPage("requestapproval");
+    }
+
+    @FXML
     private void handleExportShowView(ActionEvent e) throws IOException {
         App.setPage("export");
     }

@@ -9,7 +9,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.io.IOException;
 
-public class ApproveController {
+public class RequestApprovalController {
 
     @FXML
     private TextField programNameText;
@@ -18,7 +18,7 @@ public class ApproveController {
     private Text userResponse;
 
     @FXML
-    public void approve(ActionEvent event) throws IOException {
+    public void requestApproval(ActionEvent event) throws IOException {
 
         userResponse.setText("");
 
@@ -39,12 +39,11 @@ public class ApproveController {
             userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
             return;
         }
-        if(!program.isAwaitingApproval()) {
-            userResponse.setText("Krediteringen for " + programName + " afventer ikke godkendelse");
+        if(program.isAwaitingApproval()) {
+            userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
             return;
         }
-        PersistenceProgram.getInstance().setApproved(program.getID(), true);
-        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
-        userResponse.setText("Krediteringen for: " + programName + " er blevet godkendt");
+        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
+        userResponse.setText("Krediteringen for " + programName + " afventer nu godkendelse");
     }
 }
