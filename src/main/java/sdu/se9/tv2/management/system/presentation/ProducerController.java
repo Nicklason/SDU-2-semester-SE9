@@ -47,13 +47,22 @@ public class ProducerController {
         Producer producer = PersistenceProducer.getInstance().getProducer(nameOfProducer);
 
         if (producer == null) {
-            // TODO: Show error to user
+            Alert alert = new Alert((Alert.AlertType.WARNING));
+            alert.setTitle("Fejl");
+            alert.setHeaderText("fejl");
+            alert.setContentText("Indtast producenten's navn");
+            alert.show();
             return;
         }
 
         int amount = Integer.parseInt(textfieldAmount.getText());
         ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
 
-        // TODO: Show usernames and passwords to admin
+
+        Alert alert = new Alert((Alert.AlertType.WARNING));
+        alert.setTitle("Konti");
+        alert.setHeaderText("Her er alle de oprettede konti:");
+        alert.setContentText(accounts.toString());
+        alert.show();
     }
 }
