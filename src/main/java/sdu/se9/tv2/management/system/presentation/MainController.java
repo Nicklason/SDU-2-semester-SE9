@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class MainController {
 
+
+
     @FXML
     private void handleHomepageShowView(ActionEvent e) throws IOException {
         App.setPage("homepage");

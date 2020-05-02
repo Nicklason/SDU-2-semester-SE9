@@ -64,6 +64,7 @@ public class ViewCreditsController {
             creditTableItems.add(new CreditTableViewItem(credit));
         }
 
+
         data.setAll(creditTableItems);
     }
 }

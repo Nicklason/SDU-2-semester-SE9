@@ -58,8 +58,22 @@ public class App extends Application {
         Button loginBtn = (Button) scene.lookup("#loginShowView");
         if(system.isLoggedIn()) {
             loginBtn.setText("Log ud");
+            String accountType = system.getAccount().getType();
+            if (accountType.equals("producer")) {
+                scene.lookup("#insertCreditsButton").setVisible(true);
+                scene.lookup("#askForApprovalButton").setVisible(true);
+                scene.lookup("#eksportButton").setVisible(true);
+            } else if (accountType.equals("admin")) {
+                scene.lookup("#addProducerAndAccountsButton").setVisible(true);
+                scene.lookup("#approveButton").setVisible(true);
+            }
         } else {
             loginBtn.setText("Log ind");
+            scene.lookup("#insertCreditsButton").setVisible(false);
+            scene.lookup("#askForApprovalButton").setVisible(false);
+            scene.lookup("#eksportButton").setVisible(false);
+            scene.lookup("#addProducerAndAccountsButton").setVisible(false);
+            scene.lookup("#approveButton").setVisible(false);
         }
     }
 }
