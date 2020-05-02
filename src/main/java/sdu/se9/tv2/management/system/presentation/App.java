@@ -52,6 +52,7 @@ public class App extends Application {
 
         mainBorderPane.setCenter(page);
     }
+
     static void updateLogin(){
         ManagementSystem system = ManagementSystem.getInstance();
 
@@ -59,6 +60,7 @@ public class App extends Application {
         if(system.isLoggedIn()) {
             loginBtn.setText("Log ud");
             String accountType = system.getAccount().getType();
+
             if (accountType.equals("producer")) {
                 scene.lookup("#insertCreditsButton").setVisible(true);
                 scene.lookup("#askForApprovalButton").setVisible(true);
@@ -74,6 +76,12 @@ public class App extends Application {
             scene.lookup("#eksportButton").setVisible(false);
             scene.lookup("#addProducerAndAccountsButton").setVisible(false);
             scene.lookup("#approveButton").setVisible(false);
+
+            try {
+                App.setPage("homepage");
+            } catch (IOException e) {
+                // This will never happen, unless you delete the page but that's stupid
+            }
         }
     }
 }
