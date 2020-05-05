@@ -2,9 +2,12 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.io.IOException;
@@ -19,7 +22,6 @@ public class RequestApprovalController {
 
     @FXML
     public void requestApproval(ActionEvent event) throws IOException {
-
         userResponse.setText("");
 
         String programName = this.programNameText.getText();
@@ -31,7 +33,11 @@ public class RequestApprovalController {
 
         Program program = PersistenceProgram.getInstance().getProgram(programName);
 
-        if(program == null){
+        // TODO: Add getProgramByProducer method to IPersistenceProgram, that way the check for if the producer owns the program is not needed all the time
+        ManagementSystem system = ManagementSystem.getInstance();
+        ProducerAccount producer = (ProducerAccount)system.getAccount();
+
+        if(program == null || producer.getProducerId() != program.getProducerID()){
             userResponse.setText("Program med navn: " + programName + " ikke fundet");
             return;
         }
