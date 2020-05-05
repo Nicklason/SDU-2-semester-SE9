@@ -35,7 +35,7 @@ public class PersistenceDatabaseHelper {
             PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Program (" +
                     "id SERIAL PRIMARY KEY," +
                     "producerID INTEGER NOT NULL REFERENCES Producer(id)," +
-                    "name VARCHAR(255) NOT NULL," +
+                    "name VARCHAR(255) UNIQUE NOT NULL," +
                     "internalID INTEGER NOT NULL," +
                     "pendingApproval BOOLEAN NOT NULL," +
                     "approved BOOLEAN NOT NULL" +
