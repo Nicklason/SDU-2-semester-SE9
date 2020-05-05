@@ -30,14 +30,20 @@ public class PersistenceDatabaseHelper {
         // Get connection
         Connection connection = getConnection();
 
-        // Make query
+        // Create table Program
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM SomeTable");
-            ResultSet result = stmt.executeQuery();
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Program (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "producerID INTEGER NOT NULL REFERENCES Producer(id)," +
+                    "name VARCHAR(255) NOT NULL," +
+                    "internalID INTEGER NOT NULL," +
+                    "pendingApproval BOOLEAN NOT NULL," +
+                    "approved BOOLEAN NOT NULL" +
+                    ")");
 
-            System.out.println(result);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            stmt.execute();
+        } catch (SQLException err) {
+            err.printStackTrace();
         }
     }
 }
