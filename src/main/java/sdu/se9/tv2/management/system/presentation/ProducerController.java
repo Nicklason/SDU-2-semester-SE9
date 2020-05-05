@@ -59,7 +59,7 @@ public class ProducerController {
         ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
 
 
-        Alert alert = new Alert((Alert.AlertType.WARNING));
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
         alert.setTitle("Konti");
         alert.setHeaderText("Her er alle de oprettede konti:");
         alert.setContentText(accounts.toString());
