@@ -8,6 +8,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistencePerson;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ManagementSystem {
@@ -52,7 +53,12 @@ public class ManagementSystem {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+        Producer producer = null;
+        try {
+            producer = PersistenceProducer.getInstance().getProducer(producerId);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 
