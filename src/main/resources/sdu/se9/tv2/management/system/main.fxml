@@ -16,6 +16,7 @@
             <Button onAction="#handleRequestApprovalShowView" text="Anmod godkendelse" />
             <Button onAction="#handleApproveShowView" text="Godkend" />
             <Button onAction="#handleExportShowView" text="Eksporter" />
+         <Button layoutX="10.0" layoutY="190.0" onAction="#handleCreateProgramShowView" text="Tilføj program" />
         </VBox>
     </left>
     <center>

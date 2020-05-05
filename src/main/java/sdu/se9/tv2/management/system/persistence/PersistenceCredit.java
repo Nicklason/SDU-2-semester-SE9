@@ -6,8 +6,13 @@ import org.json.simple.parser.ParseException;
 import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class PersistenceCredit implements IPersistenceCredit {
 
@@ -43,7 +48,7 @@ public class PersistenceCredit implements IPersistenceCredit {
 
         // Save changes to file
 
-        this.write();
+        this.write(newCredit);
 
         return newCredit;
     }
@@ -130,6 +135,23 @@ public class PersistenceCredit implements IPersistenceCredit {
     }
 
     private void read() {
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM credit");
+            ResultSet result = stmt.executeQuery();
+            int rowcount = 0;
+            ArrayList<Credit> returnValue = new ArrayList<>();
+            while (result.next()){
+                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
+            }
+            this.credits = returnValue;
+
+            System.out.println(result);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        /*
         JSONObject obj = null;
 
         // Try and read the file
@@ -161,16 +183,34 @@ public class PersistenceCredit implements IPersistenceCredit {
             // Set producer list
             credits = parsedList;
         }
+
+         */
     }
 
-    private void write() {
+    private void write(Credit credit) {
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO credit VALUES(?,?,?,?)");
+            stmt.setInt(1,  credit.getID());
+            stmt.setInt(2,  credit.getProgramID());
+            stmt.setInt(3,  credit.getPersonID());
+            stmt.setString(4,  credit.getRole());
+            stmt.execute();
+            System.out.println("You did it!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("You didn't do it");
+        }
+
+
+        /*
         // Create JSONObject to save
         JSONObject obj = new JSONObject();
 
         // JSONArray that contains the producers
         JSONArray list = new JSONArray();
 
-        // Go through producer list and parse as JSON objects
+        // Go through credit list and parse as JSON objects
         for (int i = 0; i < this.credits.size(); i++) {
             list.add(Credit.parseJSON(this.credits.get(i)));
         }
@@ -181,7 +221,7 @@ public class PersistenceCredit implements IPersistenceCredit {
         obj.put("list", list);
 
         // Overwrite the file with new JSON object
-        this.persistence.write(obj);
+        this.persistence.write(obj); */
     }
 }
 

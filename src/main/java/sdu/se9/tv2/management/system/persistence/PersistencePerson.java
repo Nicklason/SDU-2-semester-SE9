@@ -1,10 +1,16 @@
 package sdu.se9.tv2.management.system.persistence;
 import org.json.simple.parser.ParseException;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.domain.Person;
 
 /**
@@ -58,7 +64,7 @@ public class PersistencePerson implements IPersistencePerson {
 
         // Save changes to file
 
-        this.write();
+        this.write(newPerson);
 
         return newPerson;
     }
@@ -104,61 +110,40 @@ public class PersistencePerson implements IPersistencePerson {
      * Reads file and parses JSONObject
      */
     private void read() {
-        JSONObject obj = null;
+        Connection connection = PersistenceDatabaseHelper.getConnection();
 
-        // Try and read the file
         try {
-            obj = this.persistence.read();
-        } catch (ParseException err) {
-            err.printStackTrace();
-        }
-
-        if (obj != null) {
-            // The file exists and has correct formatting, get lastID and list of person
-
-            // obj.get("lastID") returns Long
-            this.lastID = Math.toIntExact((Long)obj.get("lastID"));
-
-            JSONArray objList = (JSONArray)obj.get("list");
-
-            ArrayList<Person> parsedList = new ArrayList<Person>();
-
-            // Parse person list
-            Iterator<JSONObject> iterator = objList.iterator();
-            while (iterator.hasNext()) {
-                // Get element of the list array
-                JSONObject element = iterator.next();
-                // Parse the JSONObject using Producer.parseJSON
-                parsedList.add(Person.parseJSON(element));
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person");
+            ResultSet result = stmt.executeQuery();
+            int rowcount = 0;
+            ArrayList<Person> returnValue = new ArrayList<>();
+            while (result.next()){
+                returnValue.add(new Person(result.getInt(1), result.getString(2), result.getString(3)));
             }
+            this.persons = returnValue;
 
-            // Set person list
-            persons = parsedList;
+            System.out.println(result);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     /**
      * Writes data saved in memory to file
      */
-    private void write() {
-        // Create JSONObject to save
-        JSONObject obj = new JSONObject();
-
-        // JSONArray that contains the person
-        JSONArray list = new JSONArray();
-
-        // Go through person list and parse as JSON objects
-        for (int i = 0; i < this.persons.size(); i++) {
-            list.add(Person.parseJSON(this.persons.get(i)));
+    private void write(Person person) {
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person VALUES(?,?,?)");
+            stmt.setInt(1,  person.getId());
+            stmt.setString(2,  person.getFirstName());
+            stmt.setString(3,  person.getLastName());
+            stmt.execute();
+            System.out.println("You did it!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("You didn't do it");
         }
-
-        // Add lastID to JSON object
-        obj.put("lastID", lastID);
-        // Add list to JSON object
-        obj.put("list", list);
-
-        // Overwrite the file with new JSON object
-        this.persistence.write(obj);
     }
 }
 

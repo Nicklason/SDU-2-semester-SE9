@@ -3,9 +3,9 @@ package sdu.se9.tv2.management.system.domain;
 import org.json.simple.JSONObject;
 
 public class Person {
+    private int id;
     private String firstName;
     private String lastName;
-    private int id;
 
     public Person(int personID, String firstName, String lastName) {
         this.firstName = firstName;

@@ -55,4 +55,9 @@ public class MainController {
     private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
         App.setPage("insert-credits");
     }
+
+    @FXML
+    private void handleCreateProgramShowView(ActionEvent e) throws IOException {
+        App.setPage("create-program");
+    }
 }
