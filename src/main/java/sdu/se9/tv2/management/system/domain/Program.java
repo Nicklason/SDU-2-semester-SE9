@@ -35,16 +35,8 @@ public class Program {
         return approved;
     }
 
-    public void setApproved (boolean approved) {
-        this.approved = approved;
-    }
-
     public boolean isAwaitingApproval() {
         return awaitingApproval;
-    }
-
-    public void setAwaitingApproval(boolean awaitingApproval) {
-        this.awaitingApproval = awaitingApproval;
     }
 
     @Override
@@ -57,29 +49,5 @@ public class Program {
                 ", approved='" + approved + "'" +
                 ", awaitingApproval='" + awaitingApproval + "'" +
                 "}";
-    }
-
-    public static Program parseJSON (JSONObject program) {
-        int id = Math.toIntExact((Long)program.get("id"));
-        int producerID = Math.toIntExact((Long)program.get("producerID"));
-        String name = (String)program.get("name");
-        int internalID = Math.toIntExact((Long)program.get("internalID"));
-        boolean approved = (boolean)program.get("approved");
-        boolean awaitingApproval = (boolean)program.get("awaitingApproval");
-
-        return new Program(id, producerID, name, internalID, approved, awaitingApproval);
-    }
-
-    public static JSONObject parseJSON(Program program) {
-        JSONObject obj = new JSONObject();
-
-        obj.put("id", program.getID());
-        obj.put("producerID", program.getProducerID());
-        obj.put("name", program.getName());
-        obj.put("internalID", program.getInternalID());
-        obj.put("approved", program.isApproved());
-        obj.put("awaitingApproval", program.isAwaitingApproval());
-
-        return obj;
     }
 }
