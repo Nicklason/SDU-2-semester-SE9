@@ -9,6 +9,8 @@ import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
+import java.sql.SQLException;
+
 
 public class CreateProgramController {
     @FXML
@@ -28,7 +30,12 @@ public class CreateProgramController {
         String name = programNameField.getText();
         int internalID =Integer.parseInt(internalIDField.getText());
         int producerID = producerAccount.getProducerId();
-        Program program = PersistenceProgram.getInstance().createProgram(producerID, name, internalID);
 
+        try {
+            Program program = PersistenceProgram.getInstance().createProgram(producerID, name, internalID);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
     }
 }

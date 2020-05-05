@@ -14,6 +14,7 @@ import sdu.se9.tv2.management.system.domain.Program;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ViewCreditsController {
@@ -49,7 +50,13 @@ public class ViewCreditsController {
     private void onProgramNameChanged () {
         String programName = programNameField.getText();
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         if (program == null) {
             return;
