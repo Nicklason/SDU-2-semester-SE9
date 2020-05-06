@@ -11,6 +11,7 @@ import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class RequestApprovalController {
 
@@ -31,7 +32,13 @@ public class RequestApprovalController {
             return;
         }
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         // TODO: Add getProgramByProducer method to IPersistenceProgram, that way the check for if the producer owns the program is not needed all the time
         ManagementSystem system = ManagementSystem.getInstance();
@@ -49,7 +56,13 @@ public class RequestApprovalController {
             userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
             return;
         }
-        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
+        try {
+            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
+
         userResponse.setText("Krediteringen for " + programName + " afventer nu godkendelse");
     }
 }

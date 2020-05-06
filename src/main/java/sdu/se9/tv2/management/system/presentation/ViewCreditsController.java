@@ -16,6 +16,7 @@ import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ViewCreditsController {
@@ -51,7 +52,13 @@ public class ViewCreditsController {
     private void onProgramNameChanged () {
         String programName = programNameField.getText();
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         // If the user is a guest, then they can only see approved programs
         // If the user is a producer, then they can only see their own programs / approved programs

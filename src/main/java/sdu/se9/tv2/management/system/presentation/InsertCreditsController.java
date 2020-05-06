@@ -1,5 +1,6 @@
 package sdu.se9.tv2.management.system.presentation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -147,7 +148,13 @@ public class InsertCreditsController {
             return;
         }
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         ManagementSystem system = ManagementSystem.getInstance();
         ProducerAccount producer = (ProducerAccount)system.getAccount();
@@ -220,11 +227,15 @@ public class InsertCreditsController {
 
         ArrayList<Credit> credits = PersistenceCredit.getInstance().getCreditsByPerson(selected.getId(), 5);
 
-        for (int i = 0; i < credits.size(); i++) {
-            Credit credit = credits.get(i);
-            Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());
-
-            text += "\n- Program: \"" + program.getName() + "\" Rolle: \"" + credit.getRole() + "\"";
+        try {
+            for (int i = 0; i < credits.size(); i++) {
+                Credit credit = credits.get(i);
+                Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());
+                text += "\n- Program: \"" + program.getName() + "\" Rolle: \"" + credit.getRole() + "\"";
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
         }
 
         personInfoArea.setText(text);
