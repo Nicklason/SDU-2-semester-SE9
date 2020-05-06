@@ -43,6 +43,30 @@ public class PersistenceDatabaseHelper {
         }
 
         try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Producer (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "name VARCHAR(255) UNIQUE NOT NULL)"
+            );
+            stmt.execute();
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+
+        // Create table Program
+        try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Program (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "producerID INTEGER NOT NULL REFERENCES Producer(id)," +
+                    "name VARCHAR(255) UNIQUE NOT NULL," +
+                    "internalID INTEGER NOT NULL," +
+                    "pendingApproval BOOLEAN NOT NULL," +
+                    "approved BOOLEAN NOT NULL" +
+                    ")");
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+      
+        try {
             PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Credit (" +
                     "id serial PRIMARY KEY," +
                     "programID INTEGER NOT NULL REFERENCES Program(id)," +
@@ -50,8 +74,8 @@ public class PersistenceDatabaseHelper {
                     "roleName VARCHAR(50) NOT NULL" +
             ")");
             stmt.execute();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException err) {
+            err.printStackTrace();
         }
     }
 }

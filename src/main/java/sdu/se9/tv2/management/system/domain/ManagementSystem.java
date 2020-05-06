@@ -39,11 +39,26 @@ public class ManagementSystem {
         return this.account != null;
     }
 
+
+    public boolean hasAccess (String requiredAccountType) {
+        if (!this.isLoggedIn()) {
+            return false;
+        }
+
+        return account.getType().equals(requiredAccountType);
+
+    }
+
     public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+        Producer producer = null;
+        try {
+            producer = PersistenceProducer.getInstance().getProducer(producerId);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 

@@ -8,6 +8,7 @@ import sdu.se9.tv2.management.system.domain.Program;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class ApproveController {
 
@@ -29,7 +30,15 @@ public class ApproveController {
             return;
         }
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException err) {
+            err.printStackTrace();
+            // TODO: Make alert saying something went wrong
+            return;
+        }
 
         if(program == null){
             userResponse.setText("Program med navn: " + programName + " ikke fundet");
@@ -43,8 +52,16 @@ public class ApproveController {
             userResponse.setText("Krediteringen for " + programName + " afventer ikke godkendelse");
             return;
         }
-        PersistenceProgram.getInstance().setApproved(program.getID(), true);
-        PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
+
+        try {
+            PersistenceProgram.getInstance().setApproved(program.getID(), true);
+            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
+        } catch (SQLException err) {
+            err.printStackTrace();
+            // TODO: Make alert saying something went wrong
+            return;
+        }
+
         userResponse.setText("Krediteringen for: " + programName + " er blevet godkendt");
     }
 }
