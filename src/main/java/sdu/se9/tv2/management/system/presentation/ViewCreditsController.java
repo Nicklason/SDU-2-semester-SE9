@@ -9,8 +9,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sdu.se9.tv2.management.system.domain.Credit;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Person;
 import sdu.se9.tv2.management.system.domain.Program;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
@@ -58,8 +60,29 @@ public class ViewCreditsController {
             return;
         }
 
+        // If the user is a guest, then they can only see approved programs
+        // If the user is a producer, then they can only see their own programs / approved programs
+
         if (program == null) {
             return;
+        }
+
+        ManagementSystem system = ManagementSystem.getInstance();
+        boolean isProducer = system.hasAccess("producer");
+
+        if (!program.isApproved()) {
+            if (!isProducer) {
+                // User is not a producer and the program has not been approved, don't show it
+                return;
+            }
+
+            // Program is not approved and user is a producer
+            ProducerAccount producer = (ProducerAccount)system.getAccount();
+
+            if (producer.getProducerId() != program.getProducerID()) {
+                // User does not own program, don't show it to them
+                return;
+            }
         }
 
         ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());

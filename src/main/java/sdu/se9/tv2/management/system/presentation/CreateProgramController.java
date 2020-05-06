@@ -21,12 +21,8 @@ public class CreateProgramController {
 
 
     public void createProgram(ActionEvent event) {
-        // TODO: This will be fixed when we have access control (only producers can create programs)
-        Account account = ManagementSystem.getInstance().getAccount();
-        if (!account.getType().equals("producer")) {
-            return;
-        }
-        ProducerAccount producerAccount = (ProducerAccount) account;
+        ProducerAccount producerAccount = (ProducerAccount) ManagementSystem.getInstance().getAccount();
+
         String name = programNameField.getText();
         int internalID =Integer.parseInt(internalIDField.getText());
         int producerID = producerAccount.getProducerId();
@@ -37,5 +33,7 @@ public class CreateProgramController {
             throwables.printStackTrace();
             return;
         }
+
+        // TODO: Make alert confirming that the program was made
     }
 }

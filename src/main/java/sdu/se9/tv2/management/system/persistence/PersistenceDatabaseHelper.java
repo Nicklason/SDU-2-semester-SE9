@@ -41,6 +41,12 @@ public class PersistenceDatabaseHelper {
                     "approved BOOLEAN NOT NULL" +
                     ")");
 
+        try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Producer (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "name VARCHAR(255) UNIQUE NOT NULL)"
+                    );
+
             stmt.execute();
         } catch (SQLException err) {
             err.printStackTrace();
