@@ -1,10 +1,7 @@
 package sdu.se9.tv2.management.system.persistence;
 import org.json.simple.parser.ParseException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -28,28 +25,7 @@ public class PersistencePerson implements IPersistencePerson {
         return instance;
     }
 
-    /**
-     * Instance of persistence class for file
-     */
-    private Persistence persistence = new Persistence("person.json");
-
-    /**
-     * The last ID used
-     */
-    private int lastID = -1;
-
-    /**
-     * A list of persons
-     */
-    private ArrayList<Person> persons = new ArrayList<Person>();
-
-    /**
-     * Creates a new instance of the PersistencePerson class
-     */
-    private PersistencePerson() {
-        // Once a new instance is made the data will be read and saved in memory
-        this.read();
-    }
+    private PersistencePerson() {}
 
     /**
      * Creating a person
@@ -58,15 +34,26 @@ public class PersistencePerson implements IPersistencePerson {
      * @return
      */
     public Person createPerson (String firstName, String lastName) {
-        lastID++;
-        Person newPerson = new Person(lastID, firstName, lastName);
-        persons.add(newPerson);
-
-        // Save changes to file
-
-        this.write(newPerson);
-
-        return newPerson;
+        Person newPerson;
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+        try {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(first_name, last_name) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1,  firstName);
+            stmt.setString(2,  lastName);
+            stmt.execute();
+            ResultSet rs = stmt.getGeneratedKeys();
+            int i = 0;
+            if (rs.next()) {
+                i = rs.getInt(1);
+            }
+            System.out.println("You did it!");
+            System.out.println(i);
+            return new Person(i, firstName, lastName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("You didn't do it");
+            return null;
+        }
     }
 
     /**
@@ -75,15 +62,25 @@ public class PersistencePerson implements IPersistencePerson {
      * @return
      */
     public Person getPerson (int personID) {
-        for (int i = 0; i < this.persons.size(); i++) {
-            Person element = this.persons.get(i);
+        Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            if (element.getId() == personID) {
-                return element;
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE personID =" + personID);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) {
+                // No match
+                return null;
             }
-        }
 
-        return null;
+            int id = rs.getInt("id");
+            String firstName= rs.getString("first_name");
+            String lastName = rs.getString("last_name");
+
+            return new Person(id, firstName, lastName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -93,56 +90,22 @@ public class PersistencePerson implements IPersistencePerson {
      * @return
      */
     public ArrayList<Person> getPersons (String firstName, String lastName) {
-        ArrayList<Person> persons = new ArrayList<Person>();
-
-        for (int i = 0; i < this.persons.size(); i++) {
-            Person element = this.persons.get(i);
-
-            if (element.getFirstName().equals(firstName) && element.getLastName().equals(lastName)) {
-                persons.add(element);
-            }
-        }
-
-        return persons;
-    }
-
-    /**
-     * Reads file and parses JSONObject
-     */
-    private void read() {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE first_name ='" + firstName + "' AND last_name ='" + lastName+"'");
             ResultSet result = stmt.executeQuery();
             int rowcount = 0;
             ArrayList<Person> returnValue = new ArrayList<>();
             while (result.next()){
                 returnValue.add(new Person(result.getInt(1), result.getString(2), result.getString(3)));
             }
-            this.persons = returnValue;
 
             System.out.println(result);
+            return returnValue;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
-    }
-
-    /**
-     * Writes data saved in memory to file
-     */
-    private void write(Person person) {
-        Connection connection = PersistenceDatabaseHelper.getConnection();
-        try {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person VALUES(?,?,?)");
-            stmt.setInt(1,  person.getId());
-            stmt.setString(2,  person.getFirstName());
-            stmt.setString(3,  person.getLastName());
-            stmt.execute();
-            System.out.println("You did it!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("You didn't do it");
+            return null;
         }
     }
 }

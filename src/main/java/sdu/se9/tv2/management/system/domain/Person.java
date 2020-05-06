@@ -37,22 +37,4 @@ public class Person {
                 ", id=" + id +
                 '}';
     }
-
-    public static Person parseJSON (JSONObject person) {
-        int personID = Math.toIntExact((Long)person.get("id"));
-        String firstName = (String)person.get("firstName");
-        String lastName = (String)person.get("lastName");
-
-        return new Person(personID, firstName, lastName);
-    }
-
-    public static JSONObject parseJSON(Person person) {
-        JSONObject obj = new JSONObject();
-
-        obj.put("firstName", person.getFirstName());
-        obj.put("lastName", person.getLastName());
-        obj.put("id", person.getId());
-
-        return obj;
-    }
 }

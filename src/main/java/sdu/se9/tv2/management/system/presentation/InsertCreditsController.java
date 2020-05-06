@@ -1,5 +1,6 @@
 package sdu.se9.tv2.management.system.presentation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -179,6 +180,8 @@ public class InsertCreditsController {
             alert.setContentText("Rolle med navnet \"" + creditRole + "\" eksisterer allerede for program \"" + program.getName() + "\"");
             alert.show();
             return;
+        } catch (SQLException sql) {
+            sql.printStackTrace();
         }
 
         Alert alert = new Alert(AlertType.INFORMATION);

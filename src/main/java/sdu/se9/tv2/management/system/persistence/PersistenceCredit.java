@@ -6,10 +6,7 @@ import org.json.simple.parser.ParseException;
 import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,46 +23,53 @@ public class PersistenceCredit implements IPersistenceCredit {
         return instance;
     }
 
-    private Persistence persistence = new Persistence("credit.json");
-
-    private int lastID = -1;
-
-    private ArrayList<Credit> credits = new ArrayList<Credit>();
-
-    private PersistenceCredit() {
-        this.read();
-    }
+    private PersistenceCredit() {}
 
     @Override
-    public Credit createCredit(int programID, int personID, String roleName) throws DuplicateRoleNameException {
-        if (this.getCredit(programID, roleName) != null) {
-            throw new DuplicateRoleNameException("Role already exists");
-        }
+    public Credit createCredit(int programID, int personID, String roleName) throws DuplicateRoleNameException, SQLException {
 
-        lastID++;
-        Credit newCredit = new Credit(lastID, programID, personID, roleName);
-        credits.add(newCredit);
+        Connection connection = PersistenceDatabaseHelper.getConnection();
 
+            if (this.getCredit(programID, roleName) != null) {
+                throw new DuplicateRoleNameException("Role already exists");
+            }
+
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO Credit(programID, personID, roleName) VALUES(?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1,  programID);
+            stmt.setInt(2,  personID);
+            stmt.setString(3,  roleName);
+            stmt.execute();
+            ResultSet rs = stmt.getGeneratedKeys();
+            int i = 0;
+            if (rs.next()) {
+                i = rs.getInt(1);
+            }
+
+            System.out.println("You did it!");
+            System.out.println(i);
+            return new Credit(i, programID, personID, roleName);
         // Save changes to file
-
-        this.write(newCredit);
-
-        return newCredit;
     }
 
     @Override
     public ArrayList<Credit> getCredits(int programID) {
-        ArrayList<Credit> result = new ArrayList<Credit>();
+        Connection connection = PersistenceDatabaseHelper.getConnection();
 
-        for (int i = 0; i < this.credits.size(); i++) {
-            Credit element = this.credits.get(i);
-
-            if (element.getProgramID() == programID) {
-                result.add(element);
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID =" + programID);
+            ResultSet result = stmt.executeQuery();
+            int rowcount = 0;
+            ArrayList<Credit> returnValue = new ArrayList<>();
+            while (result.next()){
+                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
             }
-        }
 
-        return result;
+            System.out.println(result);
+            return returnValue;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -74,154 +78,99 @@ public class PersistenceCredit implements IPersistenceCredit {
      * @param personID Person id of the person
      * @return
      */
-    public ArrayList<Credit> getCredits(int programID, int personID) {
-        ArrayList<Credit> result = new ArrayList<Credit>();
-
-        for (int i = 0; i < this.credits.size(); i++) {
-            Credit element = this.credits.get(i);
-
-            if (element.getProgramID() == programID && element.getPersonID() == personID) {
-                result.add(element);
-            }
-        }
-
-        return result;
-    }
-
-    public Credit getCredit (int programID, String roleName) {
-        for (int i = 0; i < this.credits.size(); i++) {
-            Credit element = this.credits.get(i);
-
-            if (element.getProgramID() == programID && element.getRole().equals(roleName)) {
-                return element;
-            }
-        }
-
-        return null;
-    }
-
-    public Credit getCredit (int programID, int personID, String roleName) {
-        for (int i = 0; i < this.credits.size(); i++) {
-            Credit element = this.credits.get(i);
-
-            if (element.getProgramID() == programID && element.getPersonID() == personID && element.getRole().equals(roleName)) {
-                return element;
-            }
-        }
-
-        return null;
-    }
-
-    public ArrayList<Credit> getCreditsByPerson (int personID) {
-        return this.getCreditsByPerson(personID, Integer.MAX_VALUE);
-    }
-
-    public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) {
-        ArrayList<Credit> result = new ArrayList<Credit>();
-
-        for (int i = this.credits.size() - 1; i >= 0; i--) {
-            Credit element = this.credits.get(i);
-
-            if (element.getPersonID() == personID) {
-                result.add(element);
-            }
-
-            if (result.size() >= maxCount) {
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    private void read() {
+    public ArrayList<Credit> getCredits(int programID, int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
         try {
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM credit");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND personID ='" + personID + "'");
             ResultSet result = stmt.executeQuery();
             int rowcount = 0;
             ArrayList<Credit> returnValue = new ArrayList<>();
             while (result.next()){
                 returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
             }
-            this.credits = returnValue;
 
             System.out.println(result);
+            return returnValue;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            return null;
         }
-        /*
-        JSONObject obj = null;
-
-        // Try and read the file
-        try {
-            obj = this.persistence.read();
-        } catch (ParseException err) {
-            err.printStackTrace();
-        }
-
-        if (obj != null) {
-            // The file exists and has correct formatting, get lastID and list of producers
-
-            // obj.get("lastID") returns Long
-            this.lastID = Math.toIntExact((Long)obj.get("lastID"));
-
-            JSONArray objList = (JSONArray)obj.get("list");
-
-            ArrayList<Credit> parsedList = new ArrayList<Credit>();
-
-            // Parse producer list
-            Iterator<JSONObject> iterator = objList.iterator();
-            while (iterator.hasNext()) {
-                // Get element of the list array
-                JSONObject element = iterator.next();
-                // Parse the JSONObject using Producer.parseJSON
-                parsedList.add(Credit.parseJSON(element));
-            }
-
-            // Set producer list
-            credits = parsedList;
-        }
-
-         */
     }
 
-    private void write(Credit credit) {
-        Connection connection = PersistenceDatabaseHelper.getConnection();
+    public Credit getCredit (int programID, int personID, String roleName) throws SQLException {
+
         try {
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO credit VALUES(?,?,?,?)");
-            stmt.setInt(1,  credit.getID());
-            stmt.setInt(2,  credit.getProgramID());
-            stmt.setInt(3,  credit.getPersonID());
-            stmt.setString(4,  credit.getRole());
-            stmt.execute();
-            System.out.println("You did it!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("You didn't do it");
+            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND personID ='" + personID + "'" +
+                    " AND roleName = '" + roleName + "'");
+            ResultSet rs = stmt.executeQuery();
+
+            if (!rs.next()) {
+                // No match
+                return null;
+            }
+
+            int id = rs.getInt("id");
+            int program = rs.getInt("programID");
+            int person = rs.getInt("personID");
+            String role = rs.getString("roleName");
+
+            return new Credit(id, program, person, role);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
         }
+    }
 
+    public Credit getCredit (int programID, String roleName) throws SQLException {
 
-        /*
-        // Create JSONObject to save
-        JSONObject obj = new JSONObject();
+        try {
+            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND roleName ='" + roleName + "'");
+            ResultSet rs = stmt.executeQuery();
 
-        // JSONArray that contains the producers
-        JSONArray list = new JSONArray();
+            if (!rs.next()) {
+                // No match
+                return null;
+            }
 
-        // Go through credit list and parse as JSON objects
-        for (int i = 0; i < this.credits.size(); i++) {
-            list.add(Credit.parseJSON(this.credits.get(i)));
+            int id = rs.getInt("id");
+            int program = rs.getInt("programID");
+            int person = rs.getInt("personID");
+            String role = rs.getString("roleName");
+
+            return new Credit(id, program, person, role);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
         }
+    }
 
-        // Add lastID to JSON object
-        obj.put("lastID", lastID);
-        // Add list to JSON object
-        obj.put("list", list);
 
-        // Overwrite the file with new JSON object
-        this.persistence.write(obj); */
+    public ArrayList<Credit> getCreditsByPerson (int personID) {
+        return this.getCreditsByPerson(personID, Integer.MAX_VALUE);
+    }
+
+    public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) {
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID =" + personID);
+            ResultSet result = stmt.executeQuery();
+            int rowcount = 0;
+            ArrayList<Credit> returnValue = new ArrayList<>();
+            while (result.next()){
+                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
+                if (returnValue.size() >= maxCount) {
+                    break;
+                }
+            }
+
+            System.out.println(result);
+            return returnValue;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
     }
 }
 
