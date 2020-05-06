@@ -83,7 +83,14 @@ public class InsertCreditsController {
 
         // Check if a person with the same name but no credits already exists
 
-        boolean hasEmptyPerson = ManagementSystem.getInstance().hasExistingEmptyPerson(firstname, lastname);
+        boolean hasEmptyPerson = false;
+
+        try {
+            hasEmptyPerson = ManagementSystem.getInstance().hasExistingEmptyPerson(firstname, lastname);
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+            //Alert user of exception
+        }
 
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Tilføj kreditering");
@@ -100,7 +107,14 @@ public class InsertCreditsController {
             return;
         }
 
-        Person person = PersistencePerson.getInstance().createPerson(firstname, lastname);
+        Person person = null;
+
+        try {
+            person = PersistencePerson.getInstance().createPerson(firstname, lastname);
+        } catch (SQLException sql){
+            sql.printStackTrace();
+            //Alert user of exception
+        }
 
         personList.add(person);
 
@@ -182,6 +196,7 @@ public class InsertCreditsController {
             return;
         } catch (SQLException sql) {
             sql.printStackTrace();
+            //Alert user of exception
         }
 
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -200,7 +215,14 @@ public class InsertCreditsController {
         String firstname = personFirstnameField.getText();
         String lastname = personLastnameField.getText();
 
-        ArrayList<Person> people = PersistencePerson.getInstance().getPersons(firstname, lastname);
+        ArrayList<Person> people = null;
+
+        try {
+            people = PersistencePerson.getInstance().getPersons(firstname, lastname);
+        } catch (SQLException sql){
+            sql.printStackTrace();
+            //Alert user of exception
+        }
 
         personList.clear();
         personList.addAll(people);
@@ -217,8 +239,14 @@ public class InsertCreditsController {
 
         // Get credits that the person has
 
-        ArrayList<Credit> credits = PersistenceCredit.getInstance().getCreditsByPerson(selected.getId(), 5);
+        ArrayList<Credit> credits = null;
 
+        try {
+            credits = PersistenceCredit.getInstance().getCreditsByPerson(selected.getId(), 5);
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+            //Alert user of exception
+        }
         for (int i = 0; i < credits.size(); i++) {
             Credit credit = credits.get(i);
             Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());

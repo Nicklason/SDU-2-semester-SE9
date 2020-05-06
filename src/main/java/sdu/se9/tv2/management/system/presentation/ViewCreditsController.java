@@ -14,6 +14,7 @@ import sdu.se9.tv2.management.system.domain.Program;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ViewCreditsController {
@@ -55,15 +56,17 @@ public class ViewCreditsController {
             return;
         }
 
-        ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
-
+        ArrayList<Credit> credits = null;
         ArrayList<CreditTableViewItem> creditTableItems = new ArrayList<CreditTableViewItem>();
-
-        for (int i = 0; i < credits.size(); i++) {
-            Credit credit = credits.get(i);
-            creditTableItems.add(new CreditTableViewItem(credit));
+        try {
+            credits = PersistenceCredit.getInstance().getCredits(program.getID());
+            for (int i = 0; i < credits.size(); i++) {
+                Credit credit = credits.get(i);
+                creditTableItems.add(new CreditTableViewItem(credit));
+            }
+        } catch (SQLException sql) {
+            sql.printStackTrace();
         }
-
         data.setAll(creditTableItems);
     }
 }

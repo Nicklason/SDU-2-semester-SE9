@@ -34,5 +34,5 @@ public interface IPersistenceCredit {
 
     ArrayList<Credit> getCreditsByPerson (int personID) throws SQLException;
 
-    ArrayList<Credit> getCreditsByPerson (int personID, int maxCount);
+    ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException;
 }

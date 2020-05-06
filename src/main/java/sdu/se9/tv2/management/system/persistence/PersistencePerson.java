@@ -33,10 +33,10 @@ public class PersistencePerson implements IPersistencePerson {
      * @param lastName The person's lastname
      * @return
      */
-    public Person createPerson (String firstName, String lastName) {
+    public Person createPerson (String firstName, String lastName) throws SQLException {
         Person newPerson;
         Connection connection = PersistenceDatabaseHelper.getConnection();
-        try {
+
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(first_name, last_name) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1,  firstName);
             stmt.setString(2,  lastName);
@@ -49,11 +49,6 @@ public class PersistencePerson implements IPersistencePerson {
             System.out.println("You did it!");
             System.out.println(i);
             return new Person(i, firstName, lastName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("You didn't do it");
-            return null;
-        }
     }
 
     /**
@@ -61,10 +56,9 @@ public class PersistencePerson implements IPersistencePerson {
      * @param personID The ID of the producer
      * @return
      */
-    public Person getPerson (int personID) {
+    public Person getPerson (int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-        try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE personID =" + personID);
             ResultSet rs = stmt.executeQuery();
             if (!rs.next()) {
@@ -77,10 +71,6 @@ public class PersistencePerson implements IPersistencePerson {
             String lastName = rs.getString("last_name");
 
             return new Person(id, firstName, lastName);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
-        }
     }
 
     /**
@@ -89,10 +79,9 @@ public class PersistencePerson implements IPersistencePerson {
      * @param lastName Lastname to search for
      * @return
      */
-    public ArrayList<Person> getPersons (String firstName, String lastName) {
+    public ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-        try {
             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE first_name ='" + firstName + "' AND last_name ='" + lastName+"'");
             ResultSet result = stmt.executeQuery();
             int rowcount = 0;
@@ -103,10 +92,6 @@ public class PersistencePerson implements IPersistencePerson {
 
             System.out.println(result);
             return returnValue;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return null;
         }
-    }
 }
 

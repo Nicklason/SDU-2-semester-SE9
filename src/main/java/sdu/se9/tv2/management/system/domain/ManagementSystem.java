@@ -8,6 +8,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistencePerson;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ManagementSystem {
@@ -59,7 +60,7 @@ public class ManagementSystem {
         } return accounts;
     }
 
-    public boolean hasExistingEmptyPerson (String firstname, String lastname) {
+    public boolean hasExistingEmptyPerson (String firstname, String lastname) throws SQLException {
         ArrayList<Person> people = PersistencePerson.getInstance().getPersons(firstname, lastname);
 
         for (int i = 0; i < people.size(); i++) {
