@@ -1,11 +1,13 @@
 package sdu.se9.tv2.management.system.persistence;
 
+import kotlin.jvm.Throws;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -19,14 +21,7 @@ public interface IPersistenceAccount {
      * @param password The password of the account
      * @return
      */
-    Account getMatchingAccount(String username, String password);
-
-    /**
-     * Checks if a username is already used
-     * @param username The username to check
-     * @return
-     */
-    boolean usernameTaken (String username);
+    Account getMatchingAccount(String username, String password) throws SQLException;
 
     /**
      * Creates a new admin account
@@ -35,7 +30,7 @@ public interface IPersistenceAccount {
      * @return
      * @throws UsernameAlreadyExistsException
      */
-    AdminAccount createAdminAccount (String username, String password) throws UsernameAlreadyExistsException;
+    AdminAccount createAdminAccount (String username, String password) throws SQLException;
 
     /**
      * Creates a new producer account
@@ -45,7 +40,7 @@ public interface IPersistenceAccount {
      * @return
      * @throws UsernameAlreadyExistsException
      */
-    ProducerAccount createProducerAccount (String username, String password, int producerId) throws UsernameAlreadyExistsException;
+    ProducerAccount createProducerAccount (String username, String password, int producerId) throws SQLException;
 
     /**
      * Creates a new system admin account
@@ -54,13 +49,13 @@ public interface IPersistenceAccount {
      * @return
      * @throws UsernameAlreadyExistsException
      */
-    SystemAdminAccount createSystemAdminAccount (String username, String password) throws UsernameAlreadyExistsException;
+    SystemAdminAccount createSystemAdminAccount (String username, String password) throws SQLException;
 
     /**
      * Gets the aomunt of accounts for the specific producer
      * @param producerId
      * @return
      */
-    int getProducerAccountCount (int producerId);
+    int getProducerAccountCount (int producerId) throws SQLException;
 
 }

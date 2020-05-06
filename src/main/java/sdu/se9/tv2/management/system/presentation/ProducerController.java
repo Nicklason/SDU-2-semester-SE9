@@ -15,6 +15,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProducerController {
@@ -52,7 +53,12 @@ public class ProducerController {
         }
 
         int amount = Integer.parseInt(textfieldAmount.getText());
-        ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
+        try {
+            ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return;
+        }
 
         // TODO: Show usernames and passwords to admin
     }

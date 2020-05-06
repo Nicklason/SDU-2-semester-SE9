@@ -12,6 +12,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginController {
     @FXML
@@ -35,7 +36,13 @@ public class LoginController {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
 
-        Account account = PersistenceAccount.getInstance().getMatchingAccount(username, password);
+        Account account = null;
+        try {
+            account = PersistenceAccount.getInstance().getMatchingAccount(username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
         if (account == null) {
             loginError.setVisible(true);
             loginError.setText("Brugernavn eller adgangskoder er forkert");

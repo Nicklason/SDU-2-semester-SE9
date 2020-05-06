@@ -8,6 +8,7 @@ import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistencePerson;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ManagementSystem {
@@ -38,7 +39,7 @@ public class ManagementSystem {
         return this.account != null;
     }
 
-    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
+    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) throws SQLException {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
@@ -47,16 +48,15 @@ public class ManagementSystem {
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 
         for (int i = 0; i < amount; i++) {
-            int accountId = accountCount+i+1;
-            String username = producer.getName()+ "-" +accountId;
+            int accountId = accountCount + i + 1;
+            String username = producer.getName() + "-" + accountId;
             String password = producer.getName() + "123";
-            try {
-                ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
-                accounts.add(account);
-            } catch (UsernameAlreadyExistsException e) {
-                e.printStackTrace();
-            }
-        } return accounts;
+
+            ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
+            accounts.add(account);
+
+        }
+        return accounts;
     }
 
     public boolean hasExistingEmptyPerson (String firstname, String lastname) {
