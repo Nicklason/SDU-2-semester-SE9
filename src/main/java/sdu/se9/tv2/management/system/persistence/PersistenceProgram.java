@@ -1,12 +1,10 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import org.json.simple.parser.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import sdu.se9.tv2.management.system.domain.Program;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Implementation of the IPersistenceProgram interface
@@ -24,26 +22,9 @@ public class PersistenceProgram implements IPersistenceProgram {
     }
 
     /**
-     * Instance of persistence class for file
-     */
-    private Persistence persistence = new Persistence("program.json");
-
-    /**
-     * The last ID used
-     */
-    private int lastID = -1;
-
-    /**
-     * A list of programs
-     */
-    private ArrayList<Program> programs = new ArrayList<Program>();
-
-    /**
      * Creates a new instance of the PersistenceProducer class
      */
-    private PersistenceProgram() {
-        this.read();
-    }
+    private PersistenceProgram() {}
 
     /**
      * Creates a new program and saves it to file
@@ -52,14 +33,21 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param internalID TV2's internal ID for the program
      * @return
      */
-    public Program createProgram (int producerID, String programName, int internalID) {
-        lastID++;
-        Program newProgram = new Program(lastID, producerID, programName, internalID, false, false);
-        programs.add(newProgram);
+    public Program createProgram (int producerID, String programName, int internalID) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Program (producerID, name, internalID, pendingApproval, approved) VALUES (?, ?, ?, false, false) RETURNING id;");
+        stmt.setInt(1, producerID);
+        stmt.setString(2, programName);
+        stmt.setInt(3, internalID);
 
-        this.write();
+        // https://stackoverflow.com/questions/241003/how-to-get-a-value-from-the-last-inserted-row
 
-        return newProgram;
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
+
+        int id = rs.getInt(1);
+
+        // Return new instance of program with values inserted
+        return new Program(id, producerID, programName, internalID, false, false);
     }
 
     /**
@@ -67,16 +55,25 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param programID The ID of the program
      * @return
      */
-    public Program getProgram (int programID) {
-        for (int i = 0; i < this.programs.size(); i++) {
-            Program element = this.programs.get(i);
+    public Program getProgram (int programID) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE id = ?;");
+        stmt.setInt(1, programID);
 
-            if (element.getID() == programID) {
-                return element;
-            }
+        ResultSet rs = stmt.executeQuery();
+
+        if (!rs.next()) {
+            // No match
+            return null;
         }
 
-        return null;
+        int id = rs.getInt("id");
+        int producerID =  rs.getInt("producerID");
+        String name = rs.getString("name");
+        int internalID = rs.getInt("internalID");
+        boolean approved = rs.getBoolean("approved");
+        boolean awaitingApproval = rs.getBoolean("awaitingApproval");
+
+        return new Program(id, producerID, name, internalID, approved, awaitingApproval);
     }
 
     /**
@@ -84,16 +81,25 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param programName The name of the program
      * @return
      */
-    public Program getProgram (String programName) {
-        for (int i = 0; i < this.programs.size(); i++) {
-            Program element = this.programs.get(i);
+    public Program getProgram (String programName) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE name = ?;");
+        stmt.setString(1, programName);
 
-            if (element.getName().equals(programName)) {
-                return element;
-            }
+        ResultSet rs = stmt.executeQuery();
+
+        if (!rs.next()) {
+            // No match
+            return null;
         }
 
-        return null;
+        int id = rs.getInt("id");
+        int producerID =  rs.getInt("producerID");
+        String name = rs.getString("name");
+        int internalID = rs.getInt("internalID");
+        boolean approved = rs.getBoolean("approved");
+        boolean awaitingApproval = rs.getBoolean("awaitingApproval");
+
+        return new Program(id, producerID, name, internalID, approved, awaitingApproval);
     }
 
     /**
@@ -101,22 +107,16 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param programID The ID of the program
      * @param approved `true` for approved, `false` for not
      */
-    public void setApproved (int programID, boolean approved) {
-        // Loop through all programs
-        for (int i = 0; i < this.programs.size(); i++) {
-            Program element = this.programs.get(i);
+    public void setApproved (int programID, boolean approved) throws SQLException {
+        // Create statement
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("UPDATE Program SET approved = ? WHERE id = ?;");
 
-            // Check if the program is the one we are looking for by matching ids
-            if (element.getID() == programID) {
-                // Set it as approved
-                element.setApproved(approved);
-                // Stop the loop
-                break;
-            }
-        }
+        // Set values
+        stmt.setBoolean(1, approved);
+        stmt.setInt(2, programID);
 
-        // Save changes to file
-        this.write();
+        // Execute statement
+        stmt.execute();
     }
 
     /**
@@ -124,65 +124,12 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param programID The ID of the program
      * @param awaitingApproval The approval status, `true` for pending approval and `false` for not
      */
-    public void setAwaitingApproval (int programID, boolean awaitingApproval) {
-        // Loop through programs and look for program matching programID
-        for (int i = 0; i < this.programs.size(); i++) {
-            Program element = this.programs.get(i);
+    public void setAwaitingApproval (int programID, boolean awaitingApproval) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("UPDATE Program SET awaitingApproval = ? WHERE id = ?;");
 
-            if (element.getID() == programID) {
-                // Set awaiting approval
-                element.setAwaitingApproval(awaitingApproval);
-                return;
-            }
-        }
+        stmt.setBoolean(1, awaitingApproval);
+        stmt.setInt(2, programID);
 
-        this.write();
-    }
-
-    /**
-     * Reads file and parses JSONObject
-     */
-    private void read() {
-        JSONObject obj = null;
-
-        try {
-            obj = this.persistence.read();
-        } catch (ParseException err) {
-            err.printStackTrace();
-        }
-
-        if (obj != null) {
-            this.lastID = Math.toIntExact((Long)obj.get("lastID"));
-
-            JSONArray objList = (JSONArray)obj.get("list");
-
-            ArrayList<Program> parsedList = new ArrayList<Program>();
-
-            Iterator<JSONObject> iterator = objList.iterator();
-            while (iterator.hasNext()) {
-                JSONObject element = iterator.next();
-                parsedList.add(Program.parseJSON(element));
-            }
-
-            programs = parsedList;
-        }
-    }
-
-    /**
-     * Writes data saved in memory to file
-     */
-    private void write() {
-        JSONObject obj = new JSONObject();
-
-        JSONArray list = new JSONArray();
-
-        for (int i = 0; i < this.programs.size(); i++) {
-            list.add(Program.parseJSON(this.programs.get(i)));
-        }
-
-        obj.put("lastID", lastID);
-        obj.put("list", list);
-
-        this.persistence.write(obj);
+        stmt.execute();
     }
 }

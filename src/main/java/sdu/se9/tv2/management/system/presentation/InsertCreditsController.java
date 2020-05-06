@@ -1,5 +1,6 @@
 package sdu.se9.tv2.management.system.presentation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Person;
 import sdu.se9.tv2.management.system.domain.Program;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistencePerson;
@@ -146,13 +148,22 @@ public class InsertCreditsController {
             return;
         }
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
-        if (program == null) {
+        ManagementSystem system = ManagementSystem.getInstance();
+        ProducerAccount producer = (ProducerAccount)system.getAccount();
+
+        if (program == null || producer.getProducerId() != program.getProducerID()) {
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Tilføj kreditering");
             alert.setHeaderText("Program ikke fundet");
-            alert.setContentText("Fandt ikke et program med matchene navn");
+            alert.setContentText("Fandt ikke et program med matchende navn");
 
             alert.show();
             return;
@@ -216,11 +227,15 @@ public class InsertCreditsController {
 
         ArrayList<Credit> credits = PersistenceCredit.getInstance().getCreditsByPerson(selected.getId(), 5);
 
-        for (int i = 0; i < credits.size(); i++) {
-            Credit credit = credits.get(i);
-            Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());
-
-            text += "\n- Program: \"" + program.getName() + "\" Rolle: \"" + credit.getRole() + "\"";
+        try {
+            for (int i = 0; i < credits.size(); i++) {
+                Credit credit = credits.get(i);
+                Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());
+                text += "\n- Program: \"" + program.getName() + "\" Rolle: \"" + credit.getRole() + "\"";
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
         }
 
         personInfoArea.setText(text);

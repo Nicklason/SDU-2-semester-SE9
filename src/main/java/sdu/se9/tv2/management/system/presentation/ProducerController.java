@@ -38,17 +38,31 @@ public class ProducerController {
     @FXML
     public void addProducer(ActionEvent e) throws IOException {
         String newProducer = textfieldNewProducer.getText();
-        Producer producer = PersistenceProducer.getInstance().createProducer(newProducer);
+        try {
+            PersistenceProducer.getInstance().createProducer(newProducer);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     @FXML
     public void addAccounts (ActionEvent e) throws  IOException {
         String nameOfProducer = textfieldProducer.getText();
 
-        Producer producer = PersistenceProducer.getInstance().getProducer(nameOfProducer);
+        Producer producer = null;
+        try {
+            producer = PersistenceProducer.getInstance().getProducer(nameOfProducer);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         if (producer == null) {
-            // TODO: Show error to user
+            Alert alert = new Alert((Alert.AlertType.WARNING));
+            alert.setTitle("Fejl");
+            alert.setHeaderText("fejl");
+            alert.setContentText("Indtast producenten's navn");
+            alert.show();
             return;
         }
 
@@ -60,6 +74,11 @@ public class ProducerController {
             return;
         }
 
-        // TODO: Show usernames and passwords to admin
+
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Konti");
+        alert.setHeaderText("Her er alle de oprettede konti:");
+        alert.setContentText(accounts.toString());
+        alert.show();
     }
 }

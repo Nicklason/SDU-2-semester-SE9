@@ -39,11 +39,20 @@ public class ManagementSystem {
         return this.account != null;
     }
 
+    public boolean hasAccess (String requiredAccountType) {
+        if (!this.isLoggedIn()) {
+            return false;
+        }
+
+        return account.getType().equals(requiredAccountType);
+
+    }
+
     public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) throws SQLException {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+        Producer producer = producer = PersistenceProducer.getInstance().getProducer(producerId);
 
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 
@@ -56,6 +65,7 @@ public class ManagementSystem {
             accounts.add(account);
 
         }
+
         return accounts;
     }
 

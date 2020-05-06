@@ -14,6 +14,7 @@ import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.persistence.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ExportController {
@@ -37,7 +38,13 @@ public class ExportController {
         }
 
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         if (program == null) {
             userResponse.setText("Program med navn: " + programName + " findes ikke");
