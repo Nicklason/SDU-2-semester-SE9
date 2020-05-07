@@ -61,26 +61,25 @@ public class PersistenceProducer implements IPersistenceProducer {
      */
     public Producer getProducer (int producerID) throws SQLException{
         PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE id = ?");
+        stmt.setInt(1, producerID);
 
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
-            int id = rs.getInt("id");
             String name = rs.getString("name");
-            return new Producer(id,name);
+            return new Producer(producerID, name);
         }
         return null;
     }
 
     public Producer getProducer (String producerName) throws SQLException{
         PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE name = ?");
+        stmt.setString(1, producerName);
 
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
             int id = rs.getInt("id");
-            String name = rs.getString("name");
-            return new Producer(id,name);
+            return new Producer(id, producerName);
         }
         return null;
     }
-
 }
