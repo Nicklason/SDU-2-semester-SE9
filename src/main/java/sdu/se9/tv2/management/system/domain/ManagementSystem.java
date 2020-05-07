@@ -39,7 +39,6 @@ public class ManagementSystem {
         return this.account != null;
     }
 
-
     public boolean hasAccess (String requiredAccountType) {
         if (!this.isLoggedIn()) {
             return false;
@@ -49,30 +48,25 @@ public class ManagementSystem {
 
     }
 
-    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) {
+    public ArrayList<ProducerAccount> createAccountsForProducer(int producerId, int amount) throws SQLException {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = null;
-        try {
-            producer = PersistenceProducer.getInstance().getProducer(producerId);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        Producer producer = producer = PersistenceProducer.getInstance().getProducer(producerId);
 
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 
         for (int i = 0; i < amount; i++) {
-            int accountId = accountCount+i+1;
-            String username = producer.getName()+ "-" +accountId;
+            int accountId = accountCount + i + 1;
+            String username = producer.getName() + "-" + accountId;
             String password = producer.getName() + "123";
-            try {
-                ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
-                accounts.add(account);
-            } catch (UsernameAlreadyExistsException e) {
-                e.printStackTrace();
-            }
-        } return accounts;
+
+            ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
+            accounts.add(account);
+
+        }
+
+        return accounts;
     }
 
     public boolean hasExistingEmptyPerson (String firstname, String lastname) throws SQLException {

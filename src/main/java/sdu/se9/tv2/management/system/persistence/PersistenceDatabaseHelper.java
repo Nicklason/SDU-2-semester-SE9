@@ -51,6 +51,13 @@ public class PersistenceDatabaseHelper {
         } catch (SQLException err) {
             err.printStackTrace();
         }
+      
+        try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Account ( id serial Primary key, username varchar(255) not null, password varchar(255) not null, type varchar(255) not null, producerID int REFERENCES Producer(id))");
+            stmt.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
         // Create table Program
         try {

@@ -67,8 +67,14 @@ public class ProducerController {
         }
 
         int amount = Integer.parseInt(textfieldAmount.getText());
-        ArrayList<ProducerAccount> accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
 
+        ArrayList<ProducerAccount> accounts = null;
+        try {
+            accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return;
+        }
 
         Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
         alert.setTitle("Konti");
