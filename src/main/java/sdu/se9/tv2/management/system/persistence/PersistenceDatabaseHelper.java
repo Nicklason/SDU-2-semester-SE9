@@ -62,6 +62,7 @@ public class PersistenceDatabaseHelper {
                     "pendingApproval BOOLEAN NOT NULL," +
                     "approved BOOLEAN NOT NULL" +
                     ")");
+            stmt.execute();
         } catch (SQLException err) {
             err.printStackTrace();
         }
