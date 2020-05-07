@@ -71,7 +71,7 @@ public class PersistenceProgram implements IPersistenceProgram {
         String name = rs.getString("name");
         int internalID = rs.getInt("internalID");
         boolean approved = rs.getBoolean("approved");
-        boolean awaitingApproval = rs.getBoolean("awaitingApproval");
+        boolean awaitingApproval = rs.getBoolean("pendingApproval");
 
         return new Program(id, producerID, name, internalID, approved, awaitingApproval);
     }
@@ -97,7 +97,7 @@ public class PersistenceProgram implements IPersistenceProgram {
         String name = rs.getString("name");
         int internalID = rs.getInt("internalID");
         boolean approved = rs.getBoolean("approved");
-        boolean awaitingApproval = rs.getBoolean("awaitingApproval");
+        boolean awaitingApproval = rs.getBoolean("pendingApproval");
 
         return new Program(id, producerID, name, internalID, approved, awaitingApproval);
     }
@@ -125,7 +125,7 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @param awaitingApproval The approval status, `true` for pending approval and `false` for not
      */
     public void setAwaitingApproval (int programID, boolean awaitingApproval) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("UPDATE Program SET awaitingApproval = ? WHERE id = ?;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("UPDATE Program SET pendingApproval = ? WHERE id = ?;");
 
         stmt.setBoolean(1, awaitingApproval);
         stmt.setInt(2, programID);
