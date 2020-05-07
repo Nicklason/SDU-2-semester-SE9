@@ -31,28 +31,6 @@ public class Credit {
         return personID;
     }
 
-    public static Credit parseJSON(JSONObject credit) {
-        int id = Math.toIntExact((Long)credit.get("id"));
-        int programID = Math.toIntExact((Long)credit.get("programID"));
-        int personID = Math.toIntExact((Long)credit.get("personID"));
-        String role = (String)credit.get("role");
-        return new Credit(id, programID, personID, role);
-    }
-
-    public static JSONObject parseJSON(Credit credit) {
-        // Create new json object
-        JSONObject obj = new JSONObject();
-
-        // Add properties to json object
-        obj.put("id", credit.getID());
-        obj.put("programID", credit.getProgramID());
-        obj.put("personID", credit.getPersonID());
-        obj.put("role", credit.getRole());
-
-        // Return object
-        return obj;
-    }
-
     @Override
     public String toString() {
         return "Credit{" +

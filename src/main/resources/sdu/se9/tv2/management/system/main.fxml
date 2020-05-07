@@ -11,6 +11,7 @@
         <VBox spacing="5">
             <Button onAction="#handleHomepageShowView" text="Homepage" />
             <Button onAction="#handleViewCreditsShowView" text="Se kreditering" />
+            <Button onAction="#handleCreateProgramShowView" text="Tilføj program" visible="false"/>
             <Button fx:id="insertCreditsButton" onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" visible="false" />
             <Button fx:id="askForApprovalButton" onAction="#handleRequestApprovalShowView" text="Anmod godkendelse" visible="false" />
             <Button fx:id="eksportButton" onAction="#handleExportShowView" text="Eksporter" visible="false" />

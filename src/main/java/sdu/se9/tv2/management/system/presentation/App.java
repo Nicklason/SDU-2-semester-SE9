@@ -63,6 +63,7 @@ public class App extends Application {
 
             if (accountType.equals("producer")) {
                 scene.lookup("#insertCreditsButton").setVisible(true);
+                scene.lookup("#handleCreateProgramShowView").setVisible(true);
                 scene.lookup("#askForApprovalButton").setVisible(true);
                 scene.lookup("#eksportButton").setVisible(true);
             } else if (accountType.equals("admin")) {

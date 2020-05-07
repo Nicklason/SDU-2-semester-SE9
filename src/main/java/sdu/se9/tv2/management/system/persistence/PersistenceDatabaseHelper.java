@@ -30,6 +30,18 @@ public class PersistenceDatabaseHelper {
         // Get connection
         Connection connection = getConnection();
 
+        //Creating the tables in database if they do not already exist
+        try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Person (" +
+                    "id serial PRIMARY KEY," +
+                    "firstName varchar(20) NOT NULL," +
+                    "lastName varchar(20) NOT NULL" +
+            ")");
+            stmt.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         try {
             PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Producer (" +
                     "id SERIAL PRIMARY KEY," +
@@ -50,6 +62,18 @@ public class PersistenceDatabaseHelper {
                     "pendingApproval BOOLEAN NOT NULL," +
                     "approved BOOLEAN NOT NULL" +
                     ")");
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+      
+        try {
+            PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Credit (" +
+                    "id serial PRIMARY KEY," +
+                    "programID INTEGER NOT NULL REFERENCES Program(id)," +
+                    "personID INTEGER NOT NULL REFERENCES Person(id)," +
+                    "roleName VARCHAR(50) NOT NULL" +
+            ")");
+            stmt.execute();
         } catch (SQLException err) {
             err.printStackTrace();
         }

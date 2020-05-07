@@ -75,7 +75,7 @@ public class ManagementSystem {
         } return accounts;
     }
 
-    public boolean hasExistingEmptyPerson (String firstname, String lastname) {
+    public boolean hasExistingEmptyPerson (String firstname, String lastname) throws SQLException {
         ArrayList<Person> people = PersistencePerson.getInstance().getPersons(firstname, lastname);
 
         for (int i = 0; i < people.size(); i++) {

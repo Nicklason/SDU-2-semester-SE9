@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system.persistence;
 
 import sdu.se9.tv2.management.system.domain.Person;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IPersistencePerson {
@@ -11,14 +12,14 @@ public interface IPersistencePerson {
      * @param lastName The person's lastname
      * @return
      */
-    Person createPerson (String firstName, String lastName);
+    Person createPerson (String firstName, String lastName) throws SQLException;
 
     /**
      * Get a person by person ID
      * @param personID The ID of the person
      * @return
      */
-    Person getPerson (int personID);
+    Person getPerson (int personID) throws SQLException;
 
     /**
      * Get a list of people with matching names
@@ -26,5 +27,5 @@ public interface IPersistencePerson {
      * @param lastName Lastname to search for
      * @return
      */
-    ArrayList<Person> getPersons (String firstName, String lastName);
+    ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException;
 }

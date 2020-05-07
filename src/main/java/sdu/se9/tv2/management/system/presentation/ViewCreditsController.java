@@ -85,13 +85,18 @@ public class ViewCreditsController {
             }
         }
 
-        ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
-
         ArrayList<CreditTableViewItem> creditTableItems = new ArrayList<CreditTableViewItem>();
 
-        for (int i = 0; i < credits.size(); i++) {
-            Credit credit = credits.get(i);
-            creditTableItems.add(new CreditTableViewItem(credit));
+        try {
+            ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
+
+            for (int i = 0; i < credits.size(); i++) {
+                Credit credit = credits.get(i);
+                creditTableItems.add(new CreditTableViewItem(credit));
+            }
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+            return;
         }
 
         data.setAll(creditTableItems);

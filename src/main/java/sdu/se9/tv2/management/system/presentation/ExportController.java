@@ -52,7 +52,16 @@ public class ExportController {
         }
 
         Persistence persistence = new Persistence(program.getName().replaceAll("\\?", "") + ".json");
-        ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
+        ArrayList<Credit> credits = null;
+
+        try {
+            credits = PersistenceCredit.getInstance().getCredits(program.getID());
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+            //Alert user of exception
+            return;
+        }
+
 
         // Create JSONObject to save
         JSONObject obj = new JSONObject();
@@ -68,7 +77,15 @@ public class ExportController {
             Credit credit = credits.get(i);
             JSONObject jsonCredit = new JSONObject();
 
-            Person person = PersistencePerson.getInstance().getPerson(credit.getPersonID());
+            Person person = null;
+
+            try {
+                person = PersistencePerson.getInstance().getPerson(credit.getPersonID());
+            } catch (SQLException sql) {
+                sql.printStackTrace();
+                //Alert user of exception
+                return;
+            }
 
             jsonCredit.put("rolle", credit.getRole());
             jsonCredit.put("personID", credit.getPersonID());
