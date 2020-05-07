@@ -37,18 +37,16 @@ public class PersistencePerson implements IPersistencePerson {
         Person newPerson;
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(first_name, last_name) VALUES(?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(firstName, lastName) VALUES(?,?) RETURNING id;");
             stmt.setString(1,  firstName);
             stmt.setString(2,  lastName);
-            stmt.execute();
-            ResultSet rs = stmt.getGeneratedKeys();
-            int i = 0;
-            if (rs.next()) {
-                i = rs.getInt(1);
-            }
-            System.out.println("You did it!");
-            System.out.println(i);
-            return new Person(i, firstName, lastName);
+
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+
+            int id = rs.getInt(1);
+
+            return new Person(id, firstName, lastName);
     }
 
     /**
@@ -59,7 +57,9 @@ public class PersistencePerson implements IPersistencePerson {
     public Person getPerson (int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE personID =" + personID);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE id = ?;");
+            stmt.setInt(1, personID);
+
             ResultSet rs = stmt.executeQuery();
             if (!rs.next()) {
                 // No match
@@ -67,8 +67,8 @@ public class PersistencePerson implements IPersistencePerson {
             }
 
             int id = rs.getInt("id");
-            String firstName= rs.getString("first_name");
-            String lastName = rs.getString("last_name");
+            String firstName= rs.getString("firstName");
+            String lastName = rs.getString("lastName");
 
             return new Person(id, firstName, lastName);
     }
@@ -82,15 +82,17 @@ public class PersistencePerson implements IPersistencePerson {
     public ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE first_name ='" + firstName + "' AND last_name ='" + lastName+"'");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE firstName = ? AND lastName = ?;");
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+
             ResultSet result = stmt.executeQuery();
-            int rowcount = 0;
+
             ArrayList<Person> returnValue = new ArrayList<>();
             while (result.next()){
-                returnValue.add(new Person(result.getInt(1), result.getString(2), result.getString(3)));
+                returnValue.add(new Person(result.getInt("id"), result.getString("firstName"), result.getString("lastName")));
             }
 
-            System.out.println(result);
             return returnValue;
         }
 }

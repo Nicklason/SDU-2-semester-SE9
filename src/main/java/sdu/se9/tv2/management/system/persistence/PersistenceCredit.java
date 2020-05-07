@@ -34,21 +34,17 @@ public class PersistenceCredit implements IPersistenceCredit {
                 throw new DuplicateRoleNameException("Role already exists");
             }
 
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO Credit(programID, personID, roleName) VALUES(?,?,?) ", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO Credit(programID, personID, roleName) VALUES(?,?,?) RETURNING id;");
             stmt.setInt(1,  programID);
             stmt.setInt(2,  personID);
             stmt.setString(3,  roleName);
-            stmt.execute();
-            ResultSet rs = stmt.getGeneratedKeys();
-            int i = 0;
-            if (rs.next()) {
-                i = rs.getInt(1);
-            }
 
-            System.out.println("You did it!");
-            System.out.println(i);
-            return new Credit(i, programID, personID, roleName);
-        // Save changes to file
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+
+            int id = rs.getInt(1);
+
+            return new Credit(id, programID, personID, roleName);
     }
 
     @Override
@@ -56,15 +52,16 @@ public class PersistenceCredit implements IPersistenceCredit {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID =" + programID);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID = ?;");
+            stmt.setInt(1, programID);
+
             ResultSet result = stmt.executeQuery();
-            int rowcount = 0;
+
             ArrayList<Credit> returnValue = new ArrayList<>();
             while (result.next()){
-                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
+                returnValue.add(new Credit(result.getInt("id"), result.getInt("programID"), result.getInt("personID"), result.getString("roleName")));
             }
 
-            System.out.println(result);
             return returnValue;
     }
 
@@ -77,12 +74,15 @@ public class PersistenceCredit implements IPersistenceCredit {
     public ArrayList<Credit> getCredits(int programID, int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND personID ='" + personID + "'");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE programID = ? AND personID = ?;");
+            stmt.setInt(1, programID);
+            stmt.setInt(2, personID);
+
             ResultSet result = stmt.executeQuery();
-            int rowcount = 0;
+
             ArrayList<Credit> returnValue = new ArrayList<>();
             while (result.next()){
-                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
+                returnValue.add(new Credit(result.getInt("id"), result.getInt("programID"), result.getInt("personID"), result.getString("roleName")));
             }
 
             System.out.println(result);
@@ -91,8 +91,12 @@ public class PersistenceCredit implements IPersistenceCredit {
 
     public Credit getCredit (int programID, int personID, String roleName) throws SQLException {
 
-            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND personID ='" + personID + "'" +
-                    " AND roleName = '" + roleName + "'");
+            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND personID = ?" +
+                    " AND roleName = ?;");
+            stmt.setInt(1, programID);
+            stmt.setInt(2, personID);
+            stmt.setString(3, roleName);
+
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.next()) {
@@ -110,7 +114,10 @@ public class PersistenceCredit implements IPersistenceCredit {
 
     public Credit getCredit (int programID, String roleName) throws SQLException {
 
-            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID ='" + programID + "' AND roleName ='" + roleName + "'");
+            PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND roleName = ?;");
+            stmt.setInt(1, programID);
+            stmt.setString(2, roleName);
+
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.next()) {
@@ -134,18 +141,20 @@ public class PersistenceCredit implements IPersistenceCredit {
     public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID =" + personID);
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID = ? LIMIT ?;");
+            stmt.setInt(1, personID);
+            stmt.setInt(2, maxCount);
+
             ResultSet result = stmt.executeQuery();
-            int rowcount = 0;
+
             ArrayList<Credit> returnValue = new ArrayList<>();
             while (result.next()){
-                returnValue.add(new Credit(result.getInt(1), result.getInt(2), result.getInt(3), result.getString(4)));
+                returnValue.add(new Credit(result.getInt("id"), result.getInt("programID"), result.getInt("personID"), result.getString("roleName")));
                 if (returnValue.size() >= maxCount) {
                     break;
                 }
             }
 
-            System.out.println(result);
             return returnValue;
     }
 }

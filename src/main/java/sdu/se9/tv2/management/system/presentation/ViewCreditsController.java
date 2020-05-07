@@ -66,6 +66,7 @@ public class ViewCreditsController {
             }
         } catch (SQLException sql) {
             sql.printStackTrace();
+            return;
         }
         data.setAll(creditTableItems);
     }

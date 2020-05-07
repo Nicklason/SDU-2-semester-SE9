@@ -90,6 +90,7 @@ public class InsertCreditsController {
         } catch (SQLException sql) {
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
 
         Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -114,6 +115,7 @@ public class InsertCreditsController {
         } catch (SQLException sql){
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
 
         personList.add(person);
@@ -197,6 +199,7 @@ public class InsertCreditsController {
         } catch (SQLException sql) {
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
 
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -222,6 +225,7 @@ public class InsertCreditsController {
         } catch (SQLException sql){
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
 
         personList.clear();
@@ -246,6 +250,7 @@ public class InsertCreditsController {
         } catch (SQLException sql) {
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
         for (int i = 0; i < credits.size(); i++) {
             Credit credit = credits.get(i);

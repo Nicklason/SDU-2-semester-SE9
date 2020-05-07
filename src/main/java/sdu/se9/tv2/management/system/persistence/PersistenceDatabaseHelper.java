@@ -30,12 +30,12 @@ public class PersistenceDatabaseHelper {
         // Get connection
         Connection connection = getConnection();
 
-        //Creating the tables in database of they do not already exist
+        //Creating the tables in database if they do not already exist
         try {
             PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Person (" +
                     "id serial PRIMARY KEY," +
-                    "first_name varchar(20) NOT NULL," +
-                    "last_name varchar(20) NOT NULL" +
+                    "firstName varchar(20) NOT NULL," +
+                    "lastName varchar(20) NOT NULL" +
             ")");
             stmt.execute();
         } catch (SQLException throwables) {

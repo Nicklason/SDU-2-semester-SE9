@@ -53,6 +53,7 @@ public class ExportController {
         } catch (SQLException sql) {
             sql.printStackTrace();
             //Alert user of exception
+            return;
         }
 
 
@@ -77,6 +78,7 @@ public class ExportController {
             } catch (SQLException sql) {
                 sql.printStackTrace();
                 //Alert user of exception
+                return;
             }
 
             jsonCredit.put("rolle", credit.getRole());
