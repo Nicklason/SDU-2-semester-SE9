@@ -1,13 +1,7 @@
 package sdu.se9.tv2.management.system.persistence;
-import org.json.simple.parser.ParseException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.domain.Person;
 
 /**

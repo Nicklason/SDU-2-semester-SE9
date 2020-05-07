@@ -5,11 +5,6 @@ import org.json.simple.parser.ParseException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import sdu.se9.tv2.management.system.domain.Producer;
 

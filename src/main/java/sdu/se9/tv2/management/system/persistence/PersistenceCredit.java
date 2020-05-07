@@ -1,15 +1,10 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import sdu.se9.tv2.management.system.domain.Credit;
 import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class PersistenceCredit implements IPersistenceCredit {
 

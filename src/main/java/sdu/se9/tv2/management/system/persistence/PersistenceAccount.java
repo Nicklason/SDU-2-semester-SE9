@@ -3,13 +3,11 @@ package sdu.se9.tv2.management.system.persistence;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import sdu.se9.tv2.management.system.domain.Producer;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
-import sdu.se9.tv2.management.system.presentation.ProducerController;
 
 import java.io.InvalidClassException;
 import java.util.ArrayList;
