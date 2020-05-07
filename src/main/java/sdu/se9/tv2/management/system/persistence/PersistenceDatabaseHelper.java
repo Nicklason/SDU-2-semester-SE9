@@ -66,7 +66,7 @@ public class PersistenceDatabaseHelper {
         } catch (SQLException err) {
             err.printStackTrace();
         }
-      
+
         try {
             PreparedStatement stmt = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Credit (" +
                     "id serial PRIMARY KEY," +
