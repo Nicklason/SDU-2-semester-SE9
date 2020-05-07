@@ -9,8 +9,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sdu.se9.tv2.management.system.domain.Credit;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Person;
 import sdu.se9.tv2.management.system.domain.Program;
+import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
@@ -50,16 +52,44 @@ public class ViewCreditsController {
     private void onProgramNameChanged () {
         String programName = programNameField.getText();
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
+
+        // If the user is a guest, then they can only see approved programs
+        // If the user is a producer, then they can only see their own programs / approved programs
 
         if (program == null) {
             return;
         }
 
-        ArrayList<Credit> credits = null;
+        ManagementSystem system = ManagementSystem.getInstance();
+        boolean isProducer = system.hasAccess("producer");
+
+        if (!program.isApproved()) {
+            if (!isProducer) {
+                // User is not a producer and the program has not been approved, don't show it
+                return;
+            }
+
+            // Program is not approved and user is a producer
+            ProducerAccount producer = (ProducerAccount)system.getAccount();
+
+            if (producer.getProducerId() != program.getProducerID()) {
+                // User does not own program, don't show it to them
+                return;
+            }
+        }
+
         ArrayList<CreditTableViewItem> creditTableItems = new ArrayList<CreditTableViewItem>();
+
         try {
-            credits = PersistenceCredit.getInstance().getCredits(program.getID());
+            ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
+
             for (int i = 0; i < credits.size(); i++) {
                 Credit credit = credits.get(i);
                 creditTableItems.add(new CreditTableViewItem(credit));
@@ -68,6 +98,7 @@ public class ViewCreditsController {
             sql.printStackTrace();
             return;
         }
+
         data.setAll(creditTableItems);
     }
 }

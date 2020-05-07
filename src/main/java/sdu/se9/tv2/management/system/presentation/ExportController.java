@@ -38,7 +38,13 @@ public class ExportController {
         }
 
 
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = PersistenceProgram.getInstance().getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         if (program == null) {
             userResponse.setText("Program med navn: " + programName + " findes ikke");

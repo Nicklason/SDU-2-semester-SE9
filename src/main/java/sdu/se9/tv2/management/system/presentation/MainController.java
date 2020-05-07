@@ -7,7 +7,6 @@ import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import java.io.IOException;
 
 public class MainController {
-
     @FXML
     private void handleHomepageShowView(ActionEvent e) throws IOException {
         App.setPage("homepage");
@@ -20,7 +19,6 @@ public class MainController {
 
     @FXML
     private void handleLoginShowView(ActionEvent e) throws IOException {
-
         ManagementSystem system = ManagementSystem.getInstance();
 
         if(system.isLoggedIn()){
