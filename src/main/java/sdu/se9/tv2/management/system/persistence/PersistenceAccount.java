@@ -58,7 +58,7 @@ public class PersistenceAccount implements IPersistenceAccount {
     }
 
     public AdminAccount createAdminAccount(String username, String password) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, \"admin\", NULL) RETURNING id;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'admin', NULL) RETURNING id;");
         stmt.setString(1, username);
         stmt.setString(2, password);
 
@@ -72,7 +72,7 @@ public class PersistenceAccount implements IPersistenceAccount {
     }
 
     public SystemAdminAccount createSystemAdminAccount(String username, String password) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, \"systemadmin\", NULL) RETURNING id;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'systemadmin', NULL) RETURNING id;");
         stmt.setString(1, username);
         stmt.setString(2, password);
 
@@ -86,7 +86,7 @@ public class PersistenceAccount implements IPersistenceAccount {
     }
 
     public ProducerAccount createProducerAccount(String username, String password, int producerId) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, \"producer\", ?) RETURNING id;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'producer', ?) RETURNING id;");
         stmt.setString(1, username);
         stmt.setString(2, password);
         stmt.setInt(3, producerId);
