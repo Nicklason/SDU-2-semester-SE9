@@ -63,7 +63,7 @@ public class App extends Application {
 
             if (accountType.equals("producer")) {
                 scene.lookup("#insertCreditsButton").setVisible(true);
-                scene.lookup("#handleCreateProgramShowView").setVisible(true);
+                scene.lookup("#createProgramButton").setVisible(true);
                 scene.lookup("#askForApprovalButton").setVisible(true);
                 scene.lookup("#eksportButton").setVisible(true);
             } else if (accountType.equals("admin")) {
@@ -73,6 +73,7 @@ public class App extends Application {
         } else {
             loginBtn.setText("Log ind");
             scene.lookup("#insertCreditsButton").setVisible(false);
+            scene.lookup("#createProgramButton").setVisible(false);
             scene.lookup("#askForApprovalButton").setVisible(false);
             scene.lookup("#eksportButton").setVisible(false);
             scene.lookup("#addProducerAndAccountsButton").setVisible(false);
