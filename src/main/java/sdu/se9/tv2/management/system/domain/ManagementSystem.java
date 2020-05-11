@@ -2,7 +2,6 @@ package sdu.se9.tv2.management.system.domain;
 
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 import sdu.se9.tv2.management.system.persistence.PersistenceCredit;

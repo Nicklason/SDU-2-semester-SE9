@@ -7,7 +7,6 @@ import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
-import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 
 import java.io.InvalidClassException;
 import java.sql.PreparedStatement;

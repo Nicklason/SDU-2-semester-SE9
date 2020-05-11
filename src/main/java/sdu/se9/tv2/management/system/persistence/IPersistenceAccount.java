@@ -5,7 +5,6 @@ import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
-import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ public interface IPersistenceAccount {
      * @param username
      * @param password
      * @return
-     * @throws UsernameAlreadyExistsException
      */
     AdminAccount createAdminAccount (String username, String password) throws SQLException;
 
@@ -38,7 +36,6 @@ public interface IPersistenceAccount {
      * @param password The password of the account
      * @param producerId The producer ID for the account
      * @return
-     * @throws UsernameAlreadyExistsException
      */
     ProducerAccount createProducerAccount (String username, String password, int producerId) throws SQLException;
 
@@ -47,7 +44,6 @@ public interface IPersistenceAccount {
      * @param username The username of the account
      * @param password The password of the account
      * @return
-     * @throws UsernameAlreadyExistsException
      */
     SystemAdminAccount createSystemAdminAccount (String username, String password) throws SQLException;
 
