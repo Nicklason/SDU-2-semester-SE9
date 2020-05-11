@@ -1,6 +1,5 @@
 package sdu.se9.tv2.management.system.domain;
 
-import org.json.simple.JSONObject;
 
 public class Program {
     private int id;

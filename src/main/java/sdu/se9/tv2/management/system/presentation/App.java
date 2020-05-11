@@ -69,6 +69,7 @@ public class App extends Application {
             } else if (accountType.equals("admin")) {
                 scene.lookup("#addProducerAndAccountsButton").setVisible(true);
                 scene.lookup("#approveButton").setVisible(true);
+                scene.lookup("#ProgramApprovalButton").setVisible(true);
             }
         } else {
             loginBtn.setText("Log ind");
@@ -78,6 +79,7 @@ public class App extends Application {
             scene.lookup("#eksportButton").setVisible(false);
             scene.lookup("#addProducerAndAccountsButton").setVisible(false);
             scene.lookup("#approveButton").setVisible(false);
+            scene.lookup("#ProgramApprovalButton").setVisible(false);
 
             try {
                 App.setPage("homepage");

@@ -2,9 +2,11 @@ package sdu.se9.tv2.management.system.persistence;
 
 import sdu.se9.tv2.management.system.domain.Program;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Implementation of the IPersistenceProgram interface
@@ -131,5 +133,20 @@ public class PersistenceProgram implements IPersistenceProgram {
         stmt.setInt(2, programID);
 
         stmt.execute();
+    }
+
+    @Override
+    public ArrayList<Program> getProgramsAwaitingApproval() throws SQLException {
+        Connection connection = PersistenceDatabaseHelper.getConnection();
+
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Program WHERE pendingApproval = true;");
+
+        ResultSet result = stmt.executeQuery();
+
+        ArrayList<Program> returnValue = new ArrayList<>();
+        while (result.next()){
+            returnValue.add(new Program(result.getInt("id"), result.getInt("producerID"), result.getString("name"), result.getInt("internalID"), result.getBoolean("approved"), result.getBoolean("pendingApproval")));
+        }
+        return returnValue;
     }
 }
