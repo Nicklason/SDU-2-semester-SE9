@@ -3,6 +3,7 @@ package sdu.se9.tv2.management.system.persistence;
 import sdu.se9.tv2.management.system.domain.Program;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Interface for persistence for programs
@@ -38,4 +39,6 @@ public interface IPersistenceProgram {
      * @param approved `true` for approved, `false` for not
      */
     void setApproved (int programID, boolean approved) throws SQLException;
+
+    ArrayList<Program> getProgramsAwaitingApproval () throws SQLException;
 }
