@@ -1,25 +1,22 @@
 package sdu.se9.tv2.management.system.presentation;
 
 import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
-
-import java.sql.SQLException;
 
 public class ProgramTableViewItem {
-    private final Program program;
     private final String id;
+    private final String name;
 
-    public ProgramTableViewItem (Program program) throws SQLException {
-        this.program = program;
-        this.id = String.valueOf(PersistenceProgram.getInstance().getProgram(program.getID()));
-
+    public ProgramTableViewItem (Program program) {
+        this.id = Integer.toString(program.getID());
+        this.name = program.getName();
     }
 
-    public Program getProgram() {
-        return program;
-    }
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

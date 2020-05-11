@@ -30,8 +30,8 @@ public class MainController {
     }
 
     @FXML
-    private void handleProgramApproval(ActionEvent e) throws IOException {
-        App.setPage("View-awaiting-approval");
+    private void handleViewProgramApproval(ActionEvent e) throws IOException {
+        App.setPage("view-awaiting-approval");
     }
 
     @FXML
