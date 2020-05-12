@@ -51,7 +51,7 @@ public class ManagementSystem {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = producer = PersistenceProducer.getInstance().getProducer(producerId);
+        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
 
         int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
 
