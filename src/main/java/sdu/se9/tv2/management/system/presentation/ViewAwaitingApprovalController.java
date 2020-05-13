@@ -10,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import sdu.se9.tv2.management.system.domain.IManagementSystem;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
