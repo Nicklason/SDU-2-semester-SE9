@@ -3,18 +3,20 @@ package sdu.se9.tv2.management.system.presentation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Producer;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProducerController {
+
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     public TextField textfieldNewProducer;
@@ -26,16 +28,10 @@ public class ProducerController {
     private TextField textfieldAmount;
 
     @FXML
-    private Button buttonAddProducer;
-
-    @FXML
-    private Button buttonAddAccounts;
-
-    @FXML
     public void addProducer(ActionEvent e) throws IOException {
         String newProducer = textfieldNewProducer.getText();
         try {
-            PersistenceProducer.getInstance().createProducer(newProducer);
+            this.managementSystem.createProducer(newProducer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -47,7 +43,7 @@ public class ProducerController {
 
         Producer producer = null;
         try {
-            producer = PersistenceProducer.getInstance().getProducer(nameOfProducer);
+            this.managementSystem.getProducer(nameOfProducer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return;
@@ -66,7 +62,7 @@ public class ProducerController {
 
         ArrayList<ProducerAccount> accounts = null;
         try {
-            accounts = ManagementSystem.getInstance().createAccountsForProducer(producer.getID(), amount);
+            accounts = this.managementSystem.createAccountsForProducer(producer.getID(), amount);
         } catch (SQLException ex) {
             ex.printStackTrace();
             return;

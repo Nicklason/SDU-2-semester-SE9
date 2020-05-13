@@ -147,4 +147,8 @@ public interface IManagementSystem {
     ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException;
 
     Account getMatchingAccount (String username, String password) throws SQLException;
+
+    Producer createProducer (String producerName) throws SQLException;
+
+    Producer getProducer (String producerName) throws SQLException;
 }

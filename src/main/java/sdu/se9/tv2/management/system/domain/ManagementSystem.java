@@ -33,12 +33,14 @@ public class ManagementSystem implements IManagementSystem {
     private IPersistencePerson persistencePerson = null;
     private IPersistenceCredit persistenceCredit = null;
     private IPersistenceAccount persistenceAccount = null;
+    private IPersistenceProducer persistenceProducer = null;
 
     private ManagementSystem () {
         persistenceProgram = new PersistenceProgram();
         persistencePerson = new PersistencePerson();
         persistenceCredit = new PersistenceCredit();
         persistenceAccount = new PersistenceAccount();
+        persistenceProducer = new PersistenceProducer();
     };
 
     public void setAccount(Account account) {
@@ -66,7 +68,7 @@ public class ManagementSystem implements IManagementSystem {
 
         ArrayList<ProducerAccount> accounts = new ArrayList<ProducerAccount>();
 
-        Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
+        Producer producer = this.persistenceProducer.getProducer(producerId);
 
         int accountCount = this.persistenceAccount.getProducerAccountCount(producerId);
 
@@ -172,6 +174,14 @@ public class ManagementSystem implements IManagementSystem {
 
     public Account getMatchingAccount(String username, String password) throws SQLException {
         return this.persistenceAccount.getMatchingAccount(username, password);
+    }
+
+    public Producer createProducer(String producerName) throws SQLException {
+        return this.persistenceProducer.createProducer(producerName);
+    }
+
+    public Producer getProducer(String producerName) throws SQLException {
+        return this.persistenceProducer.getProducer(producerName);
     }
 
     public ArrayList<Credit> getCredits(int programID) throws SQLException {

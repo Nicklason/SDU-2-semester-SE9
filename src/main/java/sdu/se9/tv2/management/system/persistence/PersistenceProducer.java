@@ -10,23 +10,10 @@ import sdu.se9.tv2.management.system.domain.Producer;
  * Implementation of the IPersistenceProducer interface
  */
 public class PersistenceProducer implements IPersistenceProducer {
-
-    private static PersistenceProducer instance = null;
-
-    public static PersistenceProducer getInstance() {
-        if (instance == null) {
-            instance = new PersistenceProducer();
-        }
-
-        return instance;
-    }
-
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    private PersistenceProducer() {
-
-    }
+    public PersistenceProducer() {}
 
     /**
      * Creates a new producer and saves it to file
