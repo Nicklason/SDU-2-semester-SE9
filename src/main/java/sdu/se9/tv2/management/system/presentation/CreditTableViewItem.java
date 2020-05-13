@@ -1,26 +1,25 @@
 package sdu.se9.tv2.management.system.presentation;
 
 import sdu.se9.tv2.management.system.domain.Credit;
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Person;
-import sdu.se9.tv2.management.system.persistence.PersistencePerson;
 
 import java.sql.SQLException;
 
 public class CreditTableViewItem {
-    private final Credit credit;
-    private final Person person;
-    private final String personID;
-    private final String firstName;
-    private final String lastName;
-    private final String role;
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
+    private String personID;
+    private String firstName;
+    private String lastName;
+    private String role;
 
     public CreditTableViewItem (Credit credit) throws SQLException {
-        this.credit = credit;
-        this.person = PersistencePerson.getInstance().getPerson(credit.getPersonID());
-        this.personID = Integer.toString(this.person.getId());
-        this.firstName = this.person.getFirstName();
-        this.lastName = this.person.getLastName();
-        this.role = this.credit.getRole();
+        Person person = managementSystem.getPerson(credit.getPersonID());
+        this.personID = Integer.toString(person.getId());
+        this.firstName = person.getFirstName();
+        this.lastName = person.getLastName();
+        this.role = credit.getRole();
     }
 
     public String getPersonID() {

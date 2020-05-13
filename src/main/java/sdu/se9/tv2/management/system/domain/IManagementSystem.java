@@ -73,6 +73,15 @@ public interface IManagementSystem {
      * @param name The name of the new program
      * @param internalID The internal id of the new program
      * @return Returns new program
+     * @throws SQLException Database error
      */
     Program createProgram (int producerID, String name, int internalID) throws SQLException;
+
+    /**
+     * Get a person by id
+     * @param personID Id of the person
+     * @return Returns matching person
+     * @throws SQLException Database error
+     */
+    Person getPerson (int personID) throws SQLException;
 }
