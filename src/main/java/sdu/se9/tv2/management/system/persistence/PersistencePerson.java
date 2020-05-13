@@ -32,8 +32,8 @@ public class PersistencePerson implements IPersistencePerson {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(firstName, lastName) VALUES(?,?) RETURNING id;");
-            stmt.setString(1,  firstName);
-            stmt.setString(2,  lastName);
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
 
             ResultSet rs = stmt.executeQuery();
             rs.next();
