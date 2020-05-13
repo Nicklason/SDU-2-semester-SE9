@@ -51,7 +51,7 @@ public class PersistencePerson implements IPersistencePerson {
     public Person getPerson (int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE id = ?;");
+            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE id = ? LIMIT 1;");
             stmt.setInt(1, personID);
 
             ResultSet rs = stmt.executeQuery();
