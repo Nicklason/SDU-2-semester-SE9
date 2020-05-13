@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
@@ -13,6 +16,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ViewAwaitingApprovalController {
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
+
     @FXML
     private TableView programTableView;
 
@@ -36,7 +41,7 @@ public class ViewAwaitingApprovalController {
         ArrayList<ProgramTableViewItem> programTableItems = new ArrayList<ProgramTableViewItem>();
 
         try {
-            ArrayList<Program> programs = PersistenceProgram.getInstance().getProgramsAwaitingApproval();
+            ArrayList<Program> programs = this.managementSystem.getProgramsPendingApproval();
 
             for (int i = 0; i < programs.size(); i++) {
                 Program program = programs.get(i);

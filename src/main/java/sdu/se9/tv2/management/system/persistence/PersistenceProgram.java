@@ -124,8 +124,7 @@ public class PersistenceProgram implements IPersistenceProgram {
         stmt.execute();
     }
 
-    @Override
-    public ArrayList<Program> getProgramsAwaitingApproval() throws SQLException {
+    public ArrayList<Program> getProgramsPendingApproval() throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Program WHERE pendingApproval = true;");

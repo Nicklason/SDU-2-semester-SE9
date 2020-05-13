@@ -50,5 +50,5 @@ public interface IPersistenceProgram {
      * Get all programs that are awaiting approval
      * @return
      */
-    ArrayList<Program> getProgramsAwaitingApproval () throws SQLException;
+    ArrayList<Program> getProgramsPendingApproval () throws SQLException;
 }

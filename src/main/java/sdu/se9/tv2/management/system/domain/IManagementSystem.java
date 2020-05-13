@@ -159,4 +159,6 @@ public interface IManagementSystem {
     Producer createProducer (String producerName) throws SQLException;
 
     Producer getProducer (String producerName) throws SQLException;
+
+    ArrayList<Program> getProgramsPendingApproval() throws SQLException;
 }

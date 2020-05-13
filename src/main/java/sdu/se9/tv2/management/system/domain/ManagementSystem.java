@@ -191,4 +191,8 @@ public class ManagementSystem implements IManagementSystem {
     public ArrayList<Credit> getCredits(int programID) throws SQLException {
         return this.persistenceCredit.getCredits(programID);
     }
+
+    public ArrayList<Program> getProgramsPendingApproval() throws SQLException {
+        return this.persistenceProgram.getProgramsPendingApproval();
+    }
 }
