@@ -1,16 +1,21 @@
 package sdu.se9.tv2.management.system.presentation;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+
+import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class ApproveController {
+
+    IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     private TextField programNameText;
@@ -33,7 +38,7 @@ public class ApproveController {
         Program program = null;
 
         try {
-            program = PersistenceProgram.getInstance().getProgram(programName);
+            program = managementSystem.getProgram(programName);
         } catch (SQLException err) {
             err.printStackTrace();
             // TODO: Make alert saying something went wrong
@@ -55,7 +60,7 @@ public class ApproveController {
 
         try {
             // Setting awaiting approval to false is not needed because of a trigger
-            PersistenceProgram.getInstance().setApproved(program.getID(), true);
+            managementSystem.setApproved(program.getID(), true);
         } catch (SQLException err) {
             err.printStackTrace();
             // TODO: Make alert saying something went wrong

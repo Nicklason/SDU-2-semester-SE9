@@ -24,7 +24,13 @@ public interface IPersistenceProgram {
      * @return
      */
     Program getProgram (int programID) throws SQLException;
-    Program getProgram (String programID) throws SQLException;
+
+    /**
+     * Get a program by name
+     * @param programName The name of the program
+     * @return
+     */
+    Program getProgram (String programName) throws SQLException;
 
     /**
      * Set a program awaiting approval
@@ -40,5 +46,9 @@ public interface IPersistenceProgram {
      */
     void setApproved (int programID, boolean approved) throws SQLException;
 
+    /**
+     * Get all programs that are awaiting approval
+     * @return
+     */
     ArrayList<Program> getProgramsAwaitingApproval () throws SQLException;
 }

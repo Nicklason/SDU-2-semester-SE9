@@ -12,21 +12,10 @@ import java.util.ArrayList;
  * Implementation of the IPersistenceProgram interface
  */
 public class PersistenceProgram implements IPersistenceProgram {
-
-    private static PersistenceProgram instance = null;
-
-    public static PersistenceProgram getInstance() {
-        if (instance == null) {
-            instance = new PersistenceProgram();
-        }
-
-        return instance;
-    }
-
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    private PersistenceProgram() {}
+    public PersistenceProgram() {}
 
     /**
      * Creates a new program and saves it to file

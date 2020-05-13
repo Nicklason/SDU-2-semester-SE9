@@ -2,18 +2,20 @@ package sdu.se9.tv2.management.system.domain;
 
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
-import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
-import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
-import sdu.se9.tv2.management.system.persistence.PersistencePerson;
+import sdu.se9.tv2.management.system.persistence.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ManagementSystem {
+public class ManagementSystem implements IManagementSystem {
 
     private static ManagementSystem instance = null;
 
+    /**
+     * Singleton for creating an instance of the ManagementSystem class
+     * It is needed because controllers need easy access to the domain layer
+     * @return
+     */
     public static ManagementSystem getInstance() {
         if (instance == null) {
             instance = new ManagementSystem();
@@ -24,7 +26,11 @@ public class ManagementSystem {
 
     private Account account = null;
 
-    private ManagementSystem () {};
+    private IPersistenceProgram persistenceProgram = null;
+
+    private ManagementSystem () {
+        persistenceProgram = new PersistenceProgram();
+    };
 
     public void setAccount(Account account) {
         this.account = account;
@@ -82,5 +88,13 @@ public class ManagementSystem {
         }
 
         return false;
+    }
+
+    public void setApproved (int programID, boolean approved) throws SQLException {
+        this.persistenceProgram.setApproved(programID, true);
+    }
+
+    public Program getProgram (String programName) throws SQLException {
+        return this.persistenceProgram.getProgram(programName);
     }
 }
