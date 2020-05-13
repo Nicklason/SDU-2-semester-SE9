@@ -1,5 +1,7 @@
 package sdu.se9.tv2.management.system.domain;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.*;
@@ -27,9 +29,11 @@ public class ManagementSystem implements IManagementSystem {
     private Account account = null;
 
     private IPersistenceProgram persistenceProgram = null;
+    private IPersistencePerson persistencePerson = null;
 
     private ManagementSystem () {
         persistenceProgram = new PersistenceProgram();
+        persistencePerson = new PersistencePerson();
     };
 
     public void setAccount(Account account) {
@@ -94,11 +98,50 @@ public class ManagementSystem implements IManagementSystem {
         this.persistenceProgram.setApproved(programID, true);
     }
 
+    public Person getPerson (int personID) throws SQLException {
+        return this.persistencePerson.getPerson(personID);
+    }
+
     public Program getProgram (String programName) throws SQLException {
         return this.persistenceProgram.getProgram(programName);
     }
 
     public Program createProgram(int producerID, String name, int internalID) throws SQLException {
         return this.persistenceProgram.createProgram(producerID, name, internalID);
+    }
+
+    public void exportProgramToFile (Program program) throws SQLException {
+        PersistenceJSONFileHelper persistence = new PersistenceJSONFileHelper(program.getName().replaceAll("\\?", "") + ".json");
+        ArrayList<Credit> credits = this.getCredits(program.getID());
+
+        // Create JSONObject to save
+        JSONObject obj = new JSONObject();
+
+        obj.put("programNavn", program.getName());
+        obj.put("programID", program.getID());
+
+        // JSONArray that contains the producers
+        JSONArray list = new JSONArray();
+
+        // Go through producer list and parse as JSON objects
+        for (int i = 0; i < credits.size(); i++) {
+            Credit credit = credits.get(i);
+            JSONObject jsonCredit = new JSONObject();
+
+            Person person = this.getPerson(credit.getPersonID());
+
+            jsonCredit.put("rolle", credit.getRole());
+            jsonCredit.put("personID", credit.getPersonID());
+            jsonCredit.put("fornavn", person.getFirstName());
+            jsonCredit.put("efternavn", person.getLastName());
+
+            list.add(jsonCredit);
+        }
+
+        // Add list to JSON object
+        obj.put("medvirkende", list);
+
+        // Overwrite the file with new JSON object
+        persistence.write(obj);
     }
 }

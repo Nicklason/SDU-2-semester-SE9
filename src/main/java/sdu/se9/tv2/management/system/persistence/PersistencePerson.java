@@ -8,18 +8,7 @@ import sdu.se9.tv2.management.system.domain.Person;
  * Implementation of the IPersistencePerson interface
  */
 public class PersistencePerson implements IPersistencePerson {
-
-    private static PersistencePerson instance = null;
-
-    public static PersistencePerson getInstance() {
-        if (instance == null) {
-            instance = new PersistencePerson();
-        }
-
-        return instance;
-    }
-
-    private PersistencePerson() {}
+    public PersistencePerson() {}
 
     /**
      * Creating a person
@@ -28,19 +17,17 @@ public class PersistencePerson implements IPersistencePerson {
      * @return
      */
     public Person createPerson (String firstName, String lastName) throws SQLException {
-        Person newPerson;
         Connection connection = PersistenceDatabaseHelper.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(firstName, lastName) VALUES(?,?) RETURNING id;");
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
 
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO person(firstName, lastName) VALUES(?,?) RETURNING id;");
-            stmt.setString(1, firstName);
-            stmt.setString(2, lastName);
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
 
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
+        int id = rs.getInt(1);
 
-            int id = rs.getInt(1);
-
-            return new Person(id, firstName, lastName);
+        return new Person(id, firstName, lastName);
     }
 
     /**
@@ -51,20 +38,20 @@ public class PersistencePerson implements IPersistencePerson {
     public Person getPerson (int personID) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE id = ? LIMIT 1;");
-            stmt.setInt(1, personID);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Person WHERE id = ? LIMIT 1;");
+        stmt.setInt(1, personID);
 
-            ResultSet rs = stmt.executeQuery();
-            if (!rs.next()) {
-                // No match
-                return null;
-            }
+        ResultSet rs = stmt.executeQuery();
+        if (!rs.next()) {
+            // No match
+            return null;
+        }
 
-            int id = rs.getInt("id");
-            String firstName= rs.getString("firstName");
-            String lastName = rs.getString("lastName");
+        int id = rs.getInt("id");
+        String firstName= rs.getString("firstName");
+        String lastName = rs.getString("lastName");
 
-            return new Person(id, firstName, lastName);
+        return new Person(id, firstName, lastName);
     }
 
     /**
@@ -76,18 +63,18 @@ public class PersistencePerson implements IPersistencePerson {
     public ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-            PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE firstName = ? AND lastName = ?;");
-            stmt.setString(1, firstName);
-            stmt.setString(2, lastName);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM person WHERE firstName = ? AND lastName = ?;");
+        stmt.setString(1, firstName);
+        stmt.setString(2, lastName);
 
-            ResultSet result = stmt.executeQuery();
+        ResultSet result = stmt.executeQuery();
 
-            ArrayList<Person> returnValue = new ArrayList<>();
-            while (result.next()){
-                returnValue.add(new Person(result.getInt("id"), result.getString("firstName"), result.getString("lastName")));
-            }
-
-            return returnValue;
+        ArrayList<Person> returnValue = new ArrayList<>();
+        while (result.next()){
+            returnValue.add(new Person(result.getInt("id"), result.getString("firstName"), result.getString("lastName")));
         }
+
+        return returnValue;
+    }
 }
 
