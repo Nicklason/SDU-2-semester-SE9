@@ -97,4 +97,8 @@ public class ManagementSystem implements IManagementSystem {
     public Program getProgram (String programName) throws SQLException {
         return this.persistenceProgram.getProgram(programName);
     }
+
+    public Program createProgram(int producerID, String name, int internalID) throws SQLException {
+        return this.persistenceProgram.createProgram(producerID, name, internalID);
+    }
 }

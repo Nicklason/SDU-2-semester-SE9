@@ -66,4 +66,13 @@ public interface IManagementSystem {
      * @throws SQLException Database error
      */
     void setApproved (int programID, boolean approved) throws SQLException;
+
+    /**
+     * Creates a new program for a producer
+     * @param producerID The id of the producer
+     * @param name The name of the new program
+     * @param internalID The internal id of the new program
+     * @return Returns new program
+     */
+    Program createProgram (int producerID, String name, int internalID) throws SQLException;
 }

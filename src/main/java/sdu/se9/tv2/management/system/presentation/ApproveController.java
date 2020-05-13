@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class ApproveController {
 
-    IManagementSystem managementSystem = ManagementSystem.getInstance();
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     private TextField programNameText;
