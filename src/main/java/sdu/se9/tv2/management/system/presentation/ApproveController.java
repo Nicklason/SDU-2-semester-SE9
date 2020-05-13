@@ -54,8 +54,8 @@ public class ApproveController {
         }
 
         try {
+            // Setting awaiting approval to false is not needed because of a trigger
             PersistenceProgram.getInstance().setApproved(program.getID(), true);
-            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), false);
         } catch (SQLException err) {
             err.printStackTrace();
             // TODO: Make alert saying something went wrong

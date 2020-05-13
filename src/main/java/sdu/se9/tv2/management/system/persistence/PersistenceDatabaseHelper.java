@@ -85,5 +85,37 @@ public class PersistenceDatabaseHelper {
         } catch (SQLException err) {
             err.printStackTrace();
         }
+
+        try {
+            // It is very important that you add an if statement to the function or it will result in it recursively triggering itself
+            PreparedStatement stmt = connection.prepareStatement("CREATE OR REPLACE FUNCTION update_pending_approval()\n" +
+                    "\tRETURNS trigger AS\n" +
+                    "$BODY$\n" +
+                    "BEGIN\n" +
+                    "\tIF NEW.approved = true AND NEW.pendingApproval = true THEN\n" +
+                    "\t\tUPDATE Program\n" +
+                    "\t\tSET pendingApproval = false\n" +
+                    "\t\tWHERE id = NEW.id;\n" +
+                    "\tEND IF;\n" +
+                    "\tRETURN NEW;\n" +
+                    "END;\n" +
+                    "$BODY$\n" +
+                    "LANGUAGE plpgsql;");
+            stmt.execute();
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
+
+        try {
+            PreparedStatement stmt = connection.prepareStatement("DROP TRIGGER IF EXISTS approved_changes on Program;\n" +
+                    "CREATE TRIGGER approved_changes\n" +
+                    "\tAFTER UPDATE\n" +
+                    "\tON Program\n" +
+                    "\tFOR EACH ROW\n" +
+                    "\tEXECUTE PROCEDURE update_pending_approval();");
+            stmt.execute();
+        } catch (SQLException err) {
+            err.printStackTrace();
+        }
     }
 }
