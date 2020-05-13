@@ -65,9 +65,10 @@ public class ViewCreditsController {
         }
 
         ManagementSystem system = ManagementSystem.getInstance();
-        boolean isProducer = system.hasAccess("producer");
+        boolean isAdmin = system.hasAccess("admin");
 
-        if (!program.isApproved()) {
+        if (!isAdmin && !program.isApproved()) {
+            boolean isProducer = system.hasAccess("producer");
             if (!isProducer) {
                 // User is not a producer and the program has not been approved, don't show it
                 return;
