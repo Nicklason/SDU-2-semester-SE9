@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
+import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 import sdu.se9.tv2.management.system.persistence.*;
 
 import java.sql.SQLException;
@@ -30,10 +31,12 @@ public class ManagementSystem implements IManagementSystem {
 
     private IPersistenceProgram persistenceProgram = null;
     private IPersistencePerson persistencePerson = null;
+    private IPersistenceCredit persistenceCredit = null;
 
     private ManagementSystem () {
         persistenceProgram = new PersistenceProgram();
         persistencePerson = new PersistencePerson();
+        persistenceCredit = new PersistenceCredit();
     };
 
     public void setAccount(Account account) {
@@ -79,12 +82,12 @@ public class ManagementSystem implements IManagementSystem {
     }
 
     public boolean hasExistingEmptyPerson (String firstname, String lastname) throws SQLException {
-        ArrayList<Person> people = PersistencePerson.getInstance().getPersons(firstname, lastname);
+        ArrayList<Person> people = this.persistencePerson.getPersons(firstname, lastname);
 
         for (int i = 0; i < people.size(); i++) {
             Person person = people.get(i);
 
-            int creditCount = PersistenceCredit.getInstance().getCreditsByPerson(person.getId(), 1).size();
+            int creditCount = this.persistenceCredit.getCreditsByPerson(person.getId(), 1).size();
 
             if (creditCount == 0) {
                 return true;
@@ -104,6 +107,10 @@ public class ManagementSystem implements IManagementSystem {
 
     public Program getProgram (String programName) throws SQLException {
         return this.persistenceProgram.getProgram(programName);
+    }
+
+    public Program getProgram (int programID) throws SQLException {
+        return this.persistenceProgram.getProgram(programID);
     }
 
     public Program createProgram(int producerID, String name, int internalID) throws SQLException {
@@ -143,5 +150,25 @@ public class ManagementSystem implements IManagementSystem {
 
         // Overwrite the file with new JSON object
         persistence.write(obj);
+    }
+
+    public Person createPerson(String firstName, String lastName) throws SQLException {
+        return this.persistencePerson.createPerson(firstName, lastName);
+    }
+
+    public ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException {
+        return this.persistencePerson.getPersons(firstName, lastName);
+    }
+
+    public Credit createCredit (int programID, int personID, String roleName) throws DuplicateRoleNameException, SQLException {
+        return this.persistenceCredit.createCredit(programID, personID, roleName);
+    }
+
+    public ArrayList<Credit> getCreditsByPerson(int personID, int maxCount) throws SQLException {
+        return this.persistenceCredit.getCreditsByPerson(personID, maxCount);
+    }
+
+    public ArrayList<Credit> getCredits(int programID) throws SQLException {
+        return this.persistenceCredit.getCredits(programID);
     }
 }

@@ -1,6 +1,5 @@
 package sdu.se9.tv2.management.system.presentation;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -11,17 +10,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
-import sdu.se9.tv2.management.system.domain.Credit;
-import sdu.se9.tv2.management.system.domain.ManagementSystem;
-import sdu.se9.tv2.management.system.domain.Person;
-import sdu.se9.tv2.management.system.domain.Program;
+import sdu.se9.tv2.management.system.domain.*;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
+
+import java.sql.SQLException;
 import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
-import sdu.se9.tv2.management.system.persistence.PersistenceCredit;
-import sdu.se9.tv2.management.system.persistence.PersistencePerson;
-import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 public class InsertCreditsController {
+
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     private TextField programNameField;
@@ -112,7 +109,7 @@ public class InsertCreditsController {
         Person person = null;
 
         try {
-            person = PersistencePerson.getInstance().createPerson(firstname, lastname);
+            person = managementSystem.createPerson(firstname, lastname);
         } catch (SQLException sql){
             sql.printStackTrace();
             //Alert user of exception
@@ -166,7 +163,7 @@ public class InsertCreditsController {
 
         Program program = null;
         try {
-            program = PersistenceProgram.getInstance().getProgram(programName);
+            program = managementSystem.getProgram(programName);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return;
@@ -198,7 +195,7 @@ public class InsertCreditsController {
         Credit credit = null;
 
         try {
-            credit = PersistenceCredit.getInstance().createCredit(program.getID(), person.getId(), creditRole);
+            credit = managementSystem.createCredit(program.getID(), person.getId(), creditRole);
         } catch (DuplicateRoleNameException err) {
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Tilføj kreditering");
@@ -231,7 +228,7 @@ public class InsertCreditsController {
         ArrayList<Person> people = null;
 
         try {
-            people = PersistencePerson.getInstance().getPersons(firstname, lastname);
+            people = managementSystem.getPersons(firstname, lastname);
         } catch (SQLException sql){
             sql.printStackTrace();
             //Alert user of exception
@@ -253,11 +250,11 @@ public class InsertCreditsController {
 
         try {
             // Get credits that the person has
-            ArrayList<Credit> credits = PersistenceCredit.getInstance().getCreditsByPerson(selected.getId(), 5);
+            ArrayList<Credit> credits = managementSystem.getCreditsByPerson(selected.getId(), 5);
 
             for (int i = 0; i < credits.size(); i++) {
                 Credit credit = credits.get(i);
-                Program program = PersistenceProgram.getInstance().getProgram(credit.getProgramID());
+                Program program = managementSystem.getProgram(credit.getProgramID());
                 text += "\n- Program: \"" + program.getName() + "\" Rolle: \"" + credit.getRole() + "\"";
             }
         } catch (SQLException throwables) {

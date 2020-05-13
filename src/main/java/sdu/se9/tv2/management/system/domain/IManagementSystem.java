@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system.domain;
 
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
+import sdu.se9.tv2.management.system.exceptions.DuplicateRoleNameException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -60,6 +61,14 @@ public interface IManagementSystem {
     Program getProgram (String programName) throws SQLException;
 
     /**
+     * Get a program by id
+     * @param programID Id of the progrma
+     * @return Returns matching program
+     * @throws SQLException Database error
+     */
+    Program getProgram (int programID) throws SQLException;
+
+    /**
      * Approve a program
      * @param programID Id of the program
      * @param approved true to approve, false to not approve
@@ -99,4 +108,41 @@ public interface IManagementSystem {
      * @throws SQLException Database error
      */
     void exportProgramToFile (Program program) throws SQLException;
+
+    /**
+     * Create a new person
+     * @param firstName The firstname of the new person
+     * @param lastName The lastname of the new Person
+     * @return Returns new person
+     * @throws SQLException Database error
+     */
+    Person createPerson (String firstName, String lastName) throws SQLException;
+
+    /**
+     * Get list of people with matching name
+     * @param firstName Firstname to search for
+     * @param lastName Lastname to search for
+     * @return Returns matching people
+     * @throws SQLException
+     */
+    ArrayList<Person> getPersons (String firstName, String lastName) throws SQLException;
+
+    /**
+     * Create a new credit
+     * @param programID The id of the program the person is credited for
+     * @param personID The id of the person to credit
+     * @param roleName The role of the person
+     * @return Returns new credit
+     * @throws SQLException Database error
+     */
+    Credit createCredit (int programID, int personID, String roleName) throws DuplicateRoleNameException, SQLException;
+
+    /**
+     * Gets credits by person
+     * @param personID The id of the person
+     * @param maxCount If less than 0 then it will return all matching rows
+     * @return Returns credits by person
+     * @throws SQLException Database error
+     */
+    ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException;
 }

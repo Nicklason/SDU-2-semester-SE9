@@ -8,17 +8,7 @@ import java.util.ArrayList;
 
 public class PersistenceCredit implements IPersistenceCredit {
 
-    private static PersistenceCredit instance = null;
-
-    public static PersistenceCredit getInstance() {
-        if (instance == null) {
-            instance = new PersistenceCredit();
-        }
-
-        return instance;
-    }
-
-    private PersistenceCredit() {}
+    public PersistenceCredit() {}
 
     @Override
     public Credit createCredit(int programID, int personID, String roleName) throws DuplicateRoleNameException, SQLException {
