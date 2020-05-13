@@ -77,6 +77,14 @@ public interface IManagementSystem {
     void setApproved (int programID, boolean approved) throws SQLException;
 
     /**
+     * Set a program awaiting approval
+     * @param programID The ID of the program
+     * @param pendingApproval The approval status, `true` for pending approval and `false` for not
+     * @throws SQLException Database error
+     */
+    void setPendingApproval(int programID, boolean pendingApproval) throws SQLException;
+
+    /**
      * Creates a new program for a producer
      * @param producerID The id of the producer
      * @param name The name of the new program

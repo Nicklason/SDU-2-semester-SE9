@@ -53,7 +53,7 @@ public class ApproveController {
             userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
             return;
         }
-        if(!program.isAwaitingApproval()) {
+        if(!program.isPendingApproval()) {
             userResponse.setText("Krediteringen for " + programName + " afventer ikke godkendelse");
             return;
         }

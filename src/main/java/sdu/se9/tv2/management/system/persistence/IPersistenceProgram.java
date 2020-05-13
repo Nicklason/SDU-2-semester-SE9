@@ -35,9 +35,9 @@ public interface IPersistenceProgram {
     /**
      * Set a program awaiting approval
      * @param programID The ID of the program
-     * @param awaitingApproval The approval status, `true` for pending approval and `false` for not
+     * @param pendingApproval The approval status, `true` for pending approval and `false` for not
      */
-    void setAwaitingApproval (int programID, boolean awaitingApproval) throws SQLException;
+    void setPendingApproval (int programID, boolean pendingApproval) throws SQLException;
 
     /**
      * Get a program approval

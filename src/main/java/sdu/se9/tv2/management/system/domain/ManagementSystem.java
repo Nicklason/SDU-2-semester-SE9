@@ -105,6 +105,10 @@ public class ManagementSystem implements IManagementSystem {
         this.persistenceProgram.setApproved(programID, true);
     }
 
+    public void setPendingApproval(int programID, boolean pendingApproval) throws SQLException {
+        this.persistenceProgram.setPendingApproval(programID, pendingApproval);
+    }
+
     public Person getPerson (int personID) throws SQLException {
         return this.persistencePerson.getPerson(personID);
     }

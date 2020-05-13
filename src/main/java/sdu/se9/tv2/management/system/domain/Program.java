@@ -6,15 +6,15 @@ public class Program {
     private String name;
     private int internalID;
     private boolean approved;
-    private boolean awaitingApproval;
+    private boolean pendingApproval;
 
-    public Program(int id, int producerID, String name, int internalID, boolean approved, boolean awaitingApproval) {
+    public Program(int id, int producerID, String name, int internalID, boolean approved, boolean pendingApproval) {
         this.id = id;
         this.producerID = producerID;
         this.name = name;
         this.internalID = internalID;
         this.approved = approved;
-        this.awaitingApproval = awaitingApproval;
+        this.pendingApproval = pendingApproval;
     }
 
     public int getID() { return id; }
@@ -33,8 +33,8 @@ public class Program {
         return approved;
     }
 
-    public boolean isAwaitingApproval() {
-        return awaitingApproval;
+    public boolean isPendingApproval() {
+        return pendingApproval;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Program {
                 ", name='" + name + "'" +
                 ", internalID='" + internalID + "'" +
                 ", approved='" + approved + "'" +
-                ", awaitingApproval='" + awaitingApproval + "'" +
+                ", pendingApproval='" + pendingApproval + "'" +
                 "}";
     }
 }

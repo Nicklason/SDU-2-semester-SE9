@@ -4,15 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class RequestApprovalController {
+
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     private TextField programNameText;
@@ -33,7 +36,7 @@ public class RequestApprovalController {
 
         Program program = null;
         try {
-            program = PersistenceProgram.getInstance().getProgram(programName);
+            program = this.managementSystem.getProgram(programName);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return;
@@ -47,16 +50,19 @@ public class RequestApprovalController {
             userResponse.setText("Program med navn: " + programName + " ikke fundet");
             return;
         }
+
         if (program.isApproved()) {
             userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
             return;
         }
-        if(program.isAwaitingApproval()) {
+
+        if (program.isPendingApproval()) {
             userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
             return;
         }
+
         try {
-            PersistenceProgram.getInstance().setAwaitingApproval(program.getID(), true);
+            this.managementSystem.setPendingApproval(program.getID(), true);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return;

@@ -113,12 +113,12 @@ public class PersistenceProgram implements IPersistenceProgram {
     /**
      * Set a program awaiting approval status and saves to file
      * @param programID The ID of the program
-     * @param awaitingApproval The approval status, `true` for pending approval and `false` for not
+     * @param pendingApproval The approval status, `true` for pending approval and `false` for not
      */
-    public void setAwaitingApproval (int programID, boolean awaitingApproval) throws SQLException {
+    public void setPendingApproval (int programID, boolean pendingApproval) throws SQLException {
         PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("UPDATE Program SET pendingApproval = ? WHERE id = ?;");
 
-        stmt.setBoolean(1, awaitingApproval);
+        stmt.setBoolean(1, pendingApproval);
         stmt.setInt(2, programID);
 
         stmt.execute();
