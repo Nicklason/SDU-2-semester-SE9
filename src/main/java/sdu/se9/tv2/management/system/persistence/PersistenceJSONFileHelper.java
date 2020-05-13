@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 /**
  * Read and write to JSON files
  */
-public class Persistence {
+public class PersistenceJSONFileHelper {
     /**
      * The file to read / write from
      */
@@ -18,7 +18,7 @@ public class Persistence {
      * Crates a new instance of the Persistence class
      * @param fileName The name of the file, for example: `somefile.json`
      */
-    public Persistence(String fileName) {
+    public PersistenceJSONFileHelper(String fileName) {
         this.file = new File(fileName);
     }
 

@@ -84,4 +84,19 @@ public interface IManagementSystem {
      * @throws SQLException Database error
      */
     Person getPerson (int personID) throws SQLException;
+
+    /**
+     * Get all credits for a program
+     * @param programID Id of the program
+     * @return Returns list of all credits
+     * @throws SQLException Database error
+     */
+    ArrayList<Credit> getCredits (int programID) throws SQLException;
+
+    /**
+     *
+     * @param program An instance of the Program class
+     * @throws SQLException Database error
+     */
+    void exportProgramToFile (Program program) throws SQLException;
 }
