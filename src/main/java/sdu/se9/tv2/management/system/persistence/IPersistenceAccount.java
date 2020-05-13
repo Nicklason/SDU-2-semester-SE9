@@ -1,13 +1,11 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import kotlin.jvm.Throws;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  * Interface for persistence for accounts

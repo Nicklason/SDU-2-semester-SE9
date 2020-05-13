@@ -5,20 +5,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProgram;
 
 import java.sql.SQLException;
-
 
 public class CreateProgramController {
     @FXML
     private TextField programNameField;
     @FXML
     private TextField internalIDField;
-
-
 
     public void createProgram(ActionEvent event) {
         ProducerAccount producerAccount = (ProducerAccount) ManagementSystem.getInstance().getAccount();

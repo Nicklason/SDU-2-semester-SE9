@@ -2,7 +2,6 @@ package sdu.se9.tv2.management.system.persistence;
 
 import sdu.se9.tv2.management.system.domain.Producer;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**

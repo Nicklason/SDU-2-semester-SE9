@@ -7,10 +7,8 @@ import javafx.scene.text.Text;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sdu.se9.tv2.management.system.domain.Credit;
-import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Person;
 import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.persistence.*;
 
 import java.io.IOException;
@@ -27,7 +25,6 @@ public class ExportController {
 
     @FXML
     public void export(ActionEvent event) throws IOException {
-
         userResponse.setText("");
 
         String programName = this.programNameText.getText();
@@ -36,7 +33,6 @@ public class ExportController {
             userResponse.setText("Feltet kan ikke være blankt");
             return;
         }
-
 
         Program program = null;
         try {

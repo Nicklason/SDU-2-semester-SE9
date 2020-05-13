@@ -1,7 +1,5 @@
 package sdu.se9.tv2.management.system.domain;
 
-import org.json.simple.JSONObject;
-
 public class Credit {
     private int id;
     private String role;

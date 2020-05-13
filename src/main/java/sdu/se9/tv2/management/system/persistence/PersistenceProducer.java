@@ -1,7 +1,5 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import org.json.simple.parser.ParseException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

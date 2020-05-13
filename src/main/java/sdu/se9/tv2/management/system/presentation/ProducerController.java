@@ -7,10 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.Producer;
-import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.persistence.IPersistenceProducer;
-import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
 import sdu.se9.tv2.management.system.persistence.PersistenceProducer;
 
 import java.io.IOException;

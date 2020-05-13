@@ -1,6 +1,5 @@
 package sdu.se9.tv2.management.system.domain;
 
-
 public class Program {
     private int id;
     private int producerID;

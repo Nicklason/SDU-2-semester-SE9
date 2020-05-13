@@ -1,7 +1,5 @@
 package sdu.se9.tv2.management.system.domain;
 
-import org.json.simple.JSONObject;
-
 public class Person {
     private int id;
     private String firstName;
