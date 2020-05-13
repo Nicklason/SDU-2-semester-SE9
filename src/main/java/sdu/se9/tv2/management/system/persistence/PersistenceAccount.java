@@ -1,34 +1,17 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
+import java.sql.PreparedStatement;
+
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
 
-import java.io.InvalidClassException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class PersistenceAccount implements IPersistenceAccount {
-
-    private static PersistenceAccount instance = null;
-
-    public static PersistenceAccount getInstance() {
-        if (instance == null) {
-            instance = new PersistenceAccount();
-        }
-
-        return instance;
-    }
-
-    private PersistenceAccount() {
-    }
+    public PersistenceAccount() {}
 
     public Account getMatchingAccount(String username, String password) throws SQLException {
         PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Account WHERE username = ? AND password = ? LIMIT 1;");

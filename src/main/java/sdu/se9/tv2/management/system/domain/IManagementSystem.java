@@ -145,4 +145,6 @@ public interface IManagementSystem {
      * @throws SQLException Database error
      */
     ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException;
+
+    Account getMatchingAccount (String username, String password) throws SQLException;
 }

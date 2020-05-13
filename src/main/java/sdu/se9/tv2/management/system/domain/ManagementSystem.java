@@ -32,11 +32,13 @@ public class ManagementSystem implements IManagementSystem {
     private IPersistenceProgram persistenceProgram = null;
     private IPersistencePerson persistencePerson = null;
     private IPersistenceCredit persistenceCredit = null;
+    private IPersistenceAccount persistenceAccount = null;
 
     private ManagementSystem () {
         persistenceProgram = new PersistenceProgram();
         persistencePerson = new PersistencePerson();
         persistenceCredit = new PersistenceCredit();
+        persistenceAccount = new PersistenceAccount();
     };
 
     public void setAccount(Account account) {
@@ -66,14 +68,14 @@ public class ManagementSystem implements IManagementSystem {
 
         Producer producer = PersistenceProducer.getInstance().getProducer(producerId);
 
-        int accountCount = PersistenceAccount.getInstance().getProducerAccountCount(producerId);
+        int accountCount = this.persistenceAccount.getProducerAccountCount(producerId);
 
         for (int i = 0; i < amount; i++) {
             int accountId = accountCount + i + 1;
             String username = producer.getName() + "-" + accountId;
             String password = producer.getName() + "123";
 
-            ProducerAccount account = PersistenceAccount.getInstance().createProducerAccount(username, password, producer.getID());
+            ProducerAccount account = this.persistenceAccount.createProducerAccount(username, password, producer.getID());
             accounts.add(account);
 
         }
@@ -166,6 +168,10 @@ public class ManagementSystem implements IManagementSystem {
 
     public ArrayList<Credit> getCreditsByPerson(int personID, int maxCount) throws SQLException {
         return this.persistenceCredit.getCreditsByPerson(personID, maxCount);
+    }
+
+    public Account getMatchingAccount(String username, String password) throws SQLException {
+        return this.persistenceAccount.getMatchingAccount(username, password);
     }
 
     public ArrayList<Credit> getCredits(int programID) throws SQLException {
