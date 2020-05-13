@@ -58,7 +58,7 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @return
      */
     public Program getProgram (int programID) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE id = ?;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE id = ? LIMIT 1;");
         stmt.setInt(1, programID);
 
         ResultSet rs = stmt.executeQuery();
@@ -84,7 +84,7 @@ public class PersistenceProgram implements IPersistenceProgram {
      * @return
      */
     public Program getProgram (String programName) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE name = ?;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Program WHERE name = ? LIMIT 1;");
         stmt.setString(1, programName);
 
         ResultSet rs = stmt.executeQuery();

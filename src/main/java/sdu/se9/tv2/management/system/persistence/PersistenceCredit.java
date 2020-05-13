@@ -83,8 +83,7 @@ public class PersistenceCredit implements IPersistenceCredit {
     }
 
     public Credit getCredit (int programID, int personID, String roleName) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND personID = ?" +
-                " AND roleName = ?;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND personID = ? AND roleName = ? LIMIT 1;");
         stmt.setInt(1, programID);
         stmt.setInt(2, personID);
         stmt.setString(3, roleName);
@@ -105,7 +104,7 @@ public class PersistenceCredit implements IPersistenceCredit {
     }
 
     public Credit getCredit (int programID, String roleName) throws SQLException {
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND roleName = ?;");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Credit WHERE programID = ? AND roleName = ? LIMIT 1;");
         stmt.setInt(1, programID);
         stmt.setString(2, roleName);
 
@@ -126,15 +125,27 @@ public class PersistenceCredit implements IPersistenceCredit {
 
 
     public ArrayList<Credit> getCreditsByPerson (int personID) throws SQLException {
-        return this.getCreditsByPerson(personID, Integer.MAX_VALUE);
+        return this.getCreditsByPerson(personID, -1);
     }
 
+    /**
+     * Gets credits by person
+     * @param personID The id of the person
+     * @param maxCount If less than 0 then it will return all matching rows
+     */
     public ArrayList<Credit> getCreditsByPerson (int personID, int maxCount) throws SQLException {
         Connection connection = PersistenceDatabaseHelper.getConnection();
 
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID = ? LIMIT ?;");
+        PreparedStatement stmt = null;
+
+        if (maxCount < 0) {
+            stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID = ? LIMIT ALL;");
+        } else {
+            stmt = connection.prepareStatement("SELECT * FROM Credit WHERE personID = ? LIMIT ?;");
+            stmt.setInt(2, maxCount);
+        }
+
         stmt.setInt(1, personID);
-        stmt.setInt(2, maxCount);
 
         ResultSet result = stmt.executeQuery();
 

@@ -53,7 +53,7 @@ public class PersistenceProducer implements IPersistenceProducer {
      * @return
      */
     public Producer getProducer (int producerID) throws SQLException{
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE id = ?");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE id = ? LIMIT 1;");
         stmt.setInt(1, producerID);
 
         ResultSet rs = stmt.executeQuery();
@@ -65,7 +65,7 @@ public class PersistenceProducer implements IPersistenceProducer {
     }
 
     public Producer getProducer (String producerName) throws SQLException{
-        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE name = ?");
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE name = ? LIMIT 1;");
         stmt.setString(1, producerName);
 
         ResultSet rs = stmt.executeQuery();
