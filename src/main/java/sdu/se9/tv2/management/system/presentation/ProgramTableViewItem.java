@@ -11,7 +11,6 @@ public class ProgramTableViewItem {
         this.name = program.getName();
     }
 
-
     public String getId() {
         return id;
     }
