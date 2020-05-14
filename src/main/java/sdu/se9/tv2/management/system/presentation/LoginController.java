@@ -6,14 +6,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 import sdu.se9.tv2.management.system.domain.accounts.Account;
-import sdu.se9.tv2.management.system.persistence.PersistenceAccount;
-
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginController {
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
+
     @FXML
     private TextField usernameInput;
 
@@ -35,7 +37,13 @@ public class LoginController {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
 
-        Account account = PersistenceAccount.getInstance().getMatchingAccount(username, password);
+        Account account = null;
+        try {
+            account = managementSystem.getMatchingAccount(username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
         if (account == null) {
             loginError.setVisible(true);
             loginError.setText("Brugernavn eller adgangskoder er forkert");

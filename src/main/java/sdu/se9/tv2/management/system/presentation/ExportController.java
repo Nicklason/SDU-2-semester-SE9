@@ -6,17 +6,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import sdu.se9.tv2.management.system.domain.Credit;
-import sdu.se9.tv2.management.system.domain.ManagementSystem;
-import sdu.se9.tv2.management.system.domain.Person;
-import sdu.se9.tv2.management.system.domain.Program;
-import sdu.se9.tv2.management.system.domain.accounts.Account;
-import sdu.se9.tv2.management.system.persistence.*;
+import sdu.se9.tv2.management.system.domain.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ExportController {
+
+    private IManagementSystem managementSystem = ManagementSystem.getInstance();
 
     @FXML
     private TextField programNameText;
@@ -26,7 +24,6 @@ public class ExportController {
 
     @FXML
     public void export(ActionEvent event) throws IOException {
-
         userResponse.setText("");
 
         String programName = this.programNameText.getText();
@@ -36,46 +33,26 @@ public class ExportController {
             return;
         }
 
-
-        Program program = PersistenceProgram.getInstance().getProgram(programName);
+        Program program = null;
+        try {
+            program = managementSystem.getProgram(programName);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
 
         if (program == null) {
             userResponse.setText("Program med navn: " + programName + " findes ikke");
             return;
         }
 
-        Persistence persistence = new Persistence(program.getName().replaceAll("\\?", "") + ".json");
-        ArrayList<Credit> credits = PersistenceCredit.getInstance().getCredits(program.getID());
-
-        // Create JSONObject to save
-        JSONObject obj = new JSONObject();
-
-        obj.put("programNavn", program.getName());
-        obj.put("programID", program.getID());
-
-        // JSONArray that contains the producers
-        JSONArray list = new JSONArray();
-
-        // Go through producer list and parse as JSON objects
-        for (int i = 0; i < credits.size(); i++) {
-            Credit credit = credits.get(i);
-            JSONObject jsonCredit = new JSONObject();
-
-            Person person = PersistencePerson.getInstance().getPerson(credit.getPersonID());
-
-            jsonCredit.put("rolle", credit.getRole());
-            jsonCredit.put("personID", credit.getPersonID());
-            jsonCredit.put("fornavn", person.getFirstName());
-            jsonCredit.put("efternavn", person.getLastName());
-
-            list.add(jsonCredit);
+        try {
+            managementSystem.exportProgramToFile(program);
+        } catch (SQLException err) {
+            err.printStackTrace();
+            // Alert user about error
+            return;
         }
-
-        // Add list to JSON object
-        obj.put("medvirkende", list);
-
-        // Overwrite the file with new JSON object
-        persistence.write(obj);
 
         userResponse.setText("Krediteringer for " + programName + " er nu eksporteret");
     }

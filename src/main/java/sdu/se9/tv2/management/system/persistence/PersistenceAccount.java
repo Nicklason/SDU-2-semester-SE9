@@ -1,106 +1,85 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-import sdu.se9.tv2.management.system.domain.Producer;
+import java.sql.PreparedStatement;
+
 import sdu.se9.tv2.management.system.domain.accounts.Account;
 import sdu.se9.tv2.management.system.domain.accounts.AdminAccount;
 import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
 import sdu.se9.tv2.management.system.domain.accounts.SystemAdminAccount;
-import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
-import sdu.se9.tv2.management.system.presentation.ProducerController;
 
-import java.io.InvalidClassException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PersistenceAccount implements IPersistenceAccount {
+    public PersistenceAccount() {}
 
-    private static PersistenceAccount instance = null;
+    public Account getMatchingAccount(String username, String password) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Account WHERE username = ? AND password = ? LIMIT 1;");
+        stmt.setString(1, username);
+        stmt.setString(2, password);
 
-    public static PersistenceAccount getInstance() {
-        if (instance == null) {
-            instance = new PersistenceAccount();
+        ResultSet rs = stmt.executeQuery();
+
+        if (!rs.next()) {
+            // No match
+            return null;
         }
 
-        return instance;
-    }
+        int id = rs.getInt("id");
+        int producerID =  rs.getInt("producerID");
+        String type = rs.getString("type");
 
-    private Persistence persistence = new Persistence("account.json");
-
-    private int lastID = -1;
-
-    private ArrayList<Account> accounts = new ArrayList<Account>();
-
-    private PersistenceAccount() {
-        this.read();
-    }
-
-    public Account getMatchingAccount(String username, String password) {
-        for (int i = 0; i < this.accounts.size(); i++) {
-            Account element = this.accounts.get(i);
-
-            if (element.getUsername().equals(username) && element.getPassword().equals(password)) {
-                return element;
-            }
+        if (type.equals("producer")) {
+            return new ProducerAccount(id, username, password, producerID);
+        } else if (type.equals("admin")) {
+            return new AdminAccount(id, username, password);
+        } else if (type.equals("systemadmin")) {
+            return new SystemAdminAccount(id, username, password);
         }
-
         return null;
     }
 
-    public boolean usernameTaken(String username) {
-        for (int i = 0; i < this.accounts.size(); i++) {
-            Account element = this.accounts.get(i);
+    public AdminAccount createAdminAccount(String username, String password) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'admin', NULL) RETURNING id;");
+        stmt.setString(1, username);
+        stmt.setString(2, password);
 
-            if (element.getUsername().equals(username)) {
-                return true;
-            }
-        }
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
 
-        return false;
+        int id = rs.getInt(1);
+
+
+        return new AdminAccount(id, username, password);
     }
 
-    public AdminAccount createAdminAccount(String username, String password) throws UsernameAlreadyExistsException {
-        if (this.usernameTaken(username)) {
-            throw new UsernameAlreadyExistsException("An account with username already exists");
-        }
+    public SystemAdminAccount createSystemAdminAccount(String username, String password) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'systemadmin', NULL) RETURNING id;");
+        stmt.setString(1, username);
+        stmt.setString(2, password);
 
-        lastID++;
-        AdminAccount account = new AdminAccount(lastID, username, password);
-        accounts.add(account);
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
 
-        this.write();
+        int id = rs.getInt(1);
 
-        return account;
+
+        return new SystemAdminAccount(id, username, password);
     }
 
-    public SystemAdminAccount createSystemAdminAccount(String username, String password) throws UsernameAlreadyExistsException {
-        if (this.usernameTaken(username)) {
-            throw new UsernameAlreadyExistsException("An account with username already exists");
-        }
+    public ProducerAccount createProducerAccount(String username, String password, int producerId) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Account (username, password, type, producerID) VALUES (?, ?, 'producer', ?) RETURNING id;");
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+        stmt.setInt(3, producerId);
 
-        lastID++;
-        SystemAdminAccount account = new SystemAdminAccount(lastID, username, password);
-        accounts.add(account);
+        ResultSet rs = stmt.executeQuery();
+        rs.next();
 
-        this.write();
+        int id = rs.getInt(1);
 
-        return account;
-    }
 
-    public ProducerAccount createProducerAccount(String username, String password, int producerId) throws UsernameAlreadyExistsException {
-        if (this.usernameTaken(username)) {
-            throw new UsernameAlreadyExistsException("An account with username already exists");
-        }
-
-        lastID++;
-        ProducerAccount account = new ProducerAccount(lastID, username, password, producerId);
-        accounts.add(account);
-
-        this.write();
-
-        return account;
+        return new ProducerAccount(id, username, password, producerId);
     }
 
     /**
@@ -109,80 +88,17 @@ public class PersistenceAccount implements IPersistenceAccount {
      * @param producerId
      * @return
      */
-    public int getProducerAccountCount(int producerId) {
+    public int getProducerAccountCount(int producerId) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM Account WHERE producerID = ?");
+        stmt.setInt(1, producerId);
+
+        ResultSet rs = stmt.executeQuery();
         int count = 0;
-        for (int i = 0; i < this.accounts.size(); i++) {
-            Account element = this.accounts.get(i);
-            if (!element.getType().equals("producer")) {
-                continue;
-            }
-            ProducerAccount account = (ProducerAccount)element;
-            if (account.getProducerId() == producerId) {
-                count++;
-            }
+        while (rs.next()) {
+            count++;
         }
+
         return count;
-    }
-
-    private void read() {
-        JSONObject obj = null;
-
-        // Try and read the file
-        try {
-            obj = this.persistence.read();
-        } catch (ParseException err) {
-            err.printStackTrace();
-        }
-
-        if (obj != null) {
-            // The file exists and has correct formatting, get lastID and list of producers
-
-            // obj.get("lastID") returns Long
-            this.lastID = Math.toIntExact((Long)obj.get("lastID"));
-
-            JSONArray objList = (JSONArray)obj.get("list");
-
-            ArrayList<Account> parsedList = new ArrayList<Account>();
-
-            // Parse producer list
-            Iterator<JSONObject> iterator = objList.iterator();
-            while (iterator.hasNext()) {
-                // Get element of the list array
-                JSONObject element = iterator.next();
-                // Parse the JSONObject using Producer.parseJSON
-
-                try {
-                    parsedList.add(Account.parseJSON(element));
-                } catch (InvalidClassException err) {
-                    // If a check for the account type does not exist then an exception will be thrown
-                    err.printStackTrace();
-                }
-            }
-
-            // Set producer list
-            accounts = parsedList;
-        }
-    }
-
-    private void write() {
-        // Create JSONObject to save
-        JSONObject obj = new JSONObject();
-
-        // JSONArray that contains the producers
-        JSONArray list = new JSONArray();
-
-        // Go through producer list and parse as JSON objects
-        for (int i = 0; i < this.accounts.size(); i++) {
-            list.add(Account.parseJSON(this.accounts.get(i)));
-        }
-
-        // Add lastID to JSON object
-        obj.put("lastID", lastID);
-        // Add list to JSON object
-        obj.put("list", list);
-
-        // Overwrite the file with new JSON object
-        this.persistence.write(obj);
     }
 }
 

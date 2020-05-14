@@ -11,11 +11,13 @@
         <VBox spacing="5">
             <Button onAction="#handleHomepageShowView" text="Homepage" />
             <Button onAction="#handleViewCreditsShowView" text="Se kreditering" />
+            <Button fx:id="createProgramButton" onAction="#handleCreateProgramShowView" text="Tilføj program" visible="false" />
             <Button fx:id="insertCreditsButton" onAction="#handleInsertCreditsShowView" text="Indtast krediteringer" visible="false" />
             <Button fx:id="askForApprovalButton" onAction="#handleRequestApprovalShowView" text="Anmod godkendelse" visible="false" />
             <Button fx:id="eksportButton" onAction="#handleExportShowView" text="Eksporter" visible="false" />
             <Button fx:id="addProducerAndAccountsButton" onAction="#handleProducerShowView" text="Tilføj producent / konti" visible="false" />
-            <Button fx:id="approveButton" onAction="#handleApproveShowView" text="Godkend" visible="false"/>
+            <Button fx:id="approveButton" onAction="#handleApproveShowView" text="Godkend" visible="false" />
+            <Button fx:id="programApprovalButton" onAction="#handleViewProgramApproval" prefHeight="61.0" prefWidth="88.0" text="Programmer der venter på godkendelse" wrapText="true" visible="false" />
         </VBox>
     </left>
     <center>

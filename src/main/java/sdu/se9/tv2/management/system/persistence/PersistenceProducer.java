@@ -1,71 +1,37 @@
 package sdu.se9.tv2.management.system.persistence;
 
-import javafx.fxml.FXML;
-import org.json.simple.parser.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import sdu.se9.tv2.management.system.domain.Producer;
-import sdu.se9.tv2.management.system.domain.accounts.ProducerAccount;
-import sdu.se9.tv2.management.system.exceptions.UsernameAlreadyExistsException;
-import sdu.se9.tv2.management.system.presentation.ProducerController;
 
 /**
  * Implementation of the IPersistenceProducer interface
  */
 public class PersistenceProducer implements IPersistenceProducer {
-
-    private static PersistenceProducer instance = null;
-
-    public static PersistenceProducer getInstance() {
-        if (instance == null) {
-            instance = new PersistenceProducer();
-        }
-
-        return instance;
-    }
-
-    /**
-     * Instance of persistence class for file
-     */
-    private Persistence persistence = new Persistence("producer.json");
-
-    /**
-     * The last ID used
-     */
-    private int lastID = -1;
-
-    /**
-     * A list of producers
-     */
-    private ArrayList<Producer> producers = new ArrayList<Producer>();
-
     /**
      * Creates a new instance of the PersistenceProducer class
      */
-    private PersistenceProducer() {
-        // Once a new instance is made the data will be read and saved in memory
-        this.read();
-    }
+    public PersistenceProducer() {}
 
     /**
      * Creates a new producer and saves it to file
      * @param producerName The name of the new producer
      * @return
      */
-    public Producer createProducer (String producerName) {
-        lastID++;
-        Producer newProducer = new Producer(lastID, producerName);
-        producers.add(newProducer);
+    public Producer createProducer (String producerName) throws SQLException {
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("INSERT INTO Producer (name) VALUES (?) RETURNING id;");
+        stmt.setString(1,producerName);
 
-        // Save changes to file
+        ResultSet rs = stmt.executeQuery();
 
-        this.write();
+        rs.next();
 
-        return newProducer;
+        int id = rs.getInt(1);
+
+
+        return new Producer(id,producerName);
     }
 
     /**
@@ -73,88 +39,27 @@ public class PersistenceProducer implements IPersistenceProducer {
      * @param producerID The ID of the producer
      * @return
      */
-    public Producer getProducer (int producerID){
-        for (int i = 0; i < this.producers.size(); i++) {
-            Producer element = this.producers.get(i);
+    public Producer getProducer (int producerID) throws SQLException{
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE id = ? LIMIT 1;");
+        stmt.setInt(1, producerID);
 
-            if (element.getID() == producerID) {
-                return element;
-            }
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            String name = rs.getString("name");
+            return new Producer(producerID, name);
         }
-
         return null;
     }
 
-    public Producer getProducer (String producerName){
-        for (int i = 0; i < this.producers.size(); i++) {
-            Producer element = this.producers.get(i);
+    public Producer getProducer (String producerName) throws SQLException{
+        PreparedStatement stmt = PersistenceDatabaseHelper.getConnection().prepareStatement("SELECT * FROM producer WHERE name = ? LIMIT 1;");
+        stmt.setString(1, producerName);
 
-            if (element.getName().equals(producerName)) {
-                return element;
-            }
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            int id = rs.getInt("id");
+            return new Producer(id, producerName);
         }
-
         return null;
-    }
-
-    /**
-     * Reads file and parses JSONObject
-     */
-    private void read() {
-        JSONObject obj = null;
-
-        // Try and read the file
-        try {
-            obj = this.persistence.read();
-        } catch (ParseException err) {
-            err.printStackTrace();
-        }
-
-        if (obj != null) {
-            // The file exists and has correct formatting, get lastID and list of producers
-
-            // obj.get("lastID") returns Long
-            this.lastID = Math.toIntExact((Long) obj.get("lastID"));
-
-            JSONArray objList = (JSONArray) obj.get("list");
-
-            ArrayList<Producer> parsedList = new ArrayList<Producer>();
-
-            // Parse producer list
-            Iterator<JSONObject> iterator = objList.iterator();
-            while (iterator.hasNext()) {
-                // Get element of the list array
-                JSONObject element = iterator.next();
-                // Parse the JSONObject using Producer.parseJSON
-                parsedList.add(Producer.parseJSON(element));
-            }
-
-            // Set producer list
-            producers = parsedList;
-        }
-    }
-
-    /**
-     * Writes data saved in memory to file
-     */
-    private void write () {
-        // Create JSONObject to save
-        JSONObject obj = new JSONObject();
-
-        // JSONArray that contains the producers
-        JSONArray list = new JSONArray();
-
-        // Go through producer list and parse as JSON objects
-        for (int i = 0; i < this.producers.size(); i++) {
-            list.add(Producer.parseJSON(this.producers.get(i)));
-        }
-
-        // Add lastID to JSON object
-        obj.put("lastID", lastID);
-        // Add list to JSON object
-        obj.put("list", list);
-
-        // Overwrite the file with new JSON object
-        this.persistence.write(obj);
     }
 }

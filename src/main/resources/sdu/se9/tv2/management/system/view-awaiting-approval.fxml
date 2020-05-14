@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="296.0" prefWidth="419.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.ViewAwaitingApprovalController">
+    <children>
+        <VBox layoutX="10.0" layoutY="14.0" prefHeight="279.0" prefWidth="400.0">
+            <children>
+                <VBox prefHeight="48.0" prefWidth="400.0">
+                    <children>
+                        <Label text="Navn på programmer hvor krediteringerne mangler at blive godkendt" />
+                        <Button text="Opdater" onAction="#handleRefresh"/>
+                    </children>
+                </VBox>
+            <VBox prefHeight="228.0" prefWidth="400.0">
+               <children>
+                      <TableView fx:id="programTableView" editable="false" prefHeight="228.0" prefWidth="400.0">
+                          <columns>
+                              <TableColumn prefWidth="100" text="Program ID" />
+                              <TableColumn prefWidth="100" text="Program navn" />
+                          </columns>
+                      </TableView>
+               </children>
+            </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

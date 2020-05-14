@@ -2,11 +2,14 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import sdu.se9.tv2.management.system.domain.IManagementSystem;
 import sdu.se9.tv2.management.system.domain.ManagementSystem;
 
 import java.io.IOException;
 
 public class MainController {
+    IManagementSystem managementSystem = ManagementSystem.getInstance();
+
     @FXML
     private void handleHomepageShowView(ActionEvent e) throws IOException {
         App.setPage("homepage");
@@ -19,14 +22,17 @@ public class MainController {
 
     @FXML
     private void handleLoginShowView(ActionEvent e) throws IOException {
-        ManagementSystem system = ManagementSystem.getInstance();
-
-        if(system.isLoggedIn()){
-            system.setAccount(null);
+        if(managementSystem.isLoggedIn()) {
+            managementSystem.setAccount(null);
             App.updateLogin();
         } else{
             App.setPage("login");
         }
+    }
+
+    @FXML
+    private void handleViewProgramApproval(ActionEvent e) throws IOException {
+        App.setPage("view-awaiting-approval");
     }
 
     @FXML
@@ -52,5 +58,10 @@ public class MainController {
     @FXML
     private void handleInsertCreditsShowView(ActionEvent e) throws IOException {
         App.setPage("insert-credits");
+    }
+
+    @FXML
+    private void handleCreateProgramShowView(ActionEvent e) throws IOException {
+        App.setPage("create-program");
     }
 }
