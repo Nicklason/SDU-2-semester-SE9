@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.CreateProgramController">
+   <children>
+      <TextField fx:id="programNameField" layoutX="70.0" layoutY="97.0" />
+      <TextField fx:id="internalIDField" layoutX="237.0" layoutY="97.0" />
+      <Button layoutX="437.0" layoutY="97.0" mnemonicParsing="false" onAction="#createProgram" text="Tilføj" />
+      <Label layoutX="70.0" layoutY="80.0" prefHeight="17.0" prefWidth="109.0" text="Programmets Navn:" />
+      <Label layoutX="237.0" layoutY="80.0" text="Interne ID:" />
+   </children>
+</AnchorPane>

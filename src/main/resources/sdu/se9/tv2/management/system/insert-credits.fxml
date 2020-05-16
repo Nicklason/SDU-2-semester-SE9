@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdu.se9.tv2.management.system.presentation.InsertCreditsController">
+   <children>
+      <VBox layoutX="5.0" layoutY="1.0" prefHeight="400.0" prefWidth="400.0">
+         <children>
+            <VBox prefHeight="34.0" prefWidth="300.0">
+               <children>
+                  <Label text="Indtast navnet på programmet" />
+                  <TextField fx:id="programNameField" prefHeight="25.0" prefWidth="400.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="34.0" prefWidth="300.0">
+               <children>
+                  <HBox prefHeight="47.0" prefWidth="300.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Fornavn" />
+                              <TextField fx:id="personFirstnameField" prefHeight="25.0" prefWidth="200.0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Efternavn" />
+                              <TextField fx:id="personLastnameField" prefHeight="25.0" prefWidth="200.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="42.0" prefWidth="400.0">
+               <children>
+                  <Label text="Tilføj ny person med fornavn og efternavn?" />
+                  <Button mnemonicParsing="false" text="Tilføj person" onAction="#handleCreateNewPerson" />
+               </children>
+            </VBox>
+            <VBox prefHeight="100.0" prefWidth="400.0">
+               <children>
+                  <Label text="Personer" />
+                  <ListView fx:id="personListView" prefHeight="75.0" prefWidth="400.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="100.0" prefWidth="400.0">
+               <children>
+                  <Label text="Valgt person" />
+                  <TextArea fx:id="personInfoArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="ID: 123&#10;5 sidste programmer personen har medvirket i:&#10;- X-Factor&#10;- X-Factor&#10;- X-Factor&#10;- X-Factor&#10;- X-Factor" />
+               </children>
+            </VBox>
+            <VBox prefHeight="40.0" prefWidth="400.0">
+               <children>
+                  <Label text="Rolle" />
+                  <TextField fx:id="creditRoleField" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="30.0" prefWidth="400.0">
+               <children>
+                  <Button mnemonicParsing="false" text="Tilføj kreditering" onAction="#handleCreateCredit"/>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
