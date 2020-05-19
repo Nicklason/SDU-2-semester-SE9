@@ -18,7 +18,7 @@ public class CreateProgramController {
     private TextField programNameField;
     @FXML
     private TextField internalIDField;
-
+    @FXML
     public void createProgram(ActionEvent event) {
         ProducerAccount producerAccount = (ProducerAccount) managementSystem.getAccount();
 
