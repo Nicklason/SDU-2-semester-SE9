@@ -43,7 +43,7 @@ public class ProducerController {
 
         Producer producer = null;
         try {
-            this.managementSystem.getProducer(nameOfProducer);
+            producer = this.managementSystem.getProducer(nameOfProducer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             return;
