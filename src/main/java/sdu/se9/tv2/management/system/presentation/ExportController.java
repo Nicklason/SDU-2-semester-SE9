@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import org.json.simple.JSONArray;
@@ -29,7 +30,10 @@ public class ExportController {
         String programName = this.programNameText.getText();
 
         if (programName.isBlank()) {
-            userResponse.setText("Feltet kan ikke være blankt");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Eksporter krediteringer");
+            alert.setHeaderText("Feltet kan ikke være blankt");
+            alert.show();
             return;
         }
 
@@ -42,7 +46,10 @@ public class ExportController {
         }
 
         if (program == null) {
-            userResponse.setText("Program med navn: " + programName + " findes ikke");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Eksporter krediteringer");
+            alert.setHeaderText("Program med navn: " + programName + " findes ikke");
+            alert.show();
             return;
         }
 
@@ -54,6 +61,9 @@ public class ExportController {
             return;
         }
 
-        userResponse.setText("Krediteringer for " + programName + " er nu eksporteret");
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Eksporter krediteringer");
+        alert.setHeaderText("Krediteringer for " + programName + " er nu eksporteret");
+        alert.show();
     }
 }

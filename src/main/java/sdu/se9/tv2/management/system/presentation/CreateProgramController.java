@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import sdu.se9.tv2.management.system.domain.IManagementSystem;
@@ -30,9 +31,16 @@ public class CreateProgramController {
             Program program = managementSystem.createProgram(producerID, name, internalID);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Tilføj program");
+            alert.setHeaderText("Der skete en fejl ved tilføjelese af program: " + programNameField.getText());
+            alert.show();
             return;
         }
 
-        // TODO: Make alert confirming that the program was made
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Tilføj program");
+        alert.setHeaderText("Program: " + programNameField.getText() + " blev oprettet");
+        alert.show();
     }
 }
