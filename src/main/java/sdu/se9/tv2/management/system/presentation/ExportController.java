@@ -21,11 +21,7 @@ public class ExportController {
     private TextField programNameText;
 
     @FXML
-    private Text userResponse;
-
-    @FXML
     public void export(ActionEvent event) throws IOException {
-        userResponse.setText("");
 
         String programName = this.programNameText.getText();
 

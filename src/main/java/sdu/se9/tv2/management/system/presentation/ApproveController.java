@@ -22,12 +22,7 @@ public class ApproveController {
     private TextField programNameText;
 
     @FXML
-    private Text userResponse;
-
-    @FXML
     public void approve(ActionEvent event) throws IOException {
-
-        userResponse.setText("");
 
         String programName = this.programNameText.getText();
 
