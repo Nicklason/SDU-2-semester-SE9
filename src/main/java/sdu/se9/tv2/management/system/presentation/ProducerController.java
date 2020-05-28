@@ -34,7 +34,20 @@ public class ProducerController {
             this.managementSystem.createProducer(newProducer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+
+            Alert alert = new Alert((Alert.AlertType.WARNING));
+            alert.setTitle("Fejl");
+            alert.setHeaderText("fejl");
+            alert.setContentText("Der skete en fejl");
+            alert.show();
+
+            return;
         }
+
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Producent");
+        alert.setHeaderText("Producent: " + newProducer + " er blevet tilføjet");
+        alert.show();
     }
 
     @FXML
@@ -46,6 +59,12 @@ public class ProducerController {
             producer = this.managementSystem.getProducer(nameOfProducer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+
+            Alert alert = new Alert((Alert.AlertType.WARNING));
+            alert.setTitle("Fejl");
+            alert.setHeaderText("fejl");
+            alert.setContentText("Der skete en fejl");
+            alert.show();
             return;
         }
 
@@ -65,6 +84,12 @@ public class ProducerController {
             accounts = this.managementSystem.createAccountsForProducer(producer.getID(), amount);
         } catch (SQLException ex) {
             ex.printStackTrace();
+
+            Alert alert = new Alert((Alert.AlertType.WARNING));
+            alert.setTitle("Fejl");
+            alert.setHeaderText("fejl");
+            alert.setContentText("Der skete en fejl");
+            alert.show();
             return;
         }
 

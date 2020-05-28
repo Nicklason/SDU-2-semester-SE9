@@ -2,6 +2,7 @@ package sdu.se9.tv2.management.system.presentation;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
@@ -30,7 +31,10 @@ public class RequestApprovalController {
         String programName = this.programNameText.getText();
 
         if (programName.isBlank()) {
-            userResponse.setText("Feltet kan ikke være blankt");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Feltet kan ikke være blankt");
+            alert.show();
             return;
         }
 
@@ -39,6 +43,11 @@ public class RequestApprovalController {
             program = this.managementSystem.getProgram(programName);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Der skete en fejl");
+            alert.show();
             return;
         }
 
@@ -47,17 +56,26 @@ public class RequestApprovalController {
         ProducerAccount producer = (ProducerAccount)system.getAccount();
 
         if(program == null || producer.getProducerId() != program.getProducerID()){
-            userResponse.setText("Program med navn: " + programName + " ikke fundet");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Program med navn: " + programName + " ikke fundet");
+            alert.show();
             return;
         }
 
         if (program.isApproved()) {
-            userResponse.setText("Krediteringen for " + programName + " er allerede blevet godkendt");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Krediteringen for " + programName + " er allerede blevet godkendt");
+            alert.show();
             return;
         }
 
         if (program.isPendingApproval()) {
-            userResponse.setText("Krediteringen for " + programName + " afventer allerede godkendelse");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Krediteringen for " + programName + " afventer allerede godkendelse");
+            alert.show();
             return;
         }
 
@@ -65,9 +83,17 @@ public class RequestApprovalController {
             this.managementSystem.setPendingApproval(program.getID(), true);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Anmod om krediteringer");
+            alert.setHeaderText("Der skete en fejl");
+            alert.show();
             return;
         }
 
-        userResponse.setText("Krediteringen for " + programName + " afventer nu godkendelse");
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Godkend kreditering");
+        alert.setHeaderText("Krediteringen for " + programName + " afventer nu godkendelse");
+        alert.show();
     }
 }
