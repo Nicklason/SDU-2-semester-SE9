@@ -40,7 +40,14 @@ public class ProducerController {
             alert.setHeaderText("fejl");
             alert.setContentText("Der skete en fejl");
             alert.show();
+
+            return;
         }
+
+        Alert alert = new Alert((Alert.AlertType.CONFIRMATION));
+        alert.setTitle("Producent");
+        alert.setHeaderText("Producent: " + newProducer + " er blevet tilføjet");
+        alert.show();
     }
 
     @FXML
